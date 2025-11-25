@@ -1,4 +1,5 @@
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using SportsDumbbellsPlugin.Controls;
 
 namespace SportsDumbbellsPlugin
 {
@@ -7,6 +8,55 @@ namespace SportsDumbbellsPlugin
         public MainForm()
         {
             InitializeComponent();
+            tableLayoutDisksPanel.RowStyles.Clear();
+            tableLayoutDisksPanel.RowCount = 1;
+            tableLayoutDisksPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            var diskControl = new DiskParametersControl
+            {
+                Margin = new Padding(3),
+                Dock = DockStyle.Fill,
+                DiskNumber = 1
+            };
+
+            tableLayoutDisksPanel.Controls.Add(diskControl, 0, 0);
+        }
+
+        private void numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            var desiredCount = (int)numericUpDown.Value;
+            var currentCount = tableLayoutDisksPanel.Controls.Count;
+
+            while (currentCount < desiredCount)
+            {
+                var diskControl = new DiskParametersControl
+                {
+                    Margin = new Padding(3),
+                    Dock = DockStyle.Fill,
+                    DiskNumber = desiredCount
+                };
+
+                tableLayoutDisksPanel.RowCount++;
+                tableLayoutDisksPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+                var rowIndex = tableLayoutDisksPanel.RowCount - 1;
+                tableLayoutDisksPanel.Controls.Add(diskControl, 0, rowIndex);
+
+                currentCount++;
+            }
+
+            while (currentCount > desiredCount)
+            {
+                var lastIndex = tableLayoutDisksPanel.Controls.Count - 1;
+                var ctrl = tableLayoutDisksPanel.Controls[lastIndex];
+
+                tableLayoutDisksPanel.Controls.RemoveAt(lastIndex);
+                ctrl.Dispose();
+
+                tableLayoutDisksPanel.RowStyles.RemoveAt(tableLayoutDisksPanel.RowCount - 1);
+                tableLayoutDisksPanel.RowCount--;
+
+                currentCount--;
+            }
         }
     }
 }
