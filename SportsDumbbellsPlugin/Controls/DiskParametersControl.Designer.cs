@@ -7,8 +7,6 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        private int _diskNumber;
-
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
@@ -30,21 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DiskParametersControl));
             groupBox = new GroupBox();
-            textBox3 = new TextBox();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
+            textBoxThickness = new TextBox();
+            textBoxHoleDiameter = new TextBox();
+            textBoxOuterDiameter = new TextBox();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
+            errorProvider = new ErrorProvider(components);
             groupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // groupBox
             // 
-            groupBox.Controls.Add(textBox3);
-            groupBox.Controls.Add(textBox2);
-            groupBox.Controls.Add(textBox1);
+            groupBox.Controls.Add(textBoxThickness);
+            groupBox.Controls.Add(textBoxHoleDiameter);
+            groupBox.Controls.Add(textBoxOuterDiameter);
             groupBox.Controls.Add(label3);
             groupBox.Controls.Add(label2);
             groupBox.Controls.Add(label1);
@@ -56,29 +58,29 @@
             groupBox.TabStop = false;
             groupBox.Text = "Параметры диска n";
             // 
-            // textBox3
+            // textBoxThickness
             // 
-            textBox3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox3.Location = new Point(248, 96);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 5;
+            textBoxThickness.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxThickness.Location = new Point(230, 96);
+            textBoxThickness.Name = "textBoxThickness";
+            textBoxThickness.Size = new Size(100, 23);
+            textBoxThickness.TabIndex = 5;
             // 
-            // textBox2
+            // textBoxHoleDiameter
             // 
-            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox2.Location = new Point(248, 61);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 4;
+            textBoxHoleDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxHoleDiameter.Location = new Point(230, 61);
+            textBoxHoleDiameter.Name = "textBoxHoleDiameter";
+            textBoxHoleDiameter.Size = new Size(100, 23);
+            textBoxHoleDiameter.TabIndex = 4;
             // 
-            // textBox1
+            // textBoxOuterDiameter
             // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox1.Location = new Point(248, 26);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 3;
+            textBoxOuterDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxOuterDiameter.Location = new Point(230, 26);
+            textBoxOuterDiameter.Name = "textBoxOuterDiameter";
+            textBoxOuterDiameter.Size = new Size(100, 23);
+            textBoxOuterDiameter.TabIndex = 3;
             // 
             // label3
             // 
@@ -110,6 +112,12 @@
             label1.TabIndex = 0;
             label1.Text = "Внешний диаметр диска D, мм:";
             // 
+            // errorProvider
+            // 
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            errorProvider.ContainerControl = this;
+            errorProvider.Icon = (Icon)resources.GetObject("errorProvider.Icon");
+            // 
             // DiskParametersControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -121,6 +129,7 @@
             Size = new Size(360, 131);
             groupBox.ResumeLayout(false);
             groupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
         }
 
@@ -130,18 +139,9 @@
         private Label label1;
         private Label label2;
         private Label label3;
-        private TextBox textBox3;
-        private TextBox textBox2;
-        private TextBox textBox1;
-
-        public int DiskNumber
-        {
-            get => _diskNumber;
-            set
-            {
-                _diskNumber = value;
-                groupBox.Text = $"Параметры диска {value}";
-            }
-        }
+        private TextBox textBoxThickness;
+        private TextBox textBoxHoleDiameter;
+        private TextBox textBoxOuterDiameter;
+        private ErrorProvider errorProvider;
     }
 }

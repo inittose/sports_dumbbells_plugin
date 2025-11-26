@@ -5,7 +5,7 @@
         /// <summary>
         /// Параметры стержня.
         /// </summary>
-        public RodParameters Rod { get; } = new RodParameters();
+        public RodParameters Rod { get; set; } = new RodParameters();
 
         /// <summary>
         /// Параметры дисков.

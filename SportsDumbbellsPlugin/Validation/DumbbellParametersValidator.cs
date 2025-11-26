@@ -11,15 +11,12 @@ namespace SportsDumbbellsPlugin.Validation
     {
         public DumbbellParametersValidator()
         {
-            RuleFor(x => x.Rod)
-                .SetValidator(new RodParametersValidator());
-
-            RuleForEach(x => x.Disks)
-                .SetValidator(new DiskParametersValidator());
+            RuleFor(x => x.Rod).SetValidator(new RodParametersValidator());
+            RuleForEach(x => x.Disks).SetValidator(new DiskParametersValidator());
 
             RuleFor(x => x.DisksPerSide)
-                .InclusiveBetween(0, 8)
-                .WithMessage("Количество дисков на одной стороне n должно быть в диапазоне 0–8.");
+                .InclusiveBetween(DumbbellConstraints.DisksPerSideMin, DumbbellConstraints.DisksPerSideMax)
+                .WithMessage($"Количество дисков на одной стороне n должно быть в диапазоне {DumbbellConstraints.DisksPerSideMin}–{DumbbellConstraints.DisksPerSideMax}.");
 
             RuleFor(x => x)
                 .Custom((model, context) =>
@@ -48,30 +45,32 @@ namespace SportsDumbbellsPlugin.Validation
 
                     if (rod.SeatDiameter > 0)
                     {
-                        for (var i = 0; i < model.Disks.Count; i++)
+                        for (int i = 0; i < model.Disks.Count; i++)
                         {
                             var disk = model.Disks[i];
-                            var diff = disk.DiskHoleDiameter - rod.SeatDiameter;
+                            double diff = disk.DiskHoleDiameter - rod.SeatDiameter;
 
                             if (disk.DiskHoleDiameter > 0 &&
-                                (diff < 0.5 || diff > 1.5))
+                                (diff < DumbbellConstraints.HoleDiameterOffsetMin || diff > DumbbellConstraints.HoleDiameterOffsetMax))
                             {
                                 context.AddFailure(
                                     $"Disks[{i}].DiskHoleDiameter",
-                                    $"Диаметр отверстия диска d должен быть на 0,5–1,5 мм больше " +
-                                    $"диаметра посадочной части стержня d₂. Сейчас d₂ = {rod.SeatDiameter:F1} мм.");
+                                    $"Диаметр отверстия диска d должен быть на {DumbbellConstraints.HoleDiameterOffsetMin}–{DumbbellConstraints.HoleDiameterOffsetMax} мм " +
+                                    $"больше диаметра посадочной части стержня d₂ (d₂ = {rod.SeatDiameter} мм).");
                             }
                         }
                     }
 
-                    if (!(rod.SeatLength > 0)) return;
-                    var totalWidth = model.TotalDiskWidthPerSide;
-                    if (totalWidth > rod.SeatLength)
+                    if (rod.SeatLength > 0)
                     {
-                        context.AddFailure(
-                            nameof(model.TotalDiskWidthPerSide),
-                            $"Суммарная ширина пакета дисков H = {totalWidth:F1} мм " +
-                            $"превышает длину посадочной части стержня l₂ = {rod.SeatLength:F1} мм.");
+                        double totalWidth = model.TotalDiskWidthPerSide;
+                        if (totalWidth > rod.SeatLength)
+                        {
+                            context.AddFailure(
+                                nameof(model.TotalDiskWidthPerSide),
+                                $"Суммарная ширина пакета дисков H = {totalWidth} мм " +
+                                $"превышает длину посадочной части стержня l₂ = {rod.SeatLength} мм.");
+                        }
                     }
                 });
         }

@@ -11,16 +11,16 @@ namespace SportsDumbbellsPlugin.Validation
         public DiskParametersValidator()
         {
             RuleFor(d => d.DiskOuterDiameter)
-                .InclusiveBetween(120, 260)
-                .WithMessage("Внешний диаметр диска D должен быть в диапазоне 120–260 мм.");
+                .InclusiveBetween(DumbbellConstraints.DiskOuterDiameterMin, DumbbellConstraints.DiskOuterDiameterMax)
+                .WithMessage($"Внешний диаметр диска D должен быть в диапазоне {DumbbellConstraints.DiskOuterDiameterMin} – {DumbbellConstraints.DiskOuterDiameterMax} мм.");
 
             RuleFor(d => d.DiskHoleDiameter)
-                .InclusiveBetween(26, 34)
-                .WithMessage("Диаметр отверстия диска d должен быть в диапазоне 26–34 мм.");
+                .InclusiveBetween(DumbbellConstraints.DiskHoleDiameterMin, DumbbellConstraints.DiskHoleDiameterMax)
+                .WithMessage($"Диаметр отверстия диска d должен быть в диапазоне {DumbbellConstraints.DiskHoleDiameterMin}–{DumbbellConstraints.DiskHoleDiameterMax} мм.");
 
             RuleFor(d => d.DiskThickness)
-                .InclusiveBetween(10, 40)
-                .WithMessage("Толщина одного диска t должна быть в диапазоне 10–40 мм.");
+                .InclusiveBetween(DumbbellConstraints.DiskThicknessMin, DumbbellConstraints.DiskThicknessMax)
+                .WithMessage($"Толщина одного диска t должна быть в диапазоне {DumbbellConstraints.DiskThicknessMin}–{DumbbellConstraints.DiskThicknessMax} мм.");
         }
     }
 }

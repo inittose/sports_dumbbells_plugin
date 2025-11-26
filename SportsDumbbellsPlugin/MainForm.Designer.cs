@@ -30,7 +30,7 @@
         {
             tabControl = new TabControl();
             tabPage1 = new TabPage();
-            rodParametersControl1 = new SportsDumbbellsPlugin.Controls.RodParametersControl();
+            rodParametersControl = new SportsDumbbellsPlugin.Controls.RodParametersControl();
             button2 = new Button();
             tabPage2 = new TabPage();
             disksPanel = new Panel();
@@ -38,14 +38,14 @@
             tableLayoutDisksPanel = new TableLayoutPanel();
             button3 = new Button();
             label6 = new Label();
-            numericUpDown = new NumericUpDown();
-            button1 = new Button();
+            numericUpDownDisksPerSide = new NumericUpDown();
+            buttonDesign = new Button();
             tabControl.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
             disksPanel.SuspendLayout();
             disksScrollPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownDisksPerSide).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -63,7 +63,7 @@
             // tabPage1
             // 
             tabPage1.BackColor = Color.Transparent;
-            tabPage1.Controls.Add(rodParametersControl1);
+            tabPage1.Controls.Add(rodParametersControl);
             tabPage1.Controls.Add(button2);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
@@ -73,13 +73,13 @@
             tabPage1.Text = "Стержень";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // rodParametersControl1
+            // rodParametersControl
             // 
-            rodParametersControl1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            rodParametersControl1.Location = new Point(0, 0);
-            rodParametersControl1.Name = "rodParametersControl1";
-            rodParametersControl1.Size = new Size(397, 173);
-            rodParametersControl1.TabIndex = 11;
+            rodParametersControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            rodParametersControl.Location = new Point(0, 0);
+            rodParametersControl.Name = "rodParametersControl";
+            rodParametersControl.Size = new Size(397, 173);
+            rodParametersControl.TabIndex = 11;
             // 
             // button2
             // 
@@ -97,7 +97,7 @@
             tabPage2.Controls.Add(disksPanel);
             tabPage2.Controls.Add(button3);
             tabPage2.Controls.Add(label6);
-            tabPage2.Controls.Add(numericUpDown);
+            tabPage2.Controls.Add(numericUpDownDisksPerSide);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -159,35 +159,35 @@
             label6.TabIndex = 1;
             label6.Text = "Количество дисков на одной стороне n, шт:";
             // 
-            // numericUpDown
+            // numericUpDownDisksPerSide
             // 
-            numericUpDown.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericUpDown.Location = new Point(269, 11);
-            numericUpDown.Margin = new Padding(3, 3, 5, 3);
-            numericUpDown.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
-            numericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown.Name = "numericUpDown";
-            numericUpDown.Size = new Size(120, 23);
-            numericUpDown.TabIndex = 0;
-            numericUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown.ValueChanged += numericUpDown_ValueChanged;
+            numericUpDownDisksPerSide.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            numericUpDownDisksPerSide.Location = new Point(269, 11);
+            numericUpDownDisksPerSide.Margin = new Padding(3, 3, 5, 3);
+            numericUpDownDisksPerSide.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
+            numericUpDownDisksPerSide.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDownDisksPerSide.Name = "numericUpDownDisksPerSide";
+            numericUpDownDisksPerSide.Size = new Size(120, 23);
+            numericUpDownDisksPerSide.TabIndex = 0;
+            numericUpDownDisksPerSide.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDownDisksPerSide.ValueChanged += numericUpDown_ValueChanged;
             // 
-            // button1
+            // buttonDesign
             // 
-            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            button1.Location = new Point(299, 276);
-            button1.Name = "button1";
-            button1.Size = new Size(119, 23);
-            button1.TabIndex = 1;
-            button1.Text = "Спроектировать";
-            button1.UseVisualStyleBackColor = true;
+            buttonDesign.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonDesign.Location = new Point(299, 276);
+            buttonDesign.Name = "buttonDesign";
+            buttonDesign.Size = new Size(119, 23);
+            buttonDesign.TabIndex = 1;
+            buttonDesign.Text = "Спроектировать";
+            buttonDesign.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(434, 311);
-            Controls.Add(button1);
+            Controls.Add(buttonDesign);
             Controls.Add(tabControl);
             MinimumSize = new Size(450, 350);
             Name = "MainForm";
@@ -199,7 +199,7 @@
             disksPanel.ResumeLayout(false);
             disksScrollPanel.ResumeLayout(false);
             disksScrollPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownDisksPerSide).EndInit();
             ResumeLayout(false);
         }
 
@@ -208,14 +208,14 @@
         private TabControl tabControl;
         private TabPage tabPage1;
         private TabPage tabPage2;
-        private Button button1;
+        private Button buttonDesign;
         private Button button2;
         private Label label6;
-        private NumericUpDown numericUpDown;
+        private NumericUpDown numericUpDownDisksPerSide;
         private Button button3;
         private TableLayoutPanel tableLayoutDisksPanel;
         private Panel disksPanel;
         private Panel disksScrollPanel;
-        private Controls.RodParametersControl rodParametersControl1;
+        private Controls.RodParametersControl rodParametersControl;
     }
 }

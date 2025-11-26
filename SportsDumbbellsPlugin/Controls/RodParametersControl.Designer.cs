@@ -28,58 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox5 = new TextBox();
-            textBox4 = new TextBox();
-            textBox3 = new TextBox();
-            textBox2 = new TextBox();
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RodParametersControl));
+            textBoxSeatDiameter = new TextBox();
+            textBoxHandleDiameter = new TextBox();
+            textBoxSeatLength = new TextBox();
+            textBoxCenterLength = new TextBox();
             textBox1 = new TextBox();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
+            errorProvider = new ErrorProvider(components);
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
-            // textBox5
+            // textBoxSeatDiameter
             // 
-            textBox5.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox5.Location = new Point(270, 147);
-            textBox5.Margin = new Padding(3, 3, 5, 3);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(100, 23);
-            textBox5.TabIndex = 19;
+            textBoxSeatDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxSeatDiameter.Location = new Point(245, 147);
+            textBoxSeatDiameter.Margin = new Padding(3, 3, 5, 3);
+            textBoxSeatDiameter.Name = "textBoxSeatDiameter";
+            textBoxSeatDiameter.Size = new Size(100, 23);
+            textBoxSeatDiameter.TabIndex = 19;
             // 
-            // textBox4
+            // textBoxHandleDiameter
             // 
-            textBox4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox4.Location = new Point(270, 112);
-            textBox4.Margin = new Padding(3, 3, 5, 3);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(100, 23);
-            textBox4.TabIndex = 18;
+            textBoxHandleDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxHandleDiameter.Location = new Point(245, 112);
+            textBoxHandleDiameter.Margin = new Padding(3, 3, 5, 3);
+            textBoxHandleDiameter.Name = "textBoxHandleDiameter";
+            textBoxHandleDiameter.Size = new Size(100, 23);
+            textBoxHandleDiameter.TabIndex = 18;
             // 
-            // textBox3
+            // textBoxSeatLength
             // 
-            textBox3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox3.Location = new Point(270, 77);
-            textBox3.Margin = new Padding(3, 3, 5, 3);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 17;
+            textBoxSeatLength.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxSeatLength.Location = new Point(245, 77);
+            textBoxSeatLength.Margin = new Padding(3, 3, 5, 3);
+            textBoxSeatLength.Name = "textBoxSeatLength";
+            textBoxSeatLength.Size = new Size(100, 23);
+            textBoxSeatLength.TabIndex = 17;
             // 
-            // textBox2
+            // textBoxCenterLength
             // 
-            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox2.Location = new Point(270, 42);
-            textBox2.Margin = new Padding(3, 3, 5, 3);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 16;
+            textBoxCenterLength.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxCenterLength.Location = new Point(245, 42);
+            textBoxCenterLength.Margin = new Padding(3, 3, 5, 3);
+            textBoxCenterLength.Name = "textBoxCenterLength";
+            textBoxCenterLength.Size = new Size(100, 23);
+            textBoxCenterLength.TabIndex = 16;
             // 
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox1.Location = new Point(270, 7);
+            textBox1.Location = new Point(245, 7);
             textBox1.Margin = new Padding(3, 3, 5, 3);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -136,14 +140,20 @@
             label1.TabIndex = 10;
             label1.Text = "Общая длина стрежня L, мм:";
             // 
+            // errorProvider
+            // 
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            errorProvider.ContainerControl = this;
+            errorProvider.Icon = (Icon)resources.GetObject("errorProvider.Icon");
+            // 
             // RodParametersControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(textBox5);
-            Controls.Add(textBox4);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
+            Controls.Add(textBoxSeatDiameter);
+            Controls.Add(textBoxHandleDiameter);
+            Controls.Add(textBoxSeatLength);
+            Controls.Add(textBoxCenterLength);
             Controls.Add(textBox1);
             Controls.Add(label5);
             Controls.Add(label4);
@@ -152,21 +162,23 @@
             Controls.Add(label1);
             Name = "RodParametersControl";
             Size = new Size(380, 184);
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private TextBox textBox5;
-        private TextBox textBox4;
-        private TextBox textBox3;
-        private TextBox textBox2;
+        private TextBox textBoxSeatDiameter;
+        private TextBox textBoxHandleDiameter;
+        private TextBox textBoxSeatLength;
+        private TextBox textBoxCenterLength;
         private TextBox textBox1;
         private Label label5;
         private Label label4;
         private Label label3;
         private Label label2;
         private Label label1;
+        private ErrorProvider errorProvider;
     }
 }
