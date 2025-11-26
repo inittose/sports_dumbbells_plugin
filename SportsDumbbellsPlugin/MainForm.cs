@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using SportsDumbbellsPlugin.Controls;
+﻿using SportsDumbbellsPlugin.Controls;
 
 namespace SportsDumbbellsPlugin
 {
@@ -28,11 +27,13 @@ namespace SportsDumbbellsPlugin
 
             while (currentCount < desiredCount)
             {
+                currentCount++;
+
                 var diskControl = new DiskParametersControl
                 {
                     Margin = new Padding(3),
                     Dock = DockStyle.Fill,
-                    DiskNumber = desiredCount
+                    DiskNumber = currentCount
                 };
 
                 tableLayoutDisksPanel.RowCount++;
@@ -40,8 +41,6 @@ namespace SportsDumbbellsPlugin
 
                 var rowIndex = tableLayoutDisksPanel.RowCount - 1;
                 tableLayoutDisksPanel.Controls.Add(diskControl, 0, rowIndex);
-
-                currentCount++;
             }
 
             while (currentCount > desiredCount)
