@@ -6,6 +6,9 @@ namespace SportsDumbbellsPlugin
 {
     public partial class MainForm : Form
     {
+        private bool _rodTabHasErrors = false;
+        private bool _disksTabHasErrors = false;
+
         private readonly DumbbellParametersValidator _validator = new DumbbellParametersValidator();
 
         public MainForm()
@@ -33,58 +36,67 @@ namespace SportsDumbbellsPlugin
 
         private void ValidateAllParameters()
         {
-            // 1. Собираем модель из UI
             var model = BuildModelFromControls();
-
-            // 2. Валидируем
             var result = _validator.Validate(model);
 
-            // 3. Чистим старые ошибки
+            _rodTabHasErrors = false;
+            _disksTabHasErrors = false;
+
+            // 1. Сначала чистим старые ошибки
             rodParametersControl.ClearErrors();
             foreach (var diskControl in tableLayoutDisksPanel.Controls.OfType<DiskParametersControl>())
                 diskControl.ClearErrors();
 
-            // 4. Разбрасываем ошибки по контролам
-            foreach (var failure in result.Errors)
+            // 2. Группируем ошибки по имени свойства
+            var errorsByProperty = result.Errors
+                .GroupBy(e => e.PropertyName)
+                .ToList();
+
+            foreach (var group in errorsByProperty)
             {
-                var property = failure.PropertyName; // типа "Rod.CenterLength" или "Disks[2].DiskThickness"
+                var property = group.Key;
+
+                var message = string.Join(
+                    Environment.NewLine,
+                    group.Select(g => g.ErrorMessage).Distinct());
 
                 if (property.StartsWith("Rod."))
                 {
-                    string propName = property.Substring("Rod.".Length);
-                    rodParametersControl.SetError(propName, failure.ErrorMessage);
+                    _rodTabHasErrors = true;
+                    var propName = property.Substring("Rod.".Length);
+                    rodParametersControl.SetError(propName, message);
                 }
                 else if (property.StartsWith("Disks["))
                 {
-                    // пример: "Disks[2].DiskHoleDiameter"
+                    _disksTabHasErrors = true;
                     var match = System.Text.RegularExpressions.Regex.Match(
                         property,
                         @"Disks\[(\d+)\]\.(.+)");
 
                     if (match.Success)
                     {
-                        int index = int.Parse(match.Groups[1].Value);
-                        string propName = match.Groups[2].Value;
+                        var index = int.Parse(match.Groups[1].Value);
+                        var propName = match.Groups[2].Value;
 
                         var diskControl = tableLayoutDisksPanel
                             .Controls
                             .OfType<DiskParametersControl>()
                             .ElementAtOrDefault(index);
 
-                        diskControl?.SetError(propName, failure.ErrorMessage);
+                        diskControl?.SetError(propName, message);
                     }
                 }
                 else if (property == nameof(DumbbellParameters.TotalDiskWidthPerSide))
                 {
-                    // Можно подсветить все толщины дисков,
-                    // т.к. ошибка относится к сумме H
                     foreach (var diskControl in tableLayoutDisksPanel.Controls.OfType<DiskParametersControl>())
-                        diskControl.SetError(nameof(DiskParameters.DiskThickness), failure.ErrorMessage);
+                    {
+                        diskControl.SetError(nameof(DiskParameters.DiskThickness), message);
+                    }
                 }
             }
 
-            // 5. Кнопка "Спроектировать" активна только если нет ошибок
             buttonDesign.Enabled = result.IsValid;
+            tabControl.Invalidate();
         }
 
         private DumbbellParameters BuildModelFromControls()
@@ -106,7 +118,6 @@ namespace SportsDumbbellsPlugin
             diskControl.Margin = new Padding(3);
             diskControl.Dock = DockStyle.Fill;
 
-            // подписка на изменения для живой валидации
             diskControl.ParametersChanged += AnyParametersChanged;
 
             tableLayoutDisksPanel.Controls.Add(diskControl, 0, rowIndex);
@@ -117,14 +128,13 @@ namespace SportsDumbbellsPlugin
             var desiredCount = (int)numericUpDownDisksPerSide.Value;
             var currentCount = tableLayoutDisksPanel.Controls.Count;
 
-            // добавляем недостающие контролы
             while (currentCount < desiredCount)
             {
                 currentCount++;
 
                 var diskControl = new DiskParametersControl
                 {
-                    DiskNumber = currentCount // номер в заголовке groupBox
+                    DiskNumber = currentCount
                 };
 
                 tableLayoutDisksPanel.RowCount++;
@@ -135,14 +145,12 @@ namespace SportsDumbbellsPlugin
                 AddDiskControl(diskControl, rowIndex);
             }
 
-            // удаляем лишние контролы
             while (currentCount > desiredCount)
             {
                 var lastRowIndex = tableLayoutDisksPanel.RowCount - 1;
                 if (lastRowIndex < 0)
                     break;
 
-                // получаем контрол по позиции (0, lastRowIndex)
                 var ctrl = tableLayoutDisksPanel.GetControlFromPosition(0, lastRowIndex);
 
                 if (ctrl is DiskParametersControl diskControl)
@@ -158,8 +166,44 @@ namespace SportsDumbbellsPlugin
                 currentCount--;
             }
 
-            // пересчитать модель и провалидировать всё сразу
             ValidateAllParameters();
+        }
+
+        private void tabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var tabControl = (TabControl)sender;
+            var page = tabControl.TabPages[e.Index];
+
+            // Определяем, какая вкладка
+            bool isRodTab = page == tabPageRod;   // вкладка "Стержень"
+            bool isDisksTab = page == tabPageDisks; // вкладка "Диски"
+
+            bool hasError =
+                (isRodTab && _rodTabHasErrors) ||
+                (isDisksTab && _disksTabHasErrors);
+
+            // цвет фона заголовка
+            Color backColor;
+            if (hasError)
+                backColor = Color.MistyRose;                 // ошибка
+            else if (e.State.HasFlag(DrawItemState.Selected))
+                backColor = SystemColors.ControlLightLight;  // выбранная вкладка без ошибок
+            else
+                backColor = SystemColors.Control;            // обычная вкладка
+
+            using (var b = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(b, e.Bounds);
+            }
+
+            // Рисуем текст
+            TextRenderer.DrawText(
+                e.Graphics,
+                page.Text,
+                e.Font,
+                e.Bounds,
+                SystemColors.ControlText,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
     }
 }

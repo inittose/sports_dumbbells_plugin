@@ -34,7 +34,7 @@
             textBoxHandleDiameter = new TextBox();
             textBoxSeatLength = new TextBox();
             textBoxCenterLength = new TextBox();
-            textBox1 = new TextBox();
+            textBoxTotalLength = new TextBox();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
@@ -80,15 +80,15 @@
             textBoxCenterLength.Size = new Size(100, 23);
             textBoxCenterLength.TabIndex = 16;
             // 
-            // textBox1
+            // textBoxTotalLength
             // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox1.Location = new Point(245, 7);
-            textBox1.Margin = new Padding(3, 3, 5, 3);
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 15;
+            textBoxTotalLength.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxTotalLength.Location = new Point(245, 7);
+            textBoxTotalLength.Margin = new Padding(3, 3, 5, 3);
+            textBoxTotalLength.Name = "textBoxTotalLength";
+            textBoxTotalLength.ReadOnly = true;
+            textBoxTotalLength.Size = new Size(100, 23);
+            textBoxTotalLength.TabIndex = 15;
             // 
             // label5
             // 
@@ -154,7 +154,7 @@
             Controls.Add(textBoxHandleDiameter);
             Controls.Add(textBoxSeatLength);
             Controls.Add(textBoxCenterLength);
-            Controls.Add(textBox1);
+            Controls.Add(textBoxTotalLength);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -173,7 +173,7 @@
         private TextBox textBoxHandleDiameter;
         private TextBox textBoxSeatLength;
         private TextBox textBoxCenterLength;
-        private TextBox textBox1;
+        private TextBox textBoxTotalLength;
         private Label label5;
         private Label label4;
         private Label label3;

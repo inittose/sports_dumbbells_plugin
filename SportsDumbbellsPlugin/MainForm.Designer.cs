@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             tabControl = new TabControl();
-            tabPage1 = new TabPage();
+            tabPageRod = new TabPage();
             rodParametersControl = new SportsDumbbellsPlugin.Controls.RodParametersControl();
             button2 = new Button();
-            tabPage2 = new TabPage();
+            tabPageDisks = new TabPage();
             disksPanel = new Panel();
             disksScrollPanel = new Panel();
             tableLayoutDisksPanel = new TableLayoutPanel();
@@ -41,8 +41,8 @@
             numericUpDownDisksPerSide = new NumericUpDown();
             buttonDesign = new Button();
             tabControl.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tabPage2.SuspendLayout();
+            tabPageRod.SuspendLayout();
+            tabPageDisks.SuspendLayout();
             disksPanel.SuspendLayout();
             disksScrollPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownDisksPerSide).BeginInit();
@@ -51,32 +51,34 @@
             // tabControl
             // 
             tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tabControl.Controls.Add(tabPage1);
-            tabControl.Controls.Add(tabPage2);
+            tabControl.Controls.Add(tabPageRod);
+            tabControl.Controls.Add(tabPageDisks);
+            tabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControl.Location = new Point(12, 12);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.ShowToolTips = true;
             tabControl.Size = new Size(405, 258);
             tabControl.TabIndex = 0;
+            tabControl.DrawItem += tabControl_DrawItem;
             // 
-            // tabPage1
+            // tabPageRod
             // 
-            tabPage1.BackColor = Color.Transparent;
-            tabPage1.Controls.Add(rodParametersControl);
-            tabPage1.Controls.Add(button2);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(397, 230);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "Стержень";
-            tabPage1.UseVisualStyleBackColor = true;
+            tabPageRod.BackColor = Color.Transparent;
+            tabPageRod.Controls.Add(rodParametersControl);
+            tabPageRod.Controls.Add(button2);
+            tabPageRod.Location = new Point(4, 24);
+            tabPageRod.Name = "tabPageRod";
+            tabPageRod.Padding = new Padding(3);
+            tabPageRod.Size = new Size(397, 230);
+            tabPageRod.TabIndex = 0;
+            tabPageRod.Text = "Стержень";
+            tabPageRod.UseVisualStyleBackColor = true;
             // 
             // rodParametersControl
             // 
             rodParametersControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            rodParametersControl.Location = new Point(0, 0);
+            rodParametersControl.Location = new Point(0, 37);
             rodParametersControl.Name = "rodParametersControl";
             rodParametersControl.Size = new Size(397, 173);
             rodParametersControl.TabIndex = 11;
@@ -84,27 +86,27 @@
             // button2
             // 
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(204, 181);
+            button2.Location = new Point(211, 8);
             button2.Margin = new Padding(3, 5, 3, 3);
             button2.Name = "button2";
-            button2.Size = new Size(185, 23);
+            button2.Size = new Size(180, 23);
             button2.TabIndex = 10;
             button2.Text = "Показать эскиз с размерами";
             button2.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tabPageDisks
             // 
-            tabPage2.Controls.Add(disksPanel);
-            tabPage2.Controls.Add(button3);
-            tabPage2.Controls.Add(label6);
-            tabPage2.Controls.Add(numericUpDownDisksPerSide);
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(397, 230);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "Диски";
-            tabPage2.UseVisualStyleBackColor = true;
+            tabPageDisks.Controls.Add(disksPanel);
+            tabPageDisks.Controls.Add(button3);
+            tabPageDisks.Controls.Add(label6);
+            tabPageDisks.Controls.Add(numericUpDownDisksPerSide);
+            tabPageDisks.Location = new Point(4, 24);
+            tabPageDisks.Name = "tabPageDisks";
+            tabPageDisks.Padding = new Padding(3);
+            tabPageDisks.Size = new Size(397, 230);
+            tabPageDisks.TabIndex = 1;
+            tabPageDisks.Text = "Диски";
+            tabPageDisks.UseVisualStyleBackColor = true;
             // 
             // disksPanel
             // 
@@ -142,9 +144,10 @@
             // button3
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(215, 45);
+            button3.Location = new Point(211, 8);
+            button3.Margin = new Padding(3, 5, 3, 3);
             button3.Name = "button3";
-            button3.Size = new Size(174, 23);
+            button3.Size = new Size(180, 23);
             button3.TabIndex = 3;
             button3.Text = "Показать эскиз с размерами";
             button3.UseVisualStyleBackColor = true;
@@ -152,7 +155,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(8, 13);
+            label6.Location = new Point(8, 45);
             label6.Margin = new Padding(5, 10, 10, 10);
             label6.Name = "label6";
             label6.Size = new Size(249, 15);
@@ -162,7 +165,7 @@
             // numericUpDownDisksPerSide
             // 
             numericUpDownDisksPerSide.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericUpDownDisksPerSide.Location = new Point(269, 11);
+            numericUpDownDisksPerSide.Location = new Point(269, 43);
             numericUpDownDisksPerSide.Margin = new Padding(3, 3, 5, 3);
             numericUpDownDisksPerSide.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
             numericUpDownDisksPerSide.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -193,9 +196,9 @@
             Name = "MainForm";
             Text = "Плагин для создания спортивных гантель";
             tabControl.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage2.ResumeLayout(false);
-            tabPage2.PerformLayout();
+            tabPageRod.ResumeLayout(false);
+            tabPageDisks.ResumeLayout(false);
+            tabPageDisks.PerformLayout();
             disksPanel.ResumeLayout(false);
             disksScrollPanel.ResumeLayout(false);
             disksScrollPanel.PerformLayout();
@@ -206,8 +209,8 @@
         #endregion
 
         private TabControl tabControl;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
+        private TabPage tabPageRod;
+        private TabPage tabPageDisks;
         private Button buttonDesign;
         private Button button2;
         private Label label6;

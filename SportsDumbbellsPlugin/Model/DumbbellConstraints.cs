@@ -18,6 +18,9 @@
         public const int DisksPerSideMin = 0;
         public const int DisksPerSideMax = 8;
 
+        public const double TotalLengthMin = 200;
+        public const double TotalLengthMax = 500;
+
         // --- Диски ---
         public const double DiskOuterDiameterMin = 120;
         public const double DiskOuterDiameterMax = 260;
