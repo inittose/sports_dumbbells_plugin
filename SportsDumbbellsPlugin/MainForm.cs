@@ -1,6 +1,8 @@
 ﻿using SportsDumbbellsPlugin.Controls;
 using SportsDumbbellsPlugin.Model;
 using SportsDumbbellsPlugin.Validation;
+using System.Runtime.InteropServices;
+using SportsDumbbellsPlugin.View;
 
 namespace SportsDumbbellsPlugin
 {
@@ -14,9 +16,7 @@ namespace SportsDumbbellsPlugin
         public MainForm()
         {
             InitializeComponent();
-            tableLayoutDisksPanel.RowStyles.Clear();
-            tableLayoutDisksPanel.RowCount = 1;
-            tableLayoutDisksPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
             var diskControl = new DiskParametersControl
             {
                 Margin = new Padding(3),
@@ -175,10 +175,10 @@ namespace SportsDumbbellsPlugin
             var page = tabControl.TabPages[e.Index];
 
             // Определяем, какая вкладка
-            bool isRodTab = page == tabPageRod;   // вкладка "Стержень"
-            bool isDisksTab = page == tabPageDisks; // вкладка "Диски"
+            var isRodTab = page == tabPageRod;   // вкладка "Стержень"
+            var isDisksTab = page == tabPageDisks; // вкладка "Диски"
 
-            bool hasError =
+            var hasError =
                 (isRodTab && _rodTabHasErrors) ||
                 (isDisksTab && _disksTabHasErrors);
 
@@ -204,6 +204,31 @@ namespace SportsDumbbellsPlugin
                 e.Bounds,
                 SystemColors.ControlText,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var informationForm = RodInformationForm.GetInstance();
+            informationForm.Show();
+            informationForm.Activate();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var informationForm = DiskInformationForm.GetInstance();
+            informationForm.Show();
+            informationForm.Activate();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            rodParametersControl.SetDefault();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            numericUpDownDisksPerSide.Value = 1;
+            (tableLayoutDisksPanel.Controls[0] as DiskParametersControl)?.SetDefault();
         }
     }
 }

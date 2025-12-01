@@ -30,9 +30,11 @@
         {
             tabControl = new TabControl();
             tabPageRod = new TabPage();
+            button1 = new Button();
             rodParametersControl = new SportsDumbbellsPlugin.Controls.RodParametersControl();
             button2 = new Button();
             tabPageDisks = new TabPage();
+            button4 = new Button();
             disksPanel = new Panel();
             disksScrollPanel = new Panel();
             tableLayoutDisksPanel = new TableLayoutPanel();
@@ -58,44 +60,57 @@
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.ShowToolTips = true;
-            tabControl.Size = new Size(405, 258);
+            tabControl.Size = new Size(426, 258);
             tabControl.TabIndex = 0;
             tabControl.DrawItem += tabControl_DrawItem;
             // 
             // tabPageRod
             // 
             tabPageRod.BackColor = Color.Transparent;
+            tabPageRod.Controls.Add(button1);
             tabPageRod.Controls.Add(rodParametersControl);
             tabPageRod.Controls.Add(button2);
             tabPageRod.Location = new Point(4, 24);
             tabPageRod.Name = "tabPageRod";
             tabPageRod.Padding = new Padding(3);
-            tabPageRod.Size = new Size(397, 230);
+            tabPageRod.Size = new Size(418, 230);
             tabPageRod.TabIndex = 0;
             tabPageRod.Text = "Стержень";
             tabPageRod.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            button1.Location = new Point(6, 8);
+            button1.Name = "button1";
+            button1.Size = new Size(226, 23);
+            button1.TabIndex = 12;
+            button1.Text = "Сбросить до значений по умолчанию";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // rodParametersControl
             // 
             rodParametersControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            rodParametersControl.Location = new Point(0, 37);
+            rodParametersControl.Location = new Point(3, 36);
             rodParametersControl.Name = "rodParametersControl";
-            rodParametersControl.Size = new Size(397, 173);
+            rodParametersControl.Size = new Size(415, 173);
             rodParametersControl.TabIndex = 11;
             // 
             // button2
             // 
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(211, 8);
+            button2.Location = new Point(238, 8);
             button2.Margin = new Padding(3, 5, 3, 3);
             button2.Name = "button2";
-            button2.Size = new Size(180, 23);
+            button2.Size = new Size(174, 23);
             button2.TabIndex = 10;
             button2.Text = "Показать эскиз с размерами";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // tabPageDisks
             // 
+            tabPageDisks.Controls.Add(button4);
             tabPageDisks.Controls.Add(disksPanel);
             tabPageDisks.Controls.Add(button3);
             tabPageDisks.Controls.Add(label6);
@@ -103,10 +118,20 @@
             tabPageDisks.Location = new Point(4, 24);
             tabPageDisks.Name = "tabPageDisks";
             tabPageDisks.Padding = new Padding(3);
-            tabPageDisks.Size = new Size(397, 230);
+            tabPageDisks.Size = new Size(418, 230);
             tabPageDisks.TabIndex = 1;
             tabPageDisks.Text = "Диски";
             tabPageDisks.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(6, 8);
+            button4.Name = "button4";
+            button4.Size = new Size(226, 23);
+            button4.TabIndex = 13;
+            button4.Text = "Сбросить до значений по умолчанию";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // disksPanel
             // 
@@ -114,17 +139,18 @@
             disksPanel.Controls.Add(disksScrollPanel);
             disksPanel.Location = new Point(6, 69);
             disksPanel.Name = "disksPanel";
-            disksPanel.Size = new Size(385, 155);
+            disksPanel.Size = new Size(406, 155);
             disksPanel.TabIndex = 5;
             // 
             // disksScrollPanel
             // 
             disksScrollPanel.AutoScroll = true;
+            disksScrollPanel.AutoSize = true;
             disksScrollPanel.Controls.Add(tableLayoutDisksPanel);
             disksScrollPanel.Dock = DockStyle.Fill;
             disksScrollPanel.Location = new Point(0, 0);
             disksScrollPanel.Name = "disksScrollPanel";
-            disksScrollPanel.Size = new Size(385, 155);
+            disksScrollPanel.Size = new Size(406, 155);
             disksScrollPanel.TabIndex = 5;
             // 
             // tableLayoutDisksPanel
@@ -138,19 +164,20 @@
             tableLayoutDisksPanel.Name = "tableLayoutDisksPanel";
             tableLayoutDisksPanel.RowCount = 1;
             tableLayoutDisksPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutDisksPanel.Size = new Size(385, 0);
+            tableLayoutDisksPanel.Size = new Size(406, 0);
             tableLayoutDisksPanel.TabIndex = 4;
             // 
             // button3
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(211, 8);
+            button3.Location = new Point(238, 8);
             button3.Margin = new Padding(3, 5, 3, 3);
             button3.Name = "button3";
-            button3.Size = new Size(180, 23);
+            button3.Size = new Size(174, 23);
             button3.TabIndex = 3;
             button3.Text = "Показать эскиз с размерами";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // label6
             // 
@@ -165,7 +192,7 @@
             // numericUpDownDisksPerSide
             // 
             numericUpDownDisksPerSide.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericUpDownDisksPerSide.Location = new Point(269, 43);
+            numericUpDownDisksPerSide.Location = new Point(290, 43);
             numericUpDownDisksPerSide.Margin = new Padding(3, 3, 5, 3);
             numericUpDownDisksPerSide.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
             numericUpDownDisksPerSide.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -178,7 +205,7 @@
             // buttonDesign
             // 
             buttonDesign.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDesign.Location = new Point(299, 276);
+            buttonDesign.Location = new Point(320, 276);
             buttonDesign.Name = "buttonDesign";
             buttonDesign.Size = new Size(119, 23);
             buttonDesign.TabIndex = 1;
@@ -189,7 +216,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(434, 311);
+            ClientSize = new Size(455, 311);
             Controls.Add(buttonDesign);
             Controls.Add(tabControl);
             MinimumSize = new Size(450, 350);
@@ -200,6 +227,7 @@
             tabPageDisks.ResumeLayout(false);
             tabPageDisks.PerformLayout();
             disksPanel.ResumeLayout(false);
+            disksPanel.PerformLayout();
             disksScrollPanel.ResumeLayout(false);
             disksScrollPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownDisksPerSide).EndInit();
@@ -220,5 +248,7 @@
         private Panel disksPanel;
         private Panel disksScrollPanel;
         private Controls.RodParametersControl rodParametersControl;
+        private Button button1;
+        private Button button4;
     }
 }
