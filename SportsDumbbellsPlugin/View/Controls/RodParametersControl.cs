@@ -1,7 +1,7 @@
-﻿using SportsDumbbellsPlugin.Model;
-using System.Globalization;
+﻿using System.Globalization;
+using SportsDumbbellsPlugin.Model;
 
-namespace SportsDumbbellsPlugin.Controls
+namespace SportsDumbbellsPlugin.View.Controls
 {
     public partial class RodParametersControl : UserControl
     {

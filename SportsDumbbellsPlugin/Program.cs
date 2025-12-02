@@ -1,3 +1,5 @@
+using SportsDumbbellsPlugin.View;
+
 namespace SportsDumbbellsPlugin
 {
     internal static class Program

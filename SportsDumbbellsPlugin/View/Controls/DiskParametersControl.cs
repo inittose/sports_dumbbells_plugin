@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using SportsDumbbellsPlugin.Model;
 
-namespace SportsDumbbellsPlugin.Controls
+namespace SportsDumbbellsPlugin.View.Controls
 {
     public partial class DiskParametersControl : UserControl
     {

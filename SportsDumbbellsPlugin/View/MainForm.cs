@@ -1,10 +1,8 @@
-﻿using SportsDumbbellsPlugin.Controls;
-using SportsDumbbellsPlugin.Model;
+﻿using SportsDumbbellsPlugin.Model;
 using SportsDumbbellsPlugin.Validation;
-using System.Runtime.InteropServices;
-using SportsDumbbellsPlugin.View;
+using SportsDumbbellsPlugin.View.Controls;
 
-namespace SportsDumbbellsPlugin
+namespace SportsDumbbellsPlugin.View
 {
     public partial class MainForm : Form
     {

@@ -88,7 +88,7 @@
             Controls.Add(splitContainer1);
             MinimumSize = new Size(300, 550);
             Name = "DiskInformationForm";
-            Text = "DiskInformationForm";
+            Text = "Эскиз с размерами диска";
             FormClosing += DiskInformationForm_FormClosing;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);

@@ -1,4 +1,4 @@
-﻿namespace SportsDumbbellsPlugin.Controls
+﻿namespace SportsDumbbellsPlugin.View.Controls
 {
     partial class RodParametersControl
     {

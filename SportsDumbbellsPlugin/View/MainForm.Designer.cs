@@ -1,4 +1,6 @@
-﻿namespace SportsDumbbellsPlugin
+﻿using SportsDumbbellsPlugin.View.Controls;
+
+namespace SportsDumbbellsPlugin.View
 {
     partial class MainForm
     {
@@ -31,7 +33,7 @@
             tabControl = new TabControl();
             tabPageRod = new TabPage();
             button1 = new Button();
-            rodParametersControl = new SportsDumbbellsPlugin.Controls.RodParametersControl();
+            rodParametersControl = new RodParametersControl();
             button2 = new Button();
             tabPageDisks = new TabPage();
             button4 = new Button();
@@ -247,7 +249,7 @@
         private TableLayoutPanel tableLayoutDisksPanel;
         private Panel disksPanel;
         private Panel disksScrollPanel;
-        private Controls.RodParametersControl rodParametersControl;
+        private RodParametersControl rodParametersControl;
         private Button button1;
         private Button button4;
     }
