@@ -36,20 +36,13 @@ namespace SportsDumbbellsPlugin.View
             rodParametersControl = new RodParametersControl();
             button2 = new Button();
             tabPageDisks = new TabPage();
+            disksControl = new DisksControl();
             button4 = new Button();
-            disksPanel = new Panel();
-            disksScrollPanel = new Panel();
-            tableLayoutDisksPanel = new TableLayoutPanel();
             button3 = new Button();
-            label6 = new Label();
-            numericUpDownDisksPerSide = new NumericUpDown();
             buttonDesign = new Button();
             tabControl.SuspendLayout();
             tabPageRod.SuspendLayout();
             tabPageDisks.SuspendLayout();
-            disksPanel.SuspendLayout();
-            disksScrollPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownDisksPerSide).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -62,7 +55,7 @@ namespace SportsDumbbellsPlugin.View
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.ShowToolTips = true;
-            tabControl.Size = new Size(426, 258);
+            tabControl.Size = new Size(425, 258);
             tabControl.TabIndex = 0;
             tabControl.DrawItem += tabControl_DrawItem;
             // 
@@ -75,7 +68,7 @@ namespace SportsDumbbellsPlugin.View
             tabPageRod.Location = new Point(4, 24);
             tabPageRod.Name = "tabPageRod";
             tabPageRod.Padding = new Padding(3);
-            tabPageRod.Size = new Size(418, 230);
+            tabPageRod.Size = new Size(417, 230);
             tabPageRod.TabIndex = 0;
             tabPageRod.Text = "Стержень";
             tabPageRod.UseVisualStyleBackColor = true;
@@ -101,7 +94,7 @@ namespace SportsDumbbellsPlugin.View
             // button2
             // 
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(238, 8);
+            button2.Location = new Point(237, 8);
             button2.Margin = new Padding(3, 5, 3, 3);
             button2.Name = "button2";
             button2.Size = new Size(174, 23);
@@ -112,18 +105,26 @@ namespace SportsDumbbellsPlugin.View
             // 
             // tabPageDisks
             // 
+            tabPageDisks.Controls.Add(disksControl);
             tabPageDisks.Controls.Add(button4);
-            tabPageDisks.Controls.Add(disksPanel);
             tabPageDisks.Controls.Add(button3);
-            tabPageDisks.Controls.Add(label6);
-            tabPageDisks.Controls.Add(numericUpDownDisksPerSide);
             tabPageDisks.Location = new Point(4, 24);
             tabPageDisks.Name = "tabPageDisks";
             tabPageDisks.Padding = new Padding(3);
-            tabPageDisks.Size = new Size(418, 230);
+            tabPageDisks.Size = new Size(417, 230);
             tabPageDisks.TabIndex = 1;
             tabPageDisks.Text = "Диски";
             tabPageDisks.UseVisualStyleBackColor = true;
+            // 
+            // disksControl
+            // 
+            disksControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            disksControl.DisksPerSide = 1;
+            disksControl.Location = new Point(0, 37);
+            disksControl.Margin = new Padding(0);
+            disksControl.Name = "disksControl";
+            disksControl.Size = new Size(417, 193);
+            disksControl.TabIndex = 14;
             // 
             // button4
             // 
@@ -135,44 +136,10 @@ namespace SportsDumbbellsPlugin.View
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
-            // disksPanel
-            // 
-            disksPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            disksPanel.Controls.Add(disksScrollPanel);
-            disksPanel.Location = new Point(6, 69);
-            disksPanel.Name = "disksPanel";
-            disksPanel.Size = new Size(406, 155);
-            disksPanel.TabIndex = 5;
-            // 
-            // disksScrollPanel
-            // 
-            disksScrollPanel.AutoScroll = true;
-            disksScrollPanel.AutoSize = true;
-            disksScrollPanel.Controls.Add(tableLayoutDisksPanel);
-            disksScrollPanel.Dock = DockStyle.Fill;
-            disksScrollPanel.Location = new Point(0, 0);
-            disksScrollPanel.Name = "disksScrollPanel";
-            disksScrollPanel.Size = new Size(406, 155);
-            disksScrollPanel.TabIndex = 5;
-            // 
-            // tableLayoutDisksPanel
-            // 
-            tableLayoutDisksPanel.AutoSize = true;
-            tableLayoutDisksPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutDisksPanel.ColumnCount = 1;
-            tableLayoutDisksPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutDisksPanel.Dock = DockStyle.Top;
-            tableLayoutDisksPanel.Location = new Point(0, 0);
-            tableLayoutDisksPanel.Name = "tableLayoutDisksPanel";
-            tableLayoutDisksPanel.RowCount = 1;
-            tableLayoutDisksPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutDisksPanel.Size = new Size(406, 0);
-            tableLayoutDisksPanel.TabIndex = 4;
-            // 
             // button3
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(238, 8);
+            button3.Location = new Point(237, 8);
             button3.Margin = new Padding(3, 5, 3, 3);
             button3.Name = "button3";
             button3.Size = new Size(174, 23);
@@ -181,33 +148,10 @@ namespace SportsDumbbellsPlugin.View
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(8, 45);
-            label6.Margin = new Padding(5, 10, 10, 10);
-            label6.Name = "label6";
-            label6.Size = new Size(249, 15);
-            label6.TabIndex = 1;
-            label6.Text = "Количество дисков на одной стороне n, шт:";
-            // 
-            // numericUpDownDisksPerSide
-            // 
-            numericUpDownDisksPerSide.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericUpDownDisksPerSide.Location = new Point(290, 43);
-            numericUpDownDisksPerSide.Margin = new Padding(3, 3, 5, 3);
-            numericUpDownDisksPerSide.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
-            numericUpDownDisksPerSide.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDownDisksPerSide.Name = "numericUpDownDisksPerSide";
-            numericUpDownDisksPerSide.Size = new Size(120, 23);
-            numericUpDownDisksPerSide.TabIndex = 0;
-            numericUpDownDisksPerSide.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDownDisksPerSide.ValueChanged += numericUpDown_ValueChanged;
-            // 
             // buttonDesign
             // 
             buttonDesign.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDesign.Location = new Point(320, 276);
+            buttonDesign.Location = new Point(319, 276);
             buttonDesign.Name = "buttonDesign";
             buttonDesign.Size = new Size(119, 23);
             buttonDesign.TabIndex = 1;
@@ -218,21 +162,15 @@ namespace SportsDumbbellsPlugin.View
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(455, 311);
+            ClientSize = new Size(454, 311);
             Controls.Add(buttonDesign);
             Controls.Add(tabControl);
-            MinimumSize = new Size(450, 350);
+            MinimumSize = new Size(470, 350);
             Name = "MainForm";
             Text = "Плагин для создания спортивных гантель";
             tabControl.ResumeLayout(false);
             tabPageRod.ResumeLayout(false);
             tabPageDisks.ResumeLayout(false);
-            tabPageDisks.PerformLayout();
-            disksPanel.ResumeLayout(false);
-            disksPanel.PerformLayout();
-            disksScrollPanel.ResumeLayout(false);
-            disksScrollPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownDisksPerSide).EndInit();
             ResumeLayout(false);
         }
 
@@ -243,14 +181,10 @@ namespace SportsDumbbellsPlugin.View
         private TabPage tabPageDisks;
         private Button buttonDesign;
         private Button button2;
-        private Label label6;
-        private NumericUpDown numericUpDownDisksPerSide;
         private Button button3;
-        private TableLayoutPanel tableLayoutDisksPanel;
-        private Panel disksPanel;
-        private Panel disksScrollPanel;
         private RodParametersControl rodParametersControl;
         private Button button1;
         private Button button4;
+        private DisksControl disksControl;
     }
 }

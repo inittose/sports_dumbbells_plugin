@@ -1,5 +1,6 @@
-﻿using System.Globalization;
-using SportsDumbbellsPlugin.Model;
+﻿using SportsDumbbellsPlugin.Model;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace SportsDumbbellsPlugin.View.Controls
 {
@@ -11,81 +12,140 @@ namespace SportsDumbbellsPlugin.View.Controls
         {
             InitializeComponent();
 
-            textBoxCenterLength.TextChanged += OnAnyTextChanged;
-            textBoxSeatLength.TextChanged += OnAnyTextChanged;
-            textBoxHandleDiameter.TextChanged += OnAnyTextChanged;
-            textBoxSeatDiameter.TextChanged += OnAnyTextChanged;
+            textBoxCenterLength.TextChanged += OnAnyParameterChanged;
+            textBoxSeatLength.TextChanged += OnAnyParameterChanged;
+            textBoxHandleDiameter.TextChanged += OnAnyParameterChanged;
+            textBoxSeatDiameter.TextChanged += OnAnyParameterChanged;
 
             SetDefault();
         }
 
-        public void SetDefault()
-        {
-            textBoxCenterLength.Text =
-                DumbbellConstraints.DefaultCenterLength.ToString(CultureInfo.InvariantCulture);
-
-            textBoxSeatLength.Text =
-                DumbbellConstraints.DefaultSeatLength.ToString(CultureInfo.InvariantCulture);
-
-            textBoxHandleDiameter.Text =
-                DumbbellConstraints.DefaultHandleDiameter.ToString(CultureInfo.InvariantCulture);
-
-            textBoxSeatDiameter.Text =
-                DumbbellConstraints.DefaultSeatDiameter.ToString(CultureInfo.InvariantCulture);
-
-            textBoxTotalLength.Text =
-                (DumbbellConstraints.DefaultCenterLength
-                 + DumbbellConstraints.DefaultSeatLength * 2).ToString(CultureInfo.InvariantCulture);
-        }
-
         public RodParameters GetModel()
         {
-            double.TryParse(textBoxCenterLength.Text, out var l1);
-            double.TryParse(textBoxSeatLength.Text, out var l2);
-            double.TryParse(textBoxHandleDiameter.Text, out var d1);
-            double.TryParse(textBoxSeatDiameter.Text, out var d2);
+            var model = new RodParameters();
 
-            return new RodParameters
+            if (double.TryParse(textBoxCenterLength.Text, out var l1))
             {
-                CenterLength = l1,
-                SeatLength = l2,
-                HandleDiameter = d1,
-                SeatDiameter = d2
-            };
+                model.CenterLength = l1;
+            }
+
+            if (double.TryParse(textBoxSeatLength.Text, out var l2))
+            {
+                model.SeatLength = l2;
+            }
+
+            if (double.TryParse(textBoxHandleDiameter.Text, out var d1))
+            {
+                model.HandleDiameter = d1;
+            }
+
+            if (double.TryParse(textBoxSeatDiameter.Text, out var d2))
+            {
+                model.SeatDiameter = d2;
+            }
+
+            return model;
         }
 
+        public void SetModel(RodParameters model)
+        {
+            textBoxCenterLength.Text = model.CenterLength.ToString("F1");
+            textBoxSeatLength.Text = model.SeatLength.ToString("F1");
+            textBoxHandleDiameter.Text = model.HandleDiameter.ToString("F1");
+            textBoxSeatDiameter.Text = model.SeatDiameter.ToString("F1");
+
+            UpdateTotalLength(model.TotalLength);
+        }
+
+        public void SetDefault()
+        {
+            var model = new RodParameters();
+            SetModel(model);
+
+            ClearErrors();
+        }
+
+        /// <summary>
+        /// Сброс всех ошибок.
+        /// </summary>
         public void ClearErrors()
         {
-            Clear(textBoxCenterLength);
-            Clear(textBoxSeatLength);
-            Clear(textBoxHandleDiameter);
-            Clear(textBoxSeatDiameter);
+            errorProvider.Clear();
+
+            ResetBackColor(textBoxCenterLength);
+            ResetBackColor(textBoxSeatLength);
+            ResetBackColor(textBoxHandleDiameter);
+            ResetBackColor(textBoxSeatDiameter);
         }
 
-        private void Clear(TextBox tb)
+        /// <summary>
+        /// Применяет список ошибок к контролу (UI-валидация).
+        /// Модель уже провалидирована, сюда прилетает готовый список.
+        /// </summary>
+        public void ApplyErrors(IReadOnlyList<ValidationError> errors)
         {
-            errorProvider.SetError(tb, string.Empty);
-            tb.BackColor = SystemColors.Window;
-        }
+            ClearErrors();
 
-        public void SetError(string propertyName, string message)
-        {
-            TextBox? target = propertyName switch
+            // Берём только ошибки для стержня
+            var rodErrors = errors
+                .Where(error => error.Source.StartsWith("Rod.", StringComparison.Ordinal))
+                .ToList();
+
+            if (rodErrors.Count == 0)
+                return;
+
+            // Группируем по имени свойства после "Rod."
+            var grouped = rodErrors
+                .GroupBy(e => e.Source.Substring("Rod.".Length));
+
+            foreach (var group in grouped)
             {
-                nameof(RodParameters.CenterLength)   => textBoxCenterLength,
-                nameof(RodParameters.SeatLength)     => textBoxSeatLength,
-                nameof(RodParameters.HandleDiameter) => textBoxHandleDiameter,
-                nameof(RodParameters.SeatDiameter)   => textBoxSeatDiameter,
-                _                                    => null
-            };
+                var propertyName = group.Key;
 
-            if (target == null) return;
+                // Склеиваем все сообщения (убираем дубли)
+                var message = string.Join(
+                    Environment.NewLine,
+                    group.Select(g => g.Message).Distinct()
+                );
 
-            errorProvider.SetError(target, message);
-            target.BackColor = Color.MistyRose;
+                ApplyError(propertyName, message);
+            }
         }
 
-        private void OnAnyTextChanged(object? sender, EventArgs e)
+        private void ApplyError(string propertyName, string message)
+        {
+            switch (propertyName)
+            {
+                case nameof(RodParameters.CenterLength):
+                    SetError(textBoxCenterLength, message);
+                    break;
+
+                case nameof(RodParameters.SeatLength):
+                    SetError(textBoxSeatLength, message);
+                    break;
+
+                case nameof(RodParameters.HandleDiameter):
+                    SetError(textBoxHandleDiameter, message);
+                    break;
+
+                case nameof(RodParameters.SeatDiameter):
+                    SetError(textBoxSeatDiameter, message);
+                    break;
+            }
+        }
+
+        private void SetError(Control control, string message)
+        {
+            errorProvider.SetError(control, message);
+            control.BackColor = Color.MistyRose;
+        }
+
+        private void ResetBackColor(Control control)
+        {
+            control.BackColor = SystemColors.Window;
+        }
+
+        private void OnAnyParameterChanged(object? sender, EventArgs e)
         {
             RecalculateTotalLength();
             ParametersChanged?.Invoke(this, EventArgs.Empty);
@@ -97,13 +157,17 @@ namespace SportsDumbbellsPlugin.View.Controls
                 double.TryParse(textBoxSeatLength.Text, out var l2))
             {
                 var L = l1 + 2 * l2;
-                textBoxTotalLength.Text = L.ToString("0.##");
+                UpdateTotalLength(L);
             }
             else
             {
-                // Если ничего вменяемого посчитать нельзя — можно очищать
                 textBoxTotalLength.Text = string.Empty;
             }
+        }
+
+        private void UpdateTotalLength(double totalLength)
+        {
+            textBoxTotalLength.Text = totalLength.ToString("F1");
         }
     }
 }

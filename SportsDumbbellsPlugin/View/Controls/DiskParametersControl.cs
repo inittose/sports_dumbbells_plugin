@@ -33,11 +33,19 @@ namespace SportsDumbbellsPlugin.View.Controls
             SetDefault();
         }
 
+        public void SetModel(DiskParameters model)
+        {
+            textBoxHoleDiameter.Text = model.DiskHoleDiameter.ToString("F1");
+            textBoxOuterDiameter.Text = model.DiskOuterDiameter.ToString("F1");
+            textBoxThickness.Text = model.DiskThickness.ToString("F1");
+        }
+
         public void SetDefault()
         {
-            textBoxOuterDiameter.Text = DumbbellConstraints.DefaultDiskOuterDiameter.ToString(CultureInfo.InvariantCulture);
-            textBoxHoleDiameter.Text = DumbbellConstraints.DefaultDiskHoleDiameter.ToString(CultureInfo.InvariantCulture);
-            textBoxThickness.Text = DumbbellConstraints.DefaultDiskThickness.ToString(CultureInfo.InvariantCulture);
+            var model = new DiskParameters();
+            SetModel(model);
+
+            ClearErrors();
         }
 
         //TODO: переименовать локальные переменные.
