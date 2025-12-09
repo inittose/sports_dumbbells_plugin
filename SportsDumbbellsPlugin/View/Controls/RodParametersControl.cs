@@ -1,6 +1,4 @@
 ﻿using SportsDumbbellsPlugin.Model;
-using System.Globalization;
-using System.Windows.Forms;
 
 namespace SportsDumbbellsPlugin.View.Controls
 {
@@ -61,8 +59,6 @@ namespace SportsDumbbellsPlugin.View.Controls
         {
             var model = new RodParameters();
             SetModel(model);
-
-            ClearErrors();
         }
 
         /// <summary>
@@ -86,7 +82,6 @@ namespace SportsDumbbellsPlugin.View.Controls
         {
             ClearErrors();
 
-            // Берём только ошибки для стержня
             var rodErrors = errors
                 .Where(error => error.Source.StartsWith("Rod.", StringComparison.Ordinal))
                 .ToList();
@@ -94,7 +89,6 @@ namespace SportsDumbbellsPlugin.View.Controls
             if (rodErrors.Count == 0)
                 return;
 
-            // Группируем по имени свойства после "Rod."
             var grouped = rodErrors
                 .GroupBy(e => e.Source.Substring("Rod.".Length));
 
@@ -102,7 +96,6 @@ namespace SportsDumbbellsPlugin.View.Controls
             {
                 var propertyName = group.Key;
 
-                // Склеиваем все сообщения (убираем дубли)
                 var message = string.Join(
                     Environment.NewLine,
                     group.Select(g => g.Message).Distinct()

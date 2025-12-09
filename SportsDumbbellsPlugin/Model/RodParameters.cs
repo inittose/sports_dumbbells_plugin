@@ -37,37 +37,47 @@
             var errors = new List<ValidationError>();
 
             if (CenterLength < CenterLengthMin || CenterLength > CenterLengthMax)
+            {
                 errors.Add(
                     new ValidationError(
                         "Rod.CenterLength",
                         $"Длина центральной части l₁ должна быть в диапазоне {CenterLengthMin}–{CenterLengthMax} мм."));
+            }
 
             if (SeatLength < SeatLengthMin || SeatLength > SeatLengthMax)
+            {
                 errors.Add(
                     new ValidationError(
                         "Rod.SeatLength",
                         $"Длина посадочной части l₂ должна быть в диапазоне {SeatLengthMin}–{SeatLengthMax} мм."));
+            }
 
             if (HandleDiameter < HandleDiameterMin || HandleDiameter > HandleDiameterMax)
+            {
                 errors.Add(
                     new ValidationError(
                         "Rod.HandleDiameter",
                         $"Диаметр рукояти d₁ должен быть в диапазоне {HandleDiameterMin}–{HandleDiameterMax} мм."));
+            }
 
             if (SeatDiameter < SeatDiameterMin || SeatDiameter > SeatDiameterMax)
+            {
                 errors.Add(
                     new ValidationError(
                         "Rod.SeatDiameter",
                         $"Диаметр посадочной части стержня d₂ должен быть в диапазоне {SeatDiameterMin}–{SeatDiameterMax} мм."));
-
-            if (TotalLength < TotalLengthMin || TotalLength > TotalLengthMax)
-            {
-                var message =
-                    $"Общая длина стержня L = l₁ + 2·l₂ должна быть в диапазоне {TotalLengthMin}–{TotalLengthMax} мм.";
-
-                errors.Add(new ValidationError("Rod.CenterLength", message));
-                errors.Add(new ValidationError("Rod.SeatLength", message));
             }
+
+            if (!(TotalLength < TotalLengthMin) && !(TotalLength > TotalLengthMax))
+            {
+                return errors;
+            }
+
+            var message =
+                $"Общая длина стержня L = l₁ + 2·l₂ должна быть в диапазоне {TotalLengthMin}–{TotalLengthMax} мм.";
+
+            errors.Add(new ValidationError("Rod.CenterLength", message));
+            errors.Add(new ValidationError("Rod.SeatLength", message));
 
             return errors;
         }

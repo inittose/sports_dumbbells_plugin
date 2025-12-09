@@ -42,10 +42,10 @@ namespace SportsDumbbellsPlugin.View.Controls
 
         public void SetDefault()
         {
+            ClearErrors();
+
             var model = new DiskParameters();
             SetModel(model);
-
-            ClearErrors();
         }
 
         //TODO: переименовать локальные переменные.

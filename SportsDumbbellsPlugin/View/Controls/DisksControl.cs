@@ -60,13 +60,14 @@ namespace SportsDumbbellsPlugin.View.Controls
                 .ToList();
 
             if (diskErrors.Count == 0)
+            {
                 return;
+            }
 
-            // Группируем по индексу и имени свойства
             var grouped = diskErrors
-                .Select(e =>
+                .Select(error =>
                 {
-                    var match = Regex.Match(e.Source, @"Disks\[(\d+)\]\.(.+)");
+                    var match = Regex.Match(error.Source, @"Disks\[(\d+)\]\.(.+)");
                     if (!match.Success)
                         return null;
 
@@ -74,27 +75,27 @@ namespace SportsDumbbellsPlugin.View.Controls
                     {
                         Index = int.Parse(match.Groups[1].Value),
                         PropertyName = match.Groups[2].Value,
-                        e.Message
+                        error.Message
                     };
                 })
-                .Where(x => x != null)!
-                .GroupBy(x => new { x.Index, x.PropertyName });
+                .Where(error => error != null)!
+                .GroupBy(error => new { error.Index, error.PropertyName });
 
             foreach (var group in grouped)
             {
-                int index = group.Key.Index;
-                string propertyName = group.Key.PropertyName;
+                var index = group.Key.Index;
+                var propertyName = group.Key.PropertyName;
 
                 var message = string.Join(
                     Environment.NewLine,
                     group.Select(g => g.Message).Distinct()
                 );
 
-                var ctrl = tableLayoutDisksPanel.Controls
+                var control = tableLayoutDisksPanel.Controls
                     .OfType<DiskParametersControl>()
                     .ElementAtOrDefault(index);
 
-                ctrl?.SetError(propertyName, message);
+                control?.SetError(propertyName, message);
             }
         }
 
@@ -143,7 +144,6 @@ namespace SportsDumbbellsPlugin.View.Controls
 
         private void AddDiskControl(DiskParametersControl ctrl, int rowIndex)
         {
-            // растягиваем таблицу
             if (rowIndex >= tableLayoutDisksPanel.RowCount)
             {
                 tableLayoutDisksPanel.RowCount = rowIndex + 1;
@@ -158,16 +158,14 @@ namespace SportsDumbbellsPlugin.View.Controls
             if (tableLayoutDisksPanel.RowCount == 0)
                 return;
 
-            int lastRowIndex = tableLayoutDisksPanel.RowCount - 1;
+            var lastRowIndex = tableLayoutDisksPanel.RowCount - 1;
 
-            var ctrl = tableLayoutDisksPanel.GetControlFromPosition(0, lastRowIndex)
-                       as DiskParametersControl;
-
-            if (ctrl != null)
+            if (tableLayoutDisksPanel.GetControlFromPosition(0, lastRowIndex)
+                is DiskParametersControl control)
             {
-                ctrl.ParametersChanged -= OnDiskParametersChanged;
-                tableLayoutDisksPanel.Controls.Remove(ctrl);
-                ctrl.Dispose();
+                control.ParametersChanged -= OnDiskParametersChanged;
+                tableLayoutDisksPanel.Controls.Remove(control);
+                control.Dispose();
             }
 
             tableLayoutDisksPanel.RowStyles.RemoveAt(lastRowIndex);

@@ -32,13 +32,13 @@ namespace SportsDumbbellsPlugin.View
         {
             tabControl = new TabControl();
             tabPageRod = new TabPage();
-            button1 = new Button();
+            defaultRodButton = new Button();
             rodParametersControl = new RodParametersControl();
-            button2 = new Button();
+            informationRodButton = new Button();
             tabPageDisks = new TabPage();
             disksControl = new DisksControl();
-            button4 = new Button();
-            button3 = new Button();
+            defaultDisksButton = new Button();
+            informationDisksButton = new Button();
             buttonDesign = new Button();
             tabControl.SuspendLayout();
             tabPageRod.SuspendLayout();
@@ -62,9 +62,9 @@ namespace SportsDumbbellsPlugin.View
             // tabPageRod
             // 
             tabPageRod.BackColor = Color.Transparent;
-            tabPageRod.Controls.Add(button1);
+            tabPageRod.Controls.Add(defaultRodButton);
             tabPageRod.Controls.Add(rodParametersControl);
-            tabPageRod.Controls.Add(button2);
+            tabPageRod.Controls.Add(informationRodButton);
             tabPageRod.Location = new Point(4, 24);
             tabPageRod.Name = "tabPageRod";
             tabPageRod.Padding = new Padding(3);
@@ -73,15 +73,15 @@ namespace SportsDumbbellsPlugin.View
             tabPageRod.Text = "Стержень";
             tabPageRod.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // defaultRodButton
             // 
-            button1.Location = new Point(6, 8);
-            button1.Name = "button1";
-            button1.Size = new Size(226, 23);
-            button1.TabIndex = 12;
-            button1.Text = "Сбросить до значений по умолчанию";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            defaultRodButton.Location = new Point(6, 8);
+            defaultRodButton.Name = "defaultRodButton";
+            defaultRodButton.Size = new Size(226, 23);
+            defaultRodButton.TabIndex = 12;
+            defaultRodButton.Text = "Сбросить до значений по умолчанию";
+            defaultRodButton.UseVisualStyleBackColor = true;
+            defaultRodButton.Click += SetRodDefault;
             // 
             // rodParametersControl
             // 
@@ -91,23 +91,23 @@ namespace SportsDumbbellsPlugin.View
             rodParametersControl.Size = new Size(415, 173);
             rodParametersControl.TabIndex = 11;
             // 
-            // button2
+            // informationRodButton
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(237, 8);
-            button2.Margin = new Padding(3, 5, 3, 3);
-            button2.Name = "button2";
-            button2.Size = new Size(174, 23);
-            button2.TabIndex = 10;
-            button2.Text = "Показать эскиз с размерами";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            informationRodButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            informationRodButton.Location = new Point(237, 8);
+            informationRodButton.Margin = new Padding(3, 5, 3, 3);
+            informationRodButton.Name = "informationRodButton";
+            informationRodButton.Size = new Size(174, 23);
+            informationRodButton.TabIndex = 10;
+            informationRodButton.Text = "Показать эскиз с размерами";
+            informationRodButton.UseVisualStyleBackColor = true;
+            informationRodButton.Click += ShowRodInformation;
             // 
             // tabPageDisks
             // 
             tabPageDisks.Controls.Add(disksControl);
-            tabPageDisks.Controls.Add(button4);
-            tabPageDisks.Controls.Add(button3);
+            tabPageDisks.Controls.Add(defaultDisksButton);
+            tabPageDisks.Controls.Add(informationDisksButton);
             tabPageDisks.Location = new Point(4, 24);
             tabPageDisks.Name = "tabPageDisks";
             tabPageDisks.Padding = new Padding(3);
@@ -126,27 +126,27 @@ namespace SportsDumbbellsPlugin.View
             disksControl.Size = new Size(417, 193);
             disksControl.TabIndex = 14;
             // 
-            // button4
+            // defaultDisksButton
             // 
-            button4.Location = new Point(6, 8);
-            button4.Name = "button4";
-            button4.Size = new Size(226, 23);
-            button4.TabIndex = 13;
-            button4.Text = "Сбросить до значений по умолчанию";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
+            defaultDisksButton.Location = new Point(6, 8);
+            defaultDisksButton.Name = "defaultDisksButton";
+            defaultDisksButton.Size = new Size(226, 23);
+            defaultDisksButton.TabIndex = 13;
+            defaultDisksButton.Text = "Сбросить до значений по умолчанию";
+            defaultDisksButton.UseVisualStyleBackColor = true;
+            defaultDisksButton.Click += SetDisksDefault;
             // 
-            // button3
+            // informationDisksButton
             // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(237, 8);
-            button3.Margin = new Padding(3, 5, 3, 3);
-            button3.Name = "button3";
-            button3.Size = new Size(174, 23);
-            button3.TabIndex = 3;
-            button3.Text = "Показать эскиз с размерами";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            informationDisksButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            informationDisksButton.Location = new Point(237, 8);
+            informationDisksButton.Margin = new Padding(3, 5, 3, 3);
+            informationDisksButton.Name = "informationDisksButton";
+            informationDisksButton.Size = new Size(174, 23);
+            informationDisksButton.TabIndex = 3;
+            informationDisksButton.Text = "Показать эскиз с размерами";
+            informationDisksButton.UseVisualStyleBackColor = true;
+            informationDisksButton.Click += ShowDisksInformation;
             // 
             // buttonDesign
             // 
@@ -180,11 +180,11 @@ namespace SportsDumbbellsPlugin.View
         private TabPage tabPageRod;
         private TabPage tabPageDisks;
         private Button buttonDesign;
-        private Button button2;
-        private Button button3;
+        private Button informationRodButton;
+        private Button informationDisksButton;
         private RodParametersControl rodParametersControl;
-        private Button button1;
-        private Button button4;
+        private Button defaultRodButton;
+        private Button defaultDisksButton;
         private DisksControl disksControl;
     }
 }

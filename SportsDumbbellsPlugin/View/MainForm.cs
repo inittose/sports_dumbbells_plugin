@@ -1,5 +1,4 @@
 ﻿using SportsDumbbellsPlugin.Model;
-using SportsDumbbellsPlugin.View.Controls;
 
 namespace SportsDumbbellsPlugin.View
 {
@@ -12,14 +11,6 @@ namespace SportsDumbbellsPlugin.View
         {
             InitializeComponent();
 
-            var diskControl = new DiskParametersControl
-            {
-                Margin = new Padding(3),
-                Dock = DockStyle.Fill,
-                DiskNumber = 1
-            };
-
-            //AddDiskControl(diskControl, 0);
             rodParametersControl.ParametersChanged += AnyParametersChanged;
             disksControl.ParametersChanged += AnyParametersChanged;
         }
@@ -81,7 +72,6 @@ namespace SportsDumbbellsPlugin.View
                 e.Graphics.FillRectangle(b, e.Bounds);
             }
 
-            // Рисуем текст
             TextRenderer.DrawText(
                 e.Graphics,
                 page.Text,
@@ -91,26 +81,26 @@ namespace SportsDumbbellsPlugin.View
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void ShowRodInformation(object sender, EventArgs e)
         {
             var informationForm = RodInformationForm.GetInstance();
             informationForm.Show();
             informationForm.Activate();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void ShowDisksInformation(object sender, EventArgs e)
         {
             var informationForm = DiskInformationForm.GetInstance();
             informationForm.Show();
             informationForm.Activate();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void SetRodDefault(object sender, EventArgs e)
         {
             rodParametersControl.SetDefault();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void SetDisksDefault(object sender, EventArgs e)
         {
             disksControl.SetDefault();
         }
