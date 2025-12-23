@@ -57,7 +57,7 @@ namespace SportsDumbbellsPlugin.View
             tabControl.ShowToolTips = true;
             tabControl.Size = new Size(425, 258);
             tabControl.TabIndex = 0;
-            tabControl.DrawItem += tabControl_DrawItem;
+            tabControl.DrawItem += DrawTabValidation;
             // 
             // tabPageRod
             // 

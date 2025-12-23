@@ -47,7 +47,7 @@ namespace SportsDumbbellsPlugin.View
         return model;
     }
 
-        private void tabControl_DrawItem(object sender, DrawItemEventArgs e)
+        private void DrawTabValidation(object sender, DrawItemEventArgs e)
         {
             var tabControl = (TabControl)sender;
             var page = tabControl.TabPages[e.Index];
