@@ -1,9 +1,11 @@
 ﻿using SportsDumbbellsPlugin.Model;
+using SportsDumbbellsPlugin.Wrapper;
 
 namespace SportsDumbbellsPlugin.View
 {
     public partial class MainForm : Form
     {
+        private Wrapper.Wrapper? _wrapper;
         private bool _rodTabHasErrors = false;
         private bool _disksTabHasErrors = false;
 
@@ -35,17 +37,17 @@ namespace SportsDumbbellsPlugin.View
             tabControl.Invalidate();
         }
 
-    private DumbbellParameters BuildModelFromControls()
-    {
-        var model = new DumbbellParameters
+        private DumbbellParameters BuildModelFromControls()
         {
-            Rod = rodParametersControl.GetModel(),
-            DisksPerSide = disksControl.DisksPerSide
-        };
+            var model = new DumbbellParameters
+            {
+                Rod = rodParametersControl.GetModel(),
+                DisksPerSide = disksControl.DisksPerSide
+            };
 
-        model.Disks.AddRange(disksControl.GetDiskModels());
-        return model;
-    }
+            model.Disks.AddRange(disksControl.GetDiskModels());
+            return model;
+        }
 
         private void DrawTabValidation(object sender, DrawItemEventArgs e)
         {
@@ -103,6 +105,25 @@ namespace SportsDumbbellsPlugin.View
         private void SetDisksDefault(object sender, EventArgs e)
         {
             disksControl.SetDefault();
+        }
+
+        private void buttonDesign_Click(object sender, EventArgs e)
+        {
+            // 1) Собираешь параметры из контролов (у тебя это уже есть логикой)
+            var parameters = BuildModelFromControls();
+
+            // 2) Валидируешь (у тебя уже есть Validate())
+            var errors = parameters.Validate();
+            if (errors.Count > 0)
+            {
+                // показать ошибки как ты уже умеешь
+                return;
+            }
+
+            _wrapper ??= new Wrapper.Wrapper();
+            var builder = new Builder(_wrapper);
+
+            builder.Build(parameters);
         }
     }
 }

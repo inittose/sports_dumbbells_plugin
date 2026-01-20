@@ -24,7 +24,7 @@ namespace SportsDumbbellsPlugin.View.Controls
 
             if (double.TryParse(textBoxCenterLength.Text, out var l1))
             {
-                model.CenterLength = l1;
+                model.HandleLength = l1;
             }
 
             if (double.TryParse(textBoxSeatLength.Text, out var l2))
@@ -47,7 +47,7 @@ namespace SportsDumbbellsPlugin.View.Controls
 
         public void SetModel(RodParameters model)
         {
-            textBoxCenterLength.Text = model.CenterLength.ToString("F1");
+            textBoxCenterLength.Text = model.HandleLength.ToString("F1");
             textBoxSeatLength.Text = model.SeatLength.ToString("F1");
             textBoxHandleDiameter.Text = model.HandleDiameter.ToString("F1");
             textBoxSeatDiameter.Text = model.SeatDiameter.ToString("F1");
@@ -109,7 +109,7 @@ namespace SportsDumbbellsPlugin.View.Controls
         {
             switch (propertyName)
             {
-                case nameof(RodParameters.CenterLength):
+                case nameof(RodParameters.HandleLength):
                     SetError(textBoxCenterLength, message);
                     break;
 

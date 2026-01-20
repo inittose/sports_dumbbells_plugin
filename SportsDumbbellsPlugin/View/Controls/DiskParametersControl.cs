@@ -35,9 +35,9 @@ namespace SportsDumbbellsPlugin.View.Controls
 
         public void SetModel(DiskParameters model)
         {
-            textBoxHoleDiameter.Text = model.DiskHoleDiameter.ToString("F1");
-            textBoxOuterDiameter.Text = model.DiskOuterDiameter.ToString("F1");
-            textBoxThickness.Text = model.DiskThickness.ToString("F1");
+            textBoxHoleDiameter.Text = model.HoleDiameter.ToString("F1");
+            textBoxOuterDiameter.Text = model.OuterDiameter.ToString("F1");
+            textBoxThickness.Text = model.Thickness.ToString("F1");
         }
 
         public void SetDefault()
@@ -57,9 +57,9 @@ namespace SportsDumbbellsPlugin.View.Controls
 
             return new DiskParameters
             {
-                DiskOuterDiameter = D,
-                DiskHoleDiameter = d,
-                DiskThickness = t
+                OuterDiameter = D,
+                HoleDiameter = d,
+                Thickness = t
             };
         }
 
@@ -79,13 +79,13 @@ namespace SportsDumbbellsPlugin.View.Controls
             TextBox target;
             switch (propertyName)
             {
-                case nameof(DiskParameters.DiskOuterDiameter):
+                case nameof(DiskParameters.OuterDiameter):
                     target = textBoxOuterDiameter;
                     break;
-                case nameof(DiskParameters.DiskHoleDiameter):
+                case nameof(DiskParameters.HoleDiameter):
                     target = textBoxHoleDiameter;
                     break;
-                case nameof(DiskParameters.DiskThickness):
+                case nameof(DiskParameters.Thickness):
                     target = textBoxThickness;
                     break;
                 default:

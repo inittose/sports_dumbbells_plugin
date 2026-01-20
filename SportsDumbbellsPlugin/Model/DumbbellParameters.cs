@@ -10,13 +10,16 @@
 
         private const double HoleDiameterOffsetMax = 1.5;
 
+        public double GapBetweenDisks { get; } = 0.1;
+
         public RodParameters Rod { get; set; } = new ();
 
         public List<DiskParameters> Disks { get; } = new ();
 
         public int DisksPerSide { get; set; }
 
-        public double TotalDiskWidthPerSide => Disks.Take(DisksPerSide).Sum(d => d.DiskThickness);
+
+        public double TotalDiskWidthPerSide => Disks.Take(DisksPerSide).Sum(d => d.Thickness);
 
         public IReadOnlyList<ValidationError> Validate()
         {
@@ -46,7 +49,7 @@
             {
                 var disk = Disks[i];
 
-                var delta = disk.DiskHoleDiameter - Rod.SeatDiameter;
+                var delta = disk.HoleDiameter - Rod.SeatDiameter;
                 if (delta < HoleDiameterOffsetMin || delta > HoleDiameterOffsetMax)
                 {
                     var msgForDisk =
@@ -55,9 +58,9 @@
 
                     var msgForRod =
                         $"Диаметр посадочной части стержня d₂ должен быть на {HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм меньше "
-                        + $"диаметра отверстия диска d (d = {disk.DiskHoleDiameter:F1} мм).";
+                        + $"диаметра отверстия диска d (d = {disk.HoleDiameter:F1} мм).";
 
-                    errors.Add(new ValidationError($"Disks[{i}].DiskHoleDiameter", msgForDisk));
+                    errors.Add(new ValidationError($"Disks[{i}].HoleDiameter", msgForDisk));
                     errors.Add(new ValidationError("Rod.SeatDiameter", msgForRod));
                 }
             }
@@ -76,7 +79,7 @@
 
             for (var i = 0; i < DisksPerSide && i < Disks.Count; i++)
             {
-                errors.Add(new ValidationError($"Disks[{i}].DiskThickness", messageForDisks));
+                errors.Add(new ValidationError($"Disks[{i}].Thickness", messageForDisks));
             }
 
             errors.Add(new ValidationError("Rod.SeatLength", messageForRod));

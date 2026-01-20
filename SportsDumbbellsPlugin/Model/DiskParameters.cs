@@ -11,27 +11,27 @@
         private const double DiskThicknessMin = 10.0;
         private const double DiskThicknessMax = 40.0;
 
-        public double DiskHoleDiameter { get; set; } = 27.0;
-        public double DiskOuterDiameter { get; set; } = 150.0;
-        public double DiskThickness { get; set; } = 20.0;
+        public double HoleDiameter { get; set; } = 27.0;
+        public double OuterDiameter { get; set; } = 150.0;
+        public double Thickness { get; set; } = 20.0;
 
         public IReadOnlyList<ValidationError> Validate()
         {
             var errors = new List<ValidationError>();
 
-            if (DiskOuterDiameter < DiskOuterDiameterMin || DiskOuterDiameter > DiskOuterDiameterMax)
+            if (OuterDiameter < DiskOuterDiameterMin || OuterDiameter > DiskOuterDiameterMax)
                 errors.Add(new ValidationError(
-                    "Disk.DiskOuterDiameter",
+                    "Disk.OuterDiameter",
                     $"Внешний диаметр диска D должен быть в диапазоне {DiskOuterDiameterMin}–{DiskOuterDiameterMax} мм."));
 
-            if (DiskHoleDiameter < DiskHoleDiameterMin || DiskHoleDiameter > DiskHoleDiameterMax)
+            if (HoleDiameter < DiskHoleDiameterMin || HoleDiameter > DiskHoleDiameterMax)
                 errors.Add(new ValidationError(
-                    "Disk.DiskHoleDiameter",
+                    "Disk.HoleDiameter",
                     $"Диаметр отверстия диска d должен быть в диапазоне {DiskHoleDiameterMin}–{DiskHoleDiameterMax} мм."));
 
-            if (DiskThickness < DiskThicknessMin || DiskThickness > DiskThicknessMax)
+            if (Thickness < DiskThicknessMin || Thickness > DiskThicknessMax)
                 errors.Add(new ValidationError(
-                    "Disk.DiskThickness",
+                    "Disk.Thickness",
                     $"Толщина диска t должна быть в диапазоне {DiskThicknessMin}–{DiskThicknessMax} мм."));
 
             return errors;

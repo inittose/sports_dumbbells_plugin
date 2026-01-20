@@ -22,7 +22,7 @@
 
         private const double TotalLengthMax = 500.0;
 
-        public double CenterLength { get; set; } = 140.0;
+        public double HandleLength { get; set; } = 140.0;
 
         public double SeatLength { get; set; } = 90.0;
 
@@ -30,17 +30,17 @@
 
         public double SeatDiameter { get; set; } = 26.0;
 
-        public double TotalLength => CenterLength + 2 * SeatLength;
+        public double TotalLength => HandleLength + 2 * SeatLength;
 
         public IReadOnlyList<ValidationError> Validate()
         {
             var errors = new List<ValidationError>();
 
-            if (CenterLength < CenterLengthMin || CenterLength > CenterLengthMax)
+            if (HandleLength < CenterLengthMin || HandleLength > CenterLengthMax)
             {
                 errors.Add(
                     new ValidationError(
-                        "Rod.CenterLength",
+                        "Rod.HandleLength",
                         $"Длина центральной части l₁ должна быть в диапазоне {CenterLengthMin}–{CenterLengthMax} мм."));
             }
 
@@ -76,7 +76,7 @@
             var message =
                 $"Общая длина стержня L = l₁ + 2·l₂ должна быть в диапазоне {TotalLengthMin}–{TotalLengthMax} мм.";
 
-            errors.Add(new ValidationError("Rod.CenterLength", message));
+            errors.Add(new ValidationError("Rod.HandleLength", message));
             errors.Add(new ValidationError("Rod.SeatLength", message));
 
             return errors;
