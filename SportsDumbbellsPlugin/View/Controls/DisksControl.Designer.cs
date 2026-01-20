@@ -54,7 +54,6 @@
             numericUpDownDisksPerSide.Location = new Point(265, 8);
             numericUpDownDisksPerSide.Margin = new Padding(3, 3, 5, 3);
             numericUpDownDisksPerSide.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
-            numericUpDownDisksPerSide.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericUpDownDisksPerSide.Name = "numericUpDownDisksPerSide";
             numericUpDownDisksPerSide.Size = new Size(120, 23);
             numericUpDownDisksPerSide.TabIndex = 2;

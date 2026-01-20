@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using SportsDumbbellsPlugin.Model;
+using SportsDumbbellsPluginCore.Model;
 
 namespace SportsDumbbellsPlugin.View.Controls
 {

@@ -1,4 +1,4 @@
-﻿using SportsDumbbellsPlugin.Model;
+﻿using SportsDumbbellsPluginCore.Model;
 using SportsDumbbellsPlugin.Wrapper;
 
 namespace SportsDumbbellsPlugin.View

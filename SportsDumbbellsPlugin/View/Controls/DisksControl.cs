@@ -1,4 +1,4 @@
-﻿using SportsDumbbellsPlugin.Model;
+﻿using SportsDumbbellsPluginCore.Model;
 using System.Text.RegularExpressions;
 
 namespace SportsDumbbellsPlugin.View.Controls

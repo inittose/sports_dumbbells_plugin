@@ -1,4 +1,4 @@
-﻿namespace SportsDumbbellsPlugin.Model
+﻿namespace SportsDumbbellsPluginCore.Model
 {
     public class RodParameters
     {
@@ -66,6 +66,19 @@
                     new ValidationError(
                         "Rod.SeatDiameter",
                         $"Диаметр посадочной части стержня d₂ должен быть в диапазоне {SeatDiameterMin}–{SeatDiameterMax} мм."));
+            }
+
+            if (SeatDiameter >= HandleDiameter)
+            {
+                errors.Add(
+                    new ValidationError(
+                        "Rod.SeatDiameter",
+                        $"Диаметр посадочной части стержня d₂ должен быть меньше чем диаметр рукояти d₁ {HandleDiameter} мм."));
+
+                errors.Add(
+                    new ValidationError(
+                        "Rod.HandleDiameter",
+                        $"Диаметр рукояти d₁ должен быть больше чем диаметр посадочной части стержня d₂ {SeatDiameter} мм."));
             }
 
             if (!(TotalLength < TotalLengthMin) && !(TotalLength > TotalLengthMax))

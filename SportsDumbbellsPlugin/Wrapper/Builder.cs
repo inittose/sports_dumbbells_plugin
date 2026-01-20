@@ -1,5 +1,5 @@
 ﻿using Kompas6Constants3D;
-using SportsDumbbellsPlugin.Model;
+using SportsDumbbellsPluginCore.Model;
 
 namespace SportsDumbbellsPlugin.Wrapper
 {

@@ -1,4 +1,4 @@
-﻿namespace SportsDumbbellsPlugin.Model
+﻿namespace SportsDumbbellsPluginCore.Model
 {
     public class ValidationError(string source, string message)
     {

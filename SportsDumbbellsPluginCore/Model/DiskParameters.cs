@@ -1,4 +1,4 @@
-﻿namespace SportsDumbbellsPlugin.Model
+﻿namespace SportsDumbbellsPluginCore.Model
 {
     public class DiskParameters
     {
