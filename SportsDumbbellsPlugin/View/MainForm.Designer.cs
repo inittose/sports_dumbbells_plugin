@@ -157,7 +157,7 @@ namespace SportsDumbbellsPlugin.View
             buttonDesign.TabIndex = 1;
             buttonDesign.Text = "Спроектировать";
             buttonDesign.UseVisualStyleBackColor = true;
-            buttonDesign.Click += buttonDesign_Click;
+            buttonDesign.Click += ButtonDesignClick;
             // 
             // MainForm
             // 

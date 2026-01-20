@@ -1,5 +1,10 @@
 ﻿namespace SportsDumbbellsPluginCore.Model
 {
+    /// <summary>
+    /// Параметры гантели.
+    /// Содержит параметры грифа, параметры дисков и выполняет комплексную валидацию,
+    /// включая взаимные ограничения между элементами.
+    /// </summary>
     public class DumbbellParameters
     {
         private const int DisksPerSideMin = 0;
@@ -10,82 +15,149 @@
 
         private const double HoleDiameterOffsetMax = 1.5;
 
-        public double GapBetweenDisks { get; } = 0.1;
+        /// <summary>
+        /// Зазор между соседними дисками, мм.
+        /// </summary>
+        public static double GapBetweenDisks => 0.1;
 
+        /// <summary>
+        /// Возвращает и задает параметры грифа гантели.
+        /// </summary>
         public RodParameters Rod { get; set; } = new ();
 
+        /// <summary>
+        /// Возвращает и задает список параметров дисков.
+        /// Диски в списке считаются расположенными последовательно от грифа наружу.
+        /// </summary>
         public List<DiskParameters> Disks { get; } = new ();
 
+        /// <summary>
+        /// Возвращает и задает количество дисков на одной стороне гантели.
+        /// </summary>
         public int DisksPerSide { get; set; }
 
+        /// <summary>
+        /// Суммарная ширина пакета дисков на одной стороне, мм.
+        /// Считается как сумма толщин первых <see cref="DisksPerSide"/> дисков.
+        /// </summary>
+        public double TotalDiskWidthPerSide =>
+            Disks.Take(DisksPerSide).Sum(d => d.Thickness);
 
-        public double TotalDiskWidthPerSide => Disks.Take(DisksPerSide).Sum(d => d.Thickness);
-
+        /// <summary>
+        /// Выполняет валидацию параметров гантели и возвращает список ошибок.
+        /// Включает валидацию грифа, дисков и взаимные ограничения.
+        /// </summary>
+        /// <returns>Список ошибок валидации.
+        /// Если ошибок нет, возвращается пустой список.</returns>
         public IReadOnlyList<ValidationError> Validate()
         {
-            var errors = new List<ValidationError>();
+            var validationErrors = new List<ValidationError>();
 
-            errors.AddRange(Rod.Validate());
+            validationErrors.AddRange(Rod.Validate());
 
-            for (var i = 0; i < Disks.Count; i++)
+            for (var diskIndex = 0; diskIndex < Disks.Count; diskIndex++)
             {
-                var diskErrors = Disks[i].Validate();
-                foreach (var err in diskErrors)
+                var diskValidationErrors = Disks[diskIndex].Validate();
+
+                foreach (var diskError in diskValidationErrors)
                 {
-                    var source = $"Disks[{i}].{err.Source.Replace("Disk.", "")}";
-                    errors.Add(new ValidationError(source, err.Message));
+                    var errorSourceSuffix = diskError.Source.Replace("Disk.", string.Empty);
+                    var source = $"Disks[{diskIndex}].{errorSourceSuffix}";
+
+                    validationErrors.Add(new ValidationError(source, diskError.Message));
                 }
             }
 
             if (DisksPerSide < DisksPerSideMin || DisksPerSide > DisksPerSideMax)
             {
-                errors.Add(
-                    new ValidationError(
-                        "Dumbbell.DisksPerSide",
-                        $"Количество дисков на стороне должно быть в диапазоне {DisksPerSideMin}–{DisksPerSideMax}."));
+                validationErrors.Add(new ValidationError(
+                    "Dumbbell.DisksPerSide",
+                    "Количество дисков на стороне должно быть в диапазоне " +
+                    $"{DisksPerSideMin}–{DisksPerSideMax}."));
             }
 
-            for (var i = 0; i < DisksPerSide && i < Disks.Count; i++)
-            {
-                var disk = Disks[i];
+            ValidateHoleDiameterOffset(validationErrors);
+            ValidateDiskPackWidth(validationErrors);
 
-                var delta = disk.HoleDiameter - Rod.SeatDiameter;
-                if (delta < HoleDiameterOffsetMin || delta > HoleDiameterOffsetMax)
+            return validationErrors;
+        }
+
+        /// <summary>
+        /// Проверяет ограничение на разницу между диаметром отверстия диска
+        /// и посадочным диаметром грифа. Для каждого из первых <see cref="DisksPerSide"/> дисков
+        /// разница должна быть в диапазоне
+        /// <see cref="HoleDiameterOffsetMin"/>–<see cref="HoleDiameterOffsetMax"/>.
+        /// </summary>
+        /// <param name="validationErrors">
+        /// Список ошибок, в который добавляются результаты проверки.</param>
+        private void ValidateHoleDiameterOffset(List<ValidationError> validationErrors)
+        {
+            for (
+                var diskIndex = 0;
+                diskIndex < DisksPerSide && diskIndex < Disks.Count;
+                diskIndex++)
+            {
+                var diskParameters = Disks[diskIndex];
+
+                var holeDiameterDelta = diskParameters.HoleDiameter - Rod.SeatDiameter;
+                var deltaIsTooSmall = holeDiameterDelta < HoleDiameterOffsetMin;
+                var deltaIsTooLarge = holeDiameterDelta > HoleDiameterOffsetMax;
+
+                if (!deltaIsTooSmall && !deltaIsTooLarge)
                 {
-                    var msgForDisk =
-                        $"Диаметр отверстия диска d должен быть на {HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм больше "
-                        + $"диаметра посадочной части стержня d₂ (d₂ = {Rod.SeatDiameter:F1} мм).";
-
-                    var msgForRod =
-                        $"Диаметр посадочной части стержня d₂ должен быть на {HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм меньше "
-                        + $"диаметра отверстия диска d (d = {disk.HoleDiameter:F1} мм).";
-
-                    errors.Add(new ValidationError($"Disks[{i}].HoleDiameter", msgForDisk));
-                    errors.Add(new ValidationError("Rod.SeatDiameter", msgForRod));
+                    continue;
                 }
-            }
 
-            var H = TotalDiskWidthPerSide;
-            if (!(H > Rod.SeatLength))
+                var messageForDisk =
+                    "Диаметр отверстия диска d должен быть на " +
+                    $"{HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм больше " +
+                    $"диаметра посадочной части стержня d₂ (d₂ = {Rod.SeatDiameter:F1} мм).";
+
+                var messageForRod =
+                    "Диаметр посадочной части стержня d₂ должен быть на " +
+                    $"{HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм меньше " +
+                    $"диаметра отверстия диска d (d = {diskParameters.HoleDiameter:F1} мм).";
+
+                validationErrors.Add(
+                    new ValidationError($"Disks[{diskIndex}].HoleDiameter", messageForDisk));
+
+                validationErrors.Add(new ValidationError("Rod.SeatDiameter", messageForRod));
+            }
+        }
+
+        /// <summary>
+        /// Проверяет ограничение на суммарную ширину пакета дисков.
+        /// Суммарная ширина H не должна превышать длину посадочной части грифа l₂.
+        /// </summary>
+        /// <param name="validationErrors">
+        /// Список ошибок, в который добавляются результаты проверки.</param>
+        private void ValidateDiskPackWidth(List<ValidationError> validationErrors)
+        {
+            var totalDiskWidthPerSide = TotalDiskWidthPerSide;
+
+            if (totalDiskWidthPerSide <= Rod.SeatLength)
             {
-                return errors;
+                return;
             }
 
             var messageForDisks =
-                $"Суммарная ширина пакета дисков H = {H:F1} мм не должна превышать длину посадочной части стержня l₂ = {Rod.SeatLength:F1} мм.";
+                $"Суммарная ширина пакета дисков H = {totalDiskWidthPerSide:F1} мм не должна " +
+                $"превышать длину посадочной части стержня l₂ = {Rod.SeatLength:F1} мм.";
 
             var messageForRod =
-                $"Длина посадочной части стержня l₂ = {Rod.SeatLength:F1} мм меньше суммарной ширины пакета дисков H = {H:F1} мм.";
+                $"Длина посадочной части стержня l₂ = {Rod.SeatLength:F1} мм меньше суммарной " +
+                $"ширины пакета дисков H = {totalDiskWidthPerSide:F1} мм.";
 
-            for (var i = 0; i < DisksPerSide && i < Disks.Count; i++)
+            for (
+                var diskIndex = 0;
+                diskIndex < DisksPerSide && diskIndex < Disks.Count;
+                diskIndex++)
             {
-                errors.Add(new ValidationError($"Disks[{i}].Thickness", messageForDisks));
+                validationErrors.Add(
+                    new ValidationError($"Disks[{diskIndex}].Thickness", messageForDisks));
             }
 
-            errors.Add(new ValidationError("Rod.SeatLength", messageForRod));
-
-            return errors;
-
+            validationErrors.Add(new ValidationError("Rod.SeatLength", messageForRod));
         }
     }
 }
