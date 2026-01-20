@@ -1,4 +1,4 @@
-name: Build & Test
+name: Unit Tests (Core)
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -21,14 +21,15 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "8.0.417"
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.sln
+            **/packages.lock.json
 
-      - name: Restore solution
-        run: dotnet restore .\SportsDumbbellsPlugin\SportsDumbbellsPlugin.sln
+      - name: Restore
+        run: dotnet restore ./SportsDumbbellsPluginCore.Tests/SportsDumbbellsPluginCore.Tests.csproj
 
-      - name: Build solution
-        run: dotnet build .\SportsDumbbellsPlugin\SportsDumbbellsPlugin.sln --configuration Release --no-restore
-
-      # Запускаем строго unit-тесты Core, чтобы CI не зависел от COM/KOMPAS/WinForms нюансов
-      - name: Run unit tests
-        run: dotnet test .\SportsDumbbellsPluginCore.Tests\SportsDumbbellsPluginCore.Tests.csproj --configuration Release --no-build --verbosity normal
+      - name: Test
+        run: dotnet test ./SportsDumbbellsPluginCore.Tests/SportsDumbbellsPluginCore.Tests.csproj --configuration Release --no-restore --verbosity normal
