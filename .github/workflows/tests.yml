@@ -1,0 +1,35 @@
+name: Unit Tests (Core)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.417"
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.sln
+            **/packages.lock.json
+
+      - name: Restore
+        run: dotnet restore ./SportsDumbbellsPluginCore.Tests/SportsDumbbellsPluginCore.Tests.csproj
+
+      - name: Test
+        run: dotnet test ./SportsDumbbellsPluginCore.Tests/SportsDumbbellsPluginCore.Tests.csproj --configuration Release --no-restore --verbosity normal
