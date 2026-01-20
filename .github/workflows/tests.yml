@@ -1,0 +1,34 @@
+name: Build & Test
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore solution
+        run: dotnet restore .\SportsDumbbellsPlugin\SportsDumbbellsPlugin.sln
+
+      - name: Build solution
+        run: dotnet build .\SportsDumbbellsPlugin\SportsDumbbellsPlugin.sln --configuration Release --no-restore
+
+      # Запускаем строго unit-тесты Core, чтобы CI не зависел от COM/KOMPAS/WinForms нюансов
+      - name: Run unit tests
+        run: dotnet test .\SportsDumbbellsPluginCore.Tests\SportsDumbbellsPluginCore.Tests.csproj --configuration Release --no-build --verbosity normal
