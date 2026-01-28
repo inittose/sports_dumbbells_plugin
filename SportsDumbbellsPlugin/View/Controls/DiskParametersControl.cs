@@ -58,6 +58,7 @@ namespace SportsDumbbellsPlugin.View.Controls
                 throw new ArgumentNullException(nameof(model));
             }
 
+            //todo: duplication
             textBoxHoleDiameter.Text =
                 model.HoleDiameter.ToString("F1", CultureInfo.InvariantCulture);
 

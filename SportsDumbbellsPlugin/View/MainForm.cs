@@ -11,10 +11,14 @@ namespace SportsDumbbellsPlugin.View
     /// </summary>
     public partial class MainForm : Form
     {
+        //todo: duplication
+
         /// <summary>
         /// Префикс источника ошибок, относящихся к грифу.
         /// </summary>
         private const string RodErrorSourcePrefix = "Rod.";
+
+        //todo: duplication
 
         /// <summary>
         /// Префикс источника ошибок, относящихся к дискам.

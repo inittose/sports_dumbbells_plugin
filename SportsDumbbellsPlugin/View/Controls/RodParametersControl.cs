@@ -63,6 +63,7 @@ namespace SportsDumbbellsPlugin.View.Controls
             {
                 throw new ArgumentNullException(nameof(model));
             }
+            //todo: duplication
 
             textBoxCenterLength.Text =
                 model.HandleLength.ToString("F1", CultureInfo.InvariantCulture);
@@ -145,6 +146,7 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// <param name="message">Сообщение об ошибке.</param>
         private void ApplyError(string propertyName, string message)
         {
+            //TODO: switch-case
             if (propertyName == nameof(RodParameters.HandleLength))
             {
                 SetError(textBoxCenterLength, message);
@@ -236,6 +238,7 @@ namespace SportsDumbbellsPlugin.View.Controls
         private void UpdateTotalLength(double totalLength)
         {
             textBoxTotalLength.Text =
+            //todo: duplication
                 totalLength.ToString("F1", CultureInfo.InvariantCulture);
         }
 

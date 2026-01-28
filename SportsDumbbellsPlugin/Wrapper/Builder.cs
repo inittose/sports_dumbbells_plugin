@@ -2,6 +2,7 @@
 
 namespace SportsDumbbellsPlugin.Wrapper
 {
+    //TODO: refactor
     /// <summary>
     /// Оркестратор построения 3D-модели гантели в KOMPAS-3D.
     /// Выполняет последовательное построение грифа и дисков, используя <see cref="Wrapper"/>.

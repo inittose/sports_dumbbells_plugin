@@ -6,6 +6,7 @@
     /// </summary>
     public class RodParameters
     {
+        //TODO: XML
         private const double HandleLengthMin = 100.0;
 
         private const double HandleLengthMax = 200.0;

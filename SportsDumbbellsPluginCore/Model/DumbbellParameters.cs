@@ -7,6 +7,7 @@
     /// </summary>
     public class DumbbellParameters
     {
+        //TODO: XML
         private const int DisksPerSideMin = 0;
 
         private const int DisksPerSideMax = 8;

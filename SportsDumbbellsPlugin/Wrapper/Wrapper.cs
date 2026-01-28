@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace SportsDumbbellsPlugin.Wrapper
 {
+    //TODO: refactor
+
     /// <summary>
     /// Обёртка над KOMPAS-3D API5. Инкапсулирует подключение к КОМПАС,
     /// создание 3D-документа, работу с эскизами и базовыми 3D-операциями.
@@ -363,6 +365,7 @@ namespace SportsDumbbellsPlugin.Wrapper
             }
             catch
             {
+                //TODO: ??
                 // Игнорируем исключения при освобождении COM.
             }
         }

@@ -6,6 +6,7 @@
     /// </summary>
     public class DiskParameters
     {
+        //TODO: XML
         private const double OuterDiameterMin = 120.0;
         private const double OuterDiameterMax = 260.0;
 
