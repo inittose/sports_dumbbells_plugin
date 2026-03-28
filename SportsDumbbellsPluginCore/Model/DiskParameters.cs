@@ -8,9 +8,6 @@ namespace SportsDumbbellsPluginCore.Model
     /// </summary>
     public class DiskParameters
     {
-        //TODO: XML
-        // +
-
         /// <summary>
         /// Минимально допустимый внешний диаметр диска, мм.
         /// </summary>

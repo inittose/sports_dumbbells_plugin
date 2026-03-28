@@ -8,9 +8,6 @@ namespace SportsDumbbellsPluginCore.Model
     /// </summary>
     public class RodParameters
     {
-        //TODO: XML
-        // +
-
         /// <summary>
         /// Ширина одной кольцевой прорези, мм.
         /// </summary>

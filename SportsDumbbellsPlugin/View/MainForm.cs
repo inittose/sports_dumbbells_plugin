@@ -12,11 +12,6 @@ namespace SportsDumbbellsPlugin.View
     /// </summary>
     public partial class MainForm : Form
     {
-        //todo: duplication
-        // +
-        //todo: duplication
-        // +
-
         /// <summary>
         /// Обёртка над KOMPAS API.
         /// Создаётся лениво при первом построении модели.
@@ -64,6 +59,7 @@ namespace SportsDumbbellsPlugin.View
             var dumbbellParameters = BuildModelFromControls();
             var validationErrors = dumbbellParameters.Validate();
 
+            //TODO: RSDN
             _rodTabHasErrors = validationErrors.Any(error =>
                 error.Source.StartsWith(ValidationSources.RodPrefix, StringComparison.Ordinal));
 

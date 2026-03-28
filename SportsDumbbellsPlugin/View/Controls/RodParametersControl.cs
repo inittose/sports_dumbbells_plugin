@@ -64,9 +64,8 @@ namespace SportsDumbbellsPlugin.View.Controls
             {
                 throw new ArgumentNullException(nameof(model));
             }
-            //todo: duplication
-            // +
 
+            //TODO: RSDN
             textBoxCenterLength.Text = ParameterValueFormatter.FormatDouble(model.HandleLength);
             textBoxSeatLength.Text = ParameterValueFormatter.FormatDouble(model.SeatLength);
             textBoxHandleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HandleDiameter);
@@ -164,8 +163,6 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// <param name="message">Сообщение об ошибке.</param>
         private void ApplyError(string propertyName, string message)
         {
-            //TODO: switch-case
-            // +
             var control = GetControlByPropertyName(propertyName);
             if (control != null)
             {
@@ -240,8 +237,6 @@ namespace SportsDumbbellsPlugin.View.Controls
         private void UpdateTotalLength(double totalLength)
         {
             textBoxTotalLength.Text = ParameterValueFormatter.FormatDouble(totalLength);
-            //todo: duplication
-            // +
         }
 
         /// <summary>

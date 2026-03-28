@@ -9,8 +9,6 @@ namespace SportsDumbbellsPluginCore.Model
     /// </summary>
     public class DumbbellParameters
     {
-        //TODO: XML
-        // +
         /// <summary>
         /// Минимально допустимое количество дисков на одной стороне.
         /// </summary>
