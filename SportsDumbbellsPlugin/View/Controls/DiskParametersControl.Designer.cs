@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DiskParametersControl));
             groupBox = new GroupBox();
+            textBoxFilletDiameter = new TextBox();
+            label4 = new Label();
             textBoxThickness = new TextBox();
             textBoxHoleDiameter = new TextBox();
             textBoxOuterDiameter = new TextBox();
@@ -38,15 +40,13 @@
             label2 = new Label();
             label1 = new Label();
             errorProvider = new ErrorProvider(components);
-            label4 = new Label();
-            textBoxRounding = new TextBox();
             groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // groupBox
             // 
-            groupBox.Controls.Add(textBoxRounding);
+            groupBox.Controls.Add(textBoxFilletDiameter);
             groupBox.Controls.Add(label4);
             groupBox.Controls.Add(textBoxThickness);
             groupBox.Controls.Add(textBoxHoleDiameter);
@@ -61,6 +61,24 @@
             groupBox.TabIndex = 0;
             groupBox.TabStop = false;
             groupBox.Text = "Параметры диска n";
+            // 
+            // textBoxFilletDiameter
+            // 
+            textBoxFilletDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxFilletDiameter.Location = new Point(317, 131);
+            textBoxFilletDiameter.Name = "textBoxFilletDiameter";
+            textBoxFilletDiameter.Size = new Size(100, 23);
+            textBoxFilletDiameter.TabIndex = 7;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(13, 134);
+            label4.Margin = new Padding(10);
+            label4.Name = "label4";
+            label4.Size = new Size(182, 15);
+            label4.TabIndex = 6;
+            label4.Text = "Диаметр скругления диска, мм:";
             // 
             // textBoxThickness
             // 
@@ -122,24 +140,6 @@
             errorProvider.ContainerControl = this;
             errorProvider.Icon = (Icon)resources.GetObject("errorProvider.Icon");
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(13, 134);
-            label4.Margin = new Padding(10);
-            label4.Name = "label4";
-            label4.Size = new Size(182, 15);
-            label4.TabIndex = 6;
-            label4.Text = "Диаметр скругления диска, мм:";
-            // 
-            // textBoxRounding
-            // 
-            textBoxRounding.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxRounding.Location = new Point(317, 131);
-            textBoxRounding.Name = "textBoxRounding";
-            textBoxRounding.Size = new Size(100, 23);
-            textBoxRounding.TabIndex = 7;
-            // 
             // DiskParametersControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -166,6 +166,6 @@
         private TextBox textBoxOuterDiameter;
         private ErrorProvider errorProvider;
         private Label label4;
-        private TextBox textBoxRounding;
+        private TextBox textBoxFilletDiameter;
     }
 }
