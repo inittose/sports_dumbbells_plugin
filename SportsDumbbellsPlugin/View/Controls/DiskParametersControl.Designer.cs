@@ -38,12 +38,16 @@
             label2 = new Label();
             label1 = new Label();
             errorProvider = new ErrorProvider(components);
+            label4 = new Label();
+            textBoxRounding = new TextBox();
             groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // groupBox
             // 
+            groupBox.Controls.Add(textBoxRounding);
+            groupBox.Controls.Add(label4);
             groupBox.Controls.Add(textBoxThickness);
             groupBox.Controls.Add(textBoxHoleDiameter);
             groupBox.Controls.Add(textBoxOuterDiameter);
@@ -53,7 +57,7 @@
             groupBox.Dock = DockStyle.Fill;
             groupBox.Location = new Point(0, 0);
             groupBox.Name = "groupBox";
-            groupBox.Size = new Size(360, 131);
+            groupBox.Size = new Size(447, 156);
             groupBox.TabIndex = 0;
             groupBox.TabStop = false;
             groupBox.Text = "Параметры диска n";
@@ -61,7 +65,7 @@
             // textBoxThickness
             // 
             textBoxThickness.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxThickness.Location = new Point(230, 96);
+            textBoxThickness.Location = new Point(317, 96);
             textBoxThickness.Name = "textBoxThickness";
             textBoxThickness.Size = new Size(100, 23);
             textBoxThickness.TabIndex = 5;
@@ -69,7 +73,7 @@
             // textBoxHoleDiameter
             // 
             textBoxHoleDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxHoleDiameter.Location = new Point(230, 61);
+            textBoxHoleDiameter.Location = new Point(317, 61);
             textBoxHoleDiameter.Name = "textBoxHoleDiameter";
             textBoxHoleDiameter.Size = new Size(100, 23);
             textBoxHoleDiameter.TabIndex = 4;
@@ -77,7 +81,7 @@
             // textBoxOuterDiameter
             // 
             textBoxOuterDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxOuterDiameter.Location = new Point(230, 26);
+            textBoxOuterDiameter.Location = new Point(317, 26);
             textBoxOuterDiameter.Name = "textBoxOuterDiameter";
             textBoxOuterDiameter.Size = new Size(100, 23);
             textBoxOuterDiameter.TabIndex = 3;
@@ -118,15 +122,33 @@
             errorProvider.ContainerControl = this;
             errorProvider.Icon = (Icon)resources.GetObject("errorProvider.Icon");
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(13, 134);
+            label4.Margin = new Padding(10);
+            label4.Name = "label4";
+            label4.Size = new Size(182, 15);
+            label4.TabIndex = 6;
+            label4.Text = "Диаметр скругления диска, мм:";
+            // 
+            // textBoxRounding
+            // 
+            textBoxRounding.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxRounding.Location = new Point(317, 131);
+            textBoxRounding.Name = "textBoxRounding";
+            textBoxRounding.Size = new Size(100, 23);
+            textBoxRounding.TabIndex = 7;
+            // 
             // DiskParametersControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(groupBox);
-            MaximumSize = new Size(0, 131);
-            MinimumSize = new Size(0, 131);
+            MaximumSize = new Size(0, 156);
+            MinimumSize = new Size(0, 156);
             Name = "DiskParametersControl";
-            Size = new Size(360, 131);
+            Size = new Size(447, 156);
             groupBox.ResumeLayout(false);
             groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
@@ -143,5 +165,7 @@
         private TextBox textBoxHoleDiameter;
         private TextBox textBoxOuterDiameter;
         private ErrorProvider errorProvider;
+        private Label label4;
+        private TextBox textBoxRounding;
     }
 }

@@ -28,6 +28,8 @@ namespace SportsDumbbellsPlugin.View.Controls
             textBoxSeatLength.TextChanged += OnAnyParameterChanged;
             textBoxHandleDiameter.TextChanged += OnAnyParameterChanged;
             textBoxSeatDiameter.TextChanged += OnAnyParameterChanged;
+            textBoxGrooveDepth.TextChanged += OnAnyParameterChanged;
+            numericUpDownGrooveCount.ValueChanged += OnAnyParameterChanged;
 
             SetDefault();
         }
@@ -45,6 +47,8 @@ namespace SportsDumbbellsPlugin.View.Controls
                 SeatLength = ParseDoubleOrDefault(textBoxSeatLength.Text),
                 HandleDiameter = ParseDoubleOrDefault(textBoxHandleDiameter.Text),
                 SeatDiameter = ParseDoubleOrDefault(textBoxSeatDiameter.Text),
+                GrooveCount = (int)numericUpDownGrooveCount.Value,
+                GrooveDepth = ParseDoubleOrDefault(textBoxGrooveDepth.Text),
             };
 
             return rodParameters;
@@ -67,6 +71,11 @@ namespace SportsDumbbellsPlugin.View.Controls
             textBoxSeatLength.Text = ParameterValueFormatter.FormatDouble(model.SeatLength);
             textBoxHandleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HandleDiameter);
             textBoxSeatDiameter.Text = ParameterValueFormatter.FormatDouble(model.SeatDiameter);
+            textBoxGrooveDepth.Text = ParameterValueFormatter.FormatDouble(model.GrooveDepth);
+            numericUpDownGrooveCount.Value = Math.Max(
+                numericUpDownGrooveCount.Minimum,
+                Math.Min(numericUpDownGrooveCount.Maximum, model.GrooveCount));
+
             UpdateTotalLength(model.TotalLength);
         }
 
@@ -90,6 +99,8 @@ namespace SportsDumbbellsPlugin.View.Controls
             ResetBackColor(textBoxSeatLength);
             ResetBackColor(textBoxHandleDiameter);
             ResetBackColor(textBoxSeatDiameter);
+            ResetBackColor(textBoxGrooveDepth);
+            ResetBackColor(numericUpDownGrooveCount);
         }
 
         /// <summary>
@@ -140,6 +151,8 @@ namespace SportsDumbbellsPlugin.View.Controls
                 nameof(RodParameters.SeatLength)     => textBoxSeatLength,
                 nameof(RodParameters.HandleDiameter) => textBoxHandleDiameter,
                 nameof(RodParameters.SeatDiameter)   => textBoxSeatDiameter,
+                nameof(RodParameters.GrooveCount)    => numericUpDownGrooveCount,
+                nameof(RodParameters.GrooveDepth)   => textBoxGrooveDepth,
                 _                                    => null,
             };
         }

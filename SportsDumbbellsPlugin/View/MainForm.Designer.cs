@@ -55,7 +55,7 @@ namespace SportsDumbbellsPlugin.View
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.ShowToolTips = true;
-            tabControl.Size = new Size(425, 258);
+            tabControl.Size = new Size(425, 323);
             tabControl.TabIndex = 0;
             tabControl.DrawItem += DrawTabValidation;
             // 
@@ -68,7 +68,7 @@ namespace SportsDumbbellsPlugin.View
             tabPageRod.Location = new Point(4, 24);
             tabPageRod.Name = "tabPageRod";
             tabPageRod.Padding = new Padding(3);
-            tabPageRod.Size = new Size(417, 230);
+            tabPageRod.Size = new Size(417, 295);
             tabPageRod.TabIndex = 0;
             tabPageRod.Text = "Стержень";
             tabPageRod.UseVisualStyleBackColor = true;
@@ -88,7 +88,7 @@ namespace SportsDumbbellsPlugin.View
             rodParametersControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             rodParametersControl.Location = new Point(3, 36);
             rodParametersControl.Name = "rodParametersControl";
-            rodParametersControl.Size = new Size(415, 173);
+            rodParametersControl.Size = new Size(415, 248);
             rodParametersControl.TabIndex = 11;
             // 
             // informationRodButton
@@ -151,7 +151,7 @@ namespace SportsDumbbellsPlugin.View
             // buttonDesign
             // 
             buttonDesign.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDesign.Location = new Point(319, 276);
+            buttonDesign.Location = new Point(319, 341);
             buttonDesign.Name = "buttonDesign";
             buttonDesign.Size = new Size(119, 23);
             buttonDesign.TabIndex = 1;
@@ -163,10 +163,10 @@ namespace SportsDumbbellsPlugin.View
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(454, 311);
+            ClientSize = new Size(454, 376);
             Controls.Add(buttonDesign);
             Controls.Add(tabControl);
-            MinimumSize = new Size(470, 350);
+            MinimumSize = new Size(470, 415);
             Name = "MainForm";
             Text = "Плагин для создания спортивных гантель";
             tabControl.ResumeLayout(false);

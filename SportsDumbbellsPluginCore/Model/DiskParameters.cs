@@ -10,6 +10,7 @@ namespace SportsDumbbellsPluginCore.Model
     {
         //TODO: XML
         // +
+
         /// <summary>
         /// Минимально допустимый внешний диаметр диска, мм.
         /// </summary>
@@ -41,6 +42,11 @@ namespace SportsDumbbellsPluginCore.Model
         private const double ThicknessMax = 40.0;
 
         /// <summary>
+        /// Минимально допустимый диаметр скругления, мм.
+        /// </summary>
+        private const double FilletDiameterMin = 0.0;
+
+        /// <summary>
         /// Возвращает и задает диаметр отверстия диска (d), мм.
         /// </summary>
         public double HoleDiameter { get; set; } = 27.0;
@@ -54,6 +60,12 @@ namespace SportsDumbbellsPluginCore.Model
         /// Возвращает и задает толщину диска (t), мм.
         /// </summary>
         public double Thickness { get; set; } = 20.0;
+
+        /// <summary>
+        /// Возвращает и задает диаметр скругления диска, мм.
+        /// Значение 0 означает отсутствие скругления.
+        /// </summary>
+        public double FilletDiameter { get; set; } = 4.0;
 
         /// <summary>
         /// Выполняет валидацию параметров диска и возвращает список ошибок.
@@ -88,7 +100,38 @@ namespace SportsDumbbellsPluginCore.Model
                     $"{ThicknessMin}–{ThicknessMax} мм."));
             }
 
+            ValidateFilletDiameter(errors);
+
             return errors;
+        }
+
+        /// <summary>
+        /// Проверяет допустимость диаметра скругления.
+        /// </summary>
+        private void ValidateFilletDiameter(List<ValidationError> errors)
+        {
+            if (FilletDiameter < FilletDiameterMin)
+            {
+                errors.Add(new ValidationError(
+                    "Disk.FilletDiameter",
+                    "Диаметр скругления не может быть отрицательным."));
+                return;
+            }
+
+            var maxFilletDiameter = Math.Max(
+                0.0,
+                Math.Min(Thickness, OuterDiameter - HoleDiameter));
+
+            if (FilletDiameter <= maxFilletDiameter)
+            {
+                return;
+            }
+
+            errors.Add(new ValidationError(
+                "Disk.FilletDiameter",
+                "Диаметр скругления диска должен быть не больше минимального из двух " +
+                $"значений: толщины диска t = {Thickness:F1} мм и разности D - d = " +
+                $"{(OuterDiameter - HoleDiameter):F1} мм."));
         }
     }
 }
