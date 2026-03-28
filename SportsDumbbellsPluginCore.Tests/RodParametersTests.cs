@@ -283,5 +283,107 @@ namespace SportsDumbbellsPluginCore.Tests
                     error.Source == "Rod.SeatLength"));
             });
         }
+
+        [Test]
+        [Description("Проверяет, что при количестве прорезей вне допустимого диапазона добавляется ошибка валидации.")]
+        public void Validate_GrooveCountOutOfRange_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.GrooveCount = 20;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error => error.Source == "Rod.GrooveCount"));
+        }
+
+        [Test]
+        [Description("Проверяет, что при слишком большой глубине прорези добавляется ошибка валидации.")]
+        public void Validate_GrooveDepthTooLarge_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.GrooveCount = 5;
+            rodParameters.GrooveDepth = 5.0;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error => error.Source == "Rod.GrooveDepth"));
+        }
+
+        [Test]
+        [Description("Проверяет, что при слишком большом количестве прорезей для длины рукояти добавляются ошибки валидации.")]
+        public void Validate_GroovesDoNotFitHandleLength_AddsErrors()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.HandleLength = 100;
+            rodParameters.GrooveCount = 12;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationErrors.Any(error => error.Source == "Rod.GrooveCount"));
+                Assert.That(validationErrors.Any(error => error.Source == "Rod.HandleLength"));
+            });
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при количестве прорезей ниже допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_GrooveCountBelowMin_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.GrooveCount = -1;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.GrooveCount"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при количестве прорезей выше допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_GrooveCountAboveMax_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.GrooveCount = 13;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.GrooveCount"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при глубине прорези ниже допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_GrooveDepthBelowMin_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.GrooveDepth = -0.1;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.GrooveDepth"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при глубине прорези выше допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_GrooveDepthAboveMax_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.GrooveDepth = 5.1;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.GrooveDepth"));
+        }
     }
 }
