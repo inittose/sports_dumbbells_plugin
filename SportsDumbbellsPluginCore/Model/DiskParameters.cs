@@ -1,4 +1,6 @@
-﻿namespace SportsDumbbellsPluginCore.Model
+﻿using SportsDumbbellsPluginCore.Validation;
+
+namespace SportsDumbbellsPluginCore.Model
 {
     /// <summary>
     /// Параметры диска гантели.
@@ -7,13 +9,35 @@
     public class DiskParameters
     {
         //TODO: XML
+        // +
+        /// <summary>
+        /// Минимально допустимый внешний диаметр диска, мм.
+        /// </summary>
         private const double OuterDiameterMin = 120.0;
+
+        /// <summary>
+        /// Максимально допустимый внешний диаметр диска, мм.
+        /// </summary>
         private const double OuterDiameterMax = 260.0;
 
+        /// <summary>
+        /// Минимально допустимый диаметр отверстия диска, мм.
+        /// </summary>
         private const double HoleDiameterMin = 26.0;
+
+        /// <summary>
+        /// Максимально допустимый диаметр отверстия диска, мм.
+        /// </summary>
         private const double HoleDiameterMax = 34.0;
 
+        /// <summary>
+        /// Минимально допустимая толщина диска, мм.
+        /// </summary>
         private const double ThicknessMin = 10.0;
+
+        /// <summary>
+        /// Максимально допустимая толщина диска, мм.
+        /// </summary>
         private const double ThicknessMax = 40.0;
 
         /// <summary>

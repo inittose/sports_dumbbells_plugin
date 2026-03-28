@@ -3,6 +3,7 @@
 namespace SportsDumbbellsPlugin.Wrapper
 {
     //TODO: refactor
+    // +
     /// <summary>
     /// Оркестратор построения 3D-модели гантели в KOMPAS-3D.
     /// Выполняет последовательное построение грифа и дисков, используя <see cref="Wrapper"/>.
@@ -29,10 +30,7 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="parameters">Параметры гантели.</param>
         public void Build(DumbbellParameters parameters)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
+            ArgumentNullException.ThrowIfNull(parameters);
 
             _wrapper.AttachOrRunCad(visible: true);
             _wrapper.CreateDocument3D();
@@ -70,11 +68,6 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="parameters">Параметры гантели.</param>
         private void BuildDisks(DumbbellParameters parameters)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
             if (parameters.DisksPerSide <= 0)
             {
                 return;
@@ -83,25 +76,29 @@ namespace SportsDumbbellsPlugin.Wrapper
             var currentOffsetX = (parameters.Rod.HandleLength / 2.0) +
                                  DumbbellParameters.GapBetweenDisks;
 
-            foreach (var diskParameters in parameters.Disks)
+            foreach (var disk in parameters.Disks.Take(parameters.DisksPerSide))
             {
-                var outerRadius = diskParameters.OuterDiameter / 2.0;
-                var holeRadius = diskParameters.HoleDiameter / 2.0;
-
-                _wrapper.BuildDiskAtX(
-                    outerRadius,
-                    holeRadius,
-                    diskParameters.Thickness,
-                    currentOffsetX);
-
-                _wrapper.BuildDiskAtX(
-                    outerRadius,
-                    holeRadius,
-                    diskParameters.Thickness,
-                    -currentOffsetX - diskParameters.Thickness);
-
-                currentOffsetX += diskParameters.Thickness + DumbbellParameters.GapBetweenDisks;
+                BuildDiskPair(disk, currentOffsetX);
+                currentOffsetX += disk.Thickness + DumbbellParameters.GapBetweenDisks;
             }
+        }
+
+        /// <summary>
+        /// Строит пару одинаковых дисков симметрично относительно центра грифа.
+        /// </summary>
+        /// <param name="disk">Параметры диска.</param>
+        /// <param name="offsetX">Смещение первого диска по оси X.</param>
+        private void BuildDiskPair(DiskParameters disk, double offsetX)
+        {
+            var outerRadius = disk.OuterDiameter / 2.0;
+            var holeRadius = disk.HoleDiameter / 2.0;
+
+            _wrapper.BuildDiskAtX(outerRadius, holeRadius, disk.Thickness, offsetX);
+            _wrapper.BuildDiskAtX(
+                outerRadius,
+                holeRadius,
+                disk.Thickness,
+                -offsetX - disk.Thickness);
         }
     }
 }

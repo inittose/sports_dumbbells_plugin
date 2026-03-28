@@ -1,4 +1,6 @@
-﻿namespace SportsDumbbellsPluginCore.Model
+﻿using SportsDumbbellsPluginCore.Validation;
+
+namespace SportsDumbbellsPluginCore.Model
 {
     /// <summary>
     /// Параметры гантели.
@@ -8,12 +10,27 @@
     public class DumbbellParameters
     {
         //TODO: XML
+        // +
+        /// <summary>
+        /// Минимально допустимое количество дисков на одной стороне.
+        /// </summary>
         private const int DisksPerSideMin = 0;
 
+        /// <summary>
+        /// Максимально допустимое количество дисков на одной стороне.
+        /// </summary>
         private const int DisksPerSideMax = 8;
 
+        /// <summary>
+        /// Минимально допустимая разница между диаметром отверстия диска
+        /// и диаметром посадочной части грифа, мм.
+        /// </summary>
         private const double HoleDiameterOffsetMin = 0.5;
 
+        /// <summary>
+        /// Максимально допустимая разница между диаметром отверстия диска
+        /// и диаметром посадочной части грифа, мм.
+        /// </summary>
         private const double HoleDiameterOffsetMax = 1.5;
 
         /// <summary>

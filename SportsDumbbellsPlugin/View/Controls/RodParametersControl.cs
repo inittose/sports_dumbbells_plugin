@@ -1,5 +1,7 @@
 ﻿using SportsDumbbellsPluginCore.Model;
 using System.Globalization;
+using SportsDumbbellsPlugin.View.Formatting;
+using SportsDumbbellsPluginCore.Validation;
 
 namespace SportsDumbbellsPlugin.View.Controls
 {
@@ -9,11 +11,6 @@ namespace SportsDumbbellsPlugin.View.Controls
     /// </summary>
     public partial class RodParametersControl : UserControl
     {
-        /// <summary>
-        /// Префикс источника ошибок, относящихся к грифу.
-        /// </summary>
-        private const string RodErrorSourcePrefix = "Rod.";
-
         /// <summary>
         /// Событие, возникающее при изменении любых параметров грифа.
         /// Используется для повторной валидации на уровне формы/родительского контролла.
@@ -64,19 +61,12 @@ namespace SportsDumbbellsPlugin.View.Controls
                 throw new ArgumentNullException(nameof(model));
             }
             //todo: duplication
+            // +
 
-            textBoxCenterLength.Text =
-                model.HandleLength.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxSeatLength.Text =
-                model.SeatLength.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxHandleDiameter.Text =
-                model.HandleDiameter.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxSeatDiameter.Text =
-                model.SeatDiameter.ToString("F1", CultureInfo.InvariantCulture);
-
+            textBoxCenterLength.Text = ParameterValueFormatter.FormatDouble(model.HandleLength);
+            textBoxSeatLength.Text = ParameterValueFormatter.FormatDouble(model.SeatLength);
+            textBoxHandleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HandleDiameter);
+            textBoxSeatDiameter.Text = ParameterValueFormatter.FormatDouble(model.SeatDiameter);
             UpdateTotalLength(model.TotalLength);
         }
 
@@ -114,10 +104,8 @@ namespace SportsDumbbellsPlugin.View.Controls
             }
 
             ClearErrors();
-
-            var rodErrors = errors
-                .Where(error => error.Source.StartsWith(RodErrorSourcePrefix, StringComparison.Ordinal))
-                .ToList();
+            var rodErrors = errors.Where(error => error.Source.StartsWith(
+                ValidationSources.RodPrefix, StringComparison.Ordinal)).ToList();
 
             if (rodErrors.Count == 0)
             {
@@ -125,7 +113,7 @@ namespace SportsDumbbellsPlugin.View.Controls
             }
 
             var groupedErrors = rodErrors
-                .GroupBy(error => error.Source.Substring(RodErrorSourcePrefix.Length));
+                .GroupBy(error => error.Source.Substring(ValidationSources.RodPrefix.Length));
 
             foreach (var group in groupedErrors)
             {
@@ -140,6 +128,23 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
+        /// Возвращает контрол, соответствующий имени свойства модели грифа.
+        /// </summary>
+        /// <param name="propertyName">Имя свойства модели.</param>
+        /// <returns>Соответствующий контрол или <see langword="null"/>.</returns>
+        private Control? GetControlByPropertyName(string propertyName)
+        {
+            return propertyName switch
+            {
+                nameof(RodParameters.HandleLength)   => textBoxCenterLength,
+                nameof(RodParameters.SeatLength)     => textBoxSeatLength,
+                nameof(RodParameters.HandleDiameter) => textBoxHandleDiameter,
+                nameof(RodParameters.SeatDiameter)   => textBoxSeatDiameter,
+                _                                    => null,
+            };
+        }
+
+        /// <summary>
         /// Применяет ошибку к конкретному полю ввода, соответствующему свойству модели.
         /// </summary>
         /// <param name="propertyName">Имя свойства модели.</param>
@@ -147,27 +152,11 @@ namespace SportsDumbbellsPlugin.View.Controls
         private void ApplyError(string propertyName, string message)
         {
             //TODO: switch-case
-            if (propertyName == nameof(RodParameters.HandleLength))
+            // +
+            var control = GetControlByPropertyName(propertyName);
+            if (control != null)
             {
-                SetError(textBoxCenterLength, message);
-                return;
-            }
-
-            if (propertyName == nameof(RodParameters.SeatLength))
-            {
-                SetError(textBoxSeatLength, message);
-                return;
-            }
-
-            if (propertyName == nameof(RodParameters.HandleDiameter))
-            {
-                SetError(textBoxHandleDiameter, message);
-                return;
-            }
-
-            if (propertyName == nameof(RodParameters.SeatDiameter))
-            {
-                SetError(textBoxSeatDiameter, message);
+                SetError(control, message);
             }
         }
 
@@ -237,9 +226,9 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// <param name="totalLength">Суммарная длина.</param>
         private void UpdateTotalLength(double totalLength)
         {
-            textBoxTotalLength.Text =
+            textBoxTotalLength.Text = ParameterValueFormatter.FormatDouble(totalLength);
             //todo: duplication
-                totalLength.ToString("F1", CultureInfo.InvariantCulture);
+            // +
         }
 
         /// <summary>

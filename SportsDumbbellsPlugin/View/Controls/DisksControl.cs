@@ -1,4 +1,5 @@
 ﻿using SportsDumbbellsPluginCore.Model;
+using SportsDumbbellsPluginCore.Validation;
 using System.Text.RegularExpressions;
 
 namespace SportsDumbbellsPlugin.View.Controls

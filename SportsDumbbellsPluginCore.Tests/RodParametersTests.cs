@@ -201,5 +201,87 @@ namespace SportsDumbbellsPluginCore.Tests
 
             Assert.That(validationErrors, Is.Empty);
         }
+
+        [Test]
+        [Description(
+    "Проверяет, что при длине рукояти выше допустимого диапазона " +
+    "добавляется ошибка валидации.")]
+        public void Validate_HandleLengthAboveMax_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.HandleLength = 201;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.HandleLength"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при длине посадочной части ниже допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_SeatLengthBelowMin_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.SeatLength = 69;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.SeatLength"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при диаметре рукояти ниже допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_HandleDiameterBelowMin_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.HandleDiameter = 23;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.HandleDiameter"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при диаметре посадочной части выше допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_SeatDiameterAboveMax_AddsError()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.SeatDiameter = 35;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Rod.SeatDiameter"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при общей длине стержня выше допустимого диапазона " +
+            "добавляются ошибки для длины рукояти и посадочной части.")]
+        public void Validate_TotalLengthAboveMax_AddsErrors()
+        {
+            var rodParameters = CreateValidRodParameters();
+            rodParameters.HandleLength = 200;
+            rodParameters.SeatLength = 151;
+
+            var validationErrors = rodParameters.Validate();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationErrors.Any(error =>
+                    error.Source == "Rod.HandleLength"));
+
+                Assert.That(validationErrors.Any(error =>
+                    error.Source == "Rod.SeatLength"));
+            });
+        }
     }
 }

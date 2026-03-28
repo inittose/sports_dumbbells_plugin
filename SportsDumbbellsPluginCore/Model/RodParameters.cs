@@ -1,4 +1,6 @@
-﻿namespace SportsDumbbellsPluginCore.Model
+﻿using SportsDumbbellsPluginCore.Validation;
+
+namespace SportsDumbbellsPluginCore.Model
 {
     /// <summary>
     /// Параметры грифа гантели.
@@ -7,24 +9,55 @@
     public class RodParameters
     {
         //TODO: XML
+        // +
+        /// <summary>
+        /// Минимально допустимая длина рукояти, мм.
+        /// </summary>
         private const double HandleLengthMin = 100.0;
 
+        /// <summary>
+        /// Максимально допустимая длина рукояти, мм.
+        /// </summary>
         private const double HandleLengthMax = 200.0;
 
+        /// <summary>
+        /// Минимально допустимая длина посадочной части, мм.
+        /// </summary>
         private const double SeatLengthMin = 70.0;
 
+        /// <summary>
+        /// Максимально допустимая длина посадочной части, мм.
+        /// </summary>
         private const double SeatLengthMax = 150.0;
 
+        /// <summary>
+        /// Минимально допустимый диаметр рукояти, мм.
+        /// </summary>
         private const double HandleDiameterMin = 24.0;
 
+        /// <summary>
+        /// Максимально допустимый диаметр рукояти, мм.
+        /// </summary>
         private const double HandleDiameterMax = 34.0;
 
+        /// <summary>
+        /// Минимально допустимый диаметр посадочной части, мм.
+        /// </summary>
         private const double SeatDiameterMin = 24.0;
 
+        /// <summary>
+        /// Максимально допустимый диаметр посадочной части, мм.
+        /// </summary>
         private const double SeatDiameterMax = 34.0;
 
+        /// <summary>
+        /// Минимально допустимая общая длина грифа, мм.
+        /// </summary>
         private const double TotalLengthMin = 200.0;
 
+        /// <summary>
+        /// Максимально допустимая общая длина грифа, мм.
+        /// </summary>
         private const double TotalLengthMax = 500.0;
 
         /// <summary>

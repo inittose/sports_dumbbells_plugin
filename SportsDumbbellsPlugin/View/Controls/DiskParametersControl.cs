@@ -1,5 +1,6 @@
 ﻿using SportsDumbbellsPluginCore.Model;
 using System.Globalization;
+using SportsDumbbellsPlugin.View.Formatting;
 
 namespace SportsDumbbellsPlugin.View.Controls
 {
@@ -59,14 +60,10 @@ namespace SportsDumbbellsPlugin.View.Controls
             }
 
             //todo: duplication
-            textBoxHoleDiameter.Text =
-                model.HoleDiameter.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxOuterDiameter.Text =
-                model.OuterDiameter.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxThickness.Text =
-                model.Thickness.ToString("F1", CultureInfo.InvariantCulture);
+            // +
+            textBoxHoleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HoleDiameter);
+            textBoxOuterDiameter.Text = ParameterValueFormatter.FormatDouble(model.OuterDiameter);
+            textBoxThickness.Text = ParameterValueFormatter.FormatDouble(model.Thickness);
         }
 
         /// <summary>

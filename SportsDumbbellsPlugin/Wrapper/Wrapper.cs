@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 namespace SportsDumbbellsPlugin.Wrapper
 {
     //TODO: refactor
+    // +
 
     /// <summary>
     /// Обёртка над KOMPAS-3D API5. Инкапсулирует подключение к КОМПАС,
@@ -12,6 +13,11 @@ namespace SportsDumbbellsPlugin.Wrapper
     /// </summary>
     public class Wrapper : IDisposable
     {
+        /// <summary>
+        /// ProgID приложения KOMPAS.
+        /// </summary>
+        private const string KompasProgId = "KOMPAS.Application.5";
+
         /// <summary>
         /// Экземпляр приложения KOMPAS.
         /// </summary>
@@ -43,10 +49,10 @@ namespace SportsDumbbellsPlugin.Wrapper
                 return;
             }
 
-            var kompasType = Type.GetTypeFromProgID("KOMPAS.Application.5");
+            var kompasType = Type.GetTypeFromProgID(KompasProgId);
             if (kompasType == null)
             {
-                throw new InvalidOperationException("Не найден ProgID KOMPAS.Application.5.");
+                throw new InvalidOperationException($"Не найден ProgID {KompasProgId}.");
             }
 
             _kompas = (KompasObject?)Activator.CreateInstance(kompasType);
@@ -67,10 +73,19 @@ namespace SportsDumbbellsPlugin.Wrapper
         public void CreateDocument3D(bool invisible = false)
         {
             EnsureKompas();
-
             CloseActiveDocument();
 
-            _document3D = (ksDocument3D?)_kompas!.Document3D();
+            try
+            {
+                _document3D = (ksDocument3D?)_kompas!.Document3D();
+            }
+            catch
+            {
+                _kompas = null;
+                AttachOrRunCad();
+                _document3D = (ksDocument3D?)_kompas!.Document3D();
+            }
+
             if (_document3D == null)
             {
                 throw new InvalidOperationException("Не удалось получить ksDocument3D.");
@@ -194,15 +209,15 @@ namespace SportsDumbbellsPlugin.Wrapper
             double offsetX = 0,
             Direction_Type direction = Direction_Type.dtNormal)
         {
-            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
-            var sketchEntity = CreateSketchOnPlane(planeEntity);
-
-            DrawCircle(0, 0, outerRadius);
-            DrawCircle(0, 0, holeRadius);
-
-            FinishSketch(sketchEntity);
-
-            BossExtrusion(sketchEntity, thickness, direction);
+            BuildExtrusionAtOffsetPlaneYOZ(
+                offsetX,
+                () =>
+                {
+                    DrawCircle(0, 0, outerRadius);
+                    DrawCircle(0, 0, holeRadius);
+                },
+                thickness,
+                direction);
         }
 
         /// <summary>
@@ -214,13 +229,14 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="offsetX">Смещение плоскости YOZ по оси X.</param>
         public void BuildCylinderAtX(double radius, double height, double offsetX = 0)
         {
-            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
-            var sketchEntity = CreateSketchOnPlane(planeEntity);
-
-            DrawCircle(0, 0, radius);
-            FinishSketch(sketchEntity);
-
-            BossExtrusion(sketchEntity, height, Direction_Type.dtMiddlePlane);
+            BuildExtrusionAtOffsetPlaneYOZ(
+                offsetX,
+                () =>
+                {
+                    DrawCircle(0, 0, radius);
+                },
+                height,
+                Direction_Type.dtMiddlePlane);
         }
 
         /// <summary>
@@ -300,13 +316,7 @@ namespace SportsDumbbellsPlugin.Wrapper
             }
             finally
             {
-                ReleaseCom(_currentSketchDocument2D);
-                ReleaseCom(_topPart);
-                ReleaseCom(_document3D);
-
-                _currentSketchDocument2D = null;
-                _topPart = null;
-                _document3D = null;
+                ReleaseDocumentResources();
             }
         }
 
@@ -319,6 +329,49 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             ReleaseCom(_kompas);
             _kompas = null;
+        }
+
+        /// <summary>
+        /// Выполняет общий сценарий:
+        /// создание смещённой плоскости, создание эскиза, рисование и выдавливание.
+        /// </summary>
+        /// <param name="offsetX">Смещение плоскости по оси X.</param>
+        /// <param name="drawAction">Действие рисования в эскизе.</param>
+        /// <param name="depth">Глубина выдавливания.</param>
+        /// <param name="direction">Направление выдавливания.</param>
+        private void BuildExtrusionAtOffsetPlaneYOZ(
+            double offsetX,
+            Action drawAction,
+            double depth,
+            Direction_Type direction)
+        {
+            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
+            var sketchEntity = CreateSketchOnPlane(planeEntity);
+
+            try
+            {
+                drawAction();
+            }
+            finally
+            {
+                FinishSketch(sketchEntity);
+            }
+
+            BossExtrusion(sketchEntity, depth, direction);
+        }
+
+        /// <summary>
+        /// Освобождает ресурсы текущего документа.
+        /// </summary>
+        private void ReleaseDocumentResources()
+        {
+            ReleaseCom(_currentSketchDocument2D);
+            ReleaseCom(_topPart);
+            ReleaseCom(_document3D);
+
+            _currentSketchDocument2D = null;
+            _topPart = null;
+            _document3D = null;
         }
 
         /// <summary>
@@ -356,18 +409,12 @@ namespace SportsDumbbellsPlugin.Wrapper
                 return;
             }
 
-            try
+            if (Marshal.IsComObject(comObject))
             {
-                if (Marshal.IsComObject(comObject))
-                {
-                    Marshal.FinalReleaseComObject(comObject);
-                }
+                Marshal.FinalReleaseComObject(comObject);
             }
-            catch
-            {
-                //TODO: ??
-                // Игнорируем исключения при освобождении COM.
-            }
+            //TODO: ??
+            // +
         }
     }
 }

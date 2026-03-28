@@ -1,6 +1,7 @@
 ﻿using SportsDumbbellsPlugin.Wrapper;
 
 using SportsDumbbellsPluginCore.Model;
+using SportsDumbbellsPluginCore.Validation;
 
 namespace SportsDumbbellsPlugin.View
 {
@@ -12,18 +13,9 @@ namespace SportsDumbbellsPlugin.View
     public partial class MainForm : Form
     {
         //todo: duplication
-
-        /// <summary>
-        /// Префикс источника ошибок, относящихся к грифу.
-        /// </summary>
-        private const string RodErrorSourcePrefix = "Rod.";
-
+        // +
         //todo: duplication
-
-        /// <summary>
-        /// Префикс источника ошибок, относящихся к дискам.
-        /// </summary>
-        private const string DisksErrorSourcePrefix = "Disks[";
+        // +
 
         /// <summary>
         /// Обёртка над KOMPAS API.
@@ -73,10 +65,10 @@ namespace SportsDumbbellsPlugin.View
             var validationErrors = dumbbellParameters.Validate();
 
             _rodTabHasErrors = validationErrors.Any(error =>
-                error.Source.StartsWith(RodErrorSourcePrefix, StringComparison.Ordinal));
+                error.Source.StartsWith(ValidationSources.RodPrefix, StringComparison.Ordinal));
 
             _disksTabHasErrors = validationErrors.Any(error =>
-                error.Source.StartsWith(DisksErrorSourcePrefix, StringComparison.Ordinal));
+                error.Source.StartsWith(ValidationSources.DisksPrefix, StringComparison.Ordinal));
 
             rodParametersControl.ApplyErrors(validationErrors);
             disksControl.ApplyErrors(validationErrors);
