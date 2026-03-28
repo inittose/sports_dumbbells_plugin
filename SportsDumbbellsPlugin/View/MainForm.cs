@@ -57,14 +57,19 @@ namespace SportsDumbbellsPlugin.View
         private void ValidateAllParameters()
         {
             var dumbbellParameters = BuildModelFromControls();
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             //TODO: RSDN
-            _rodTabHasErrors = validationErrors.Any(error =>
-                error.Source.StartsWith(ValidationSources.RodPrefix, StringComparison.Ordinal));
+            _rodTabHasErrors = validationErrors.Any(
+                error => error.Source.StartsWith(
+                    ValidationSources.RodPrefix,
+                    StringComparison.Ordinal));
 
-            _disksTabHasErrors = validationErrors.Any(error =>
-                error.Source.StartsWith(ValidationSources.DisksPrefix, StringComparison.Ordinal));
+            _disksTabHasErrors = validationErrors.Any(
+                error => error.Source.StartsWith(
+                    ValidationSources.DisksPrefix,
+                    StringComparison.Ordinal));
 
             rodParametersControl.ApplyErrors(validationErrors);
             disksControl.ApplyErrors(validationErrors);
@@ -86,7 +91,8 @@ namespace SportsDumbbellsPlugin.View
                 DisksPerSide = disksControl.DisksPerSide,
             };
 
-            dumbbellParameters.Disks.AddRange(disksControl.GetDiskModels());
+            dumbbellParameters.Disks.AddRange(
+                disksControl.GetDiskModels());
 
             return dumbbellParameters;
         }
@@ -121,16 +127,22 @@ namespace SportsDumbbellsPlugin.View
                 e.Font,
                 e.Bounds,
                 SystemColors.ControlText,
-                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                TextFormatFlags.HorizontalCenter
+                | TextFormatFlags.VerticalCenter);
         }
 
         /// <summary>
-        /// Возвращает цвет фона вкладки в зависимости от состояния выбора и наличия ошибок.
+        /// Возвращает цвет фона вкладки в зависимости от состояния выбора и
+        /// наличия ошибок.
         /// </summary>
-        /// <param name="hasError">Признак наличия ошибок, связанных с вкладкой.</param>
+        /// <param name="hasError">
+        /// Признак наличия ошибок, связанных с вкладкой.
+        /// </param>
         /// <param name="state">Состояние отрисовки вкладки.</param>
         /// <returns>Цвет фона вкладки.</returns>
-        private static Color GetTabBackColor(bool hasError, DrawItemState state)
+        private static Color GetTabBackColor(
+            bool hasError,
+            DrawItemState state)
         {
             if (hasError)
             {
@@ -191,7 +203,8 @@ namespace SportsDumbbellsPlugin.View
 
         /// <summary>
         /// Запускает построение 3D-модели гантели в KOMPAS-3D.
-        /// Перед построением выполняет валидацию и, при наличии ошибок, не продолжает построение.
+        /// Перед построением выполняет валидацию и, при наличии ошибок,
+        /// не продолжает построение.
         /// </summary>
         /// <param name="sender">Источник события.</param>
         /// <param name="e">Аргументы события.</param>
@@ -199,14 +212,12 @@ namespace SportsDumbbellsPlugin.View
         {
             var dumbbellParameters = BuildModelFromControls();
             var validationErrors = dumbbellParameters.Validate();
-
             if (validationErrors.Count > 0)
             {
                 return;
             }
 
             _wrapper ??= new Wrapper.Wrapper();
-
             var builder = new Builder(_wrapper);
             builder.Build(dumbbellParameters);
         }

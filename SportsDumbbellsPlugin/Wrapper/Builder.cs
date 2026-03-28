@@ -4,12 +4,14 @@ namespace SportsDumbbellsPlugin.Wrapper
 {
     /// <summary>
     /// Оркестратор построения 3D-модели гантели в KOMPAS-3D.
-    /// Выполняет последовательное построение грифа и дисков, используя <see cref="Wrapper"/>.
+    /// Выполняет последовательное построение грифа и дисков,
+    /// используя <see cref="Wrapper"/>.
     /// </summary>
     public class Builder
     {
         /// <summary>
-        /// Обёртка над KOMPAS API, выполняющая низкоуровневые операции моделирования.
+        /// Обёртка над KOMPAS API, выполняющая низкоуровневые
+        /// операции моделирования.
         /// </summary>
         private readonly Wrapper _wrapper;
 
@@ -19,7 +21,11 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="wrapper">Обёртка KOMPAS API.</param>
         public Builder(Wrapper wrapper)
         {
-            _wrapper = wrapper ?? throw new ArgumentNullException(nameof(wrapper));
+            _wrapper = wrapper;
+            if (_wrapper == null)
+            {
+                throw new ArgumentNullException(nameof(wrapper));
+            }
         }
 
         /// <summary>
@@ -52,10 +58,13 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             var seatRadius = rodParameters.SeatDiameter / 2.0;
             var handleRadius = rodParameters.HandleDiameter / 2.0;
-            var totalRodLength = (rodParameters.SeatLength * 2.0) + rodParameters.HandleLength;
+            var totalRodLength = rodParameters.SeatLength * 2.0
+                                 + rodParameters.HandleLength;
 
             _wrapper.BuildCylinderAtX(seatRadius, totalRodLength);
-            _wrapper.BuildCylinderAtX(handleRadius, rodParameters.HandleLength);
+            _wrapper.BuildCylinderAtX(
+                handleRadius,
+                rodParameters.HandleLength);
 
             BuildHandleGrooves(rodParameters, handleRadius);
         }
@@ -67,13 +76,16 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="handleRadius">Радиус рукояти.</param>
         private void BuildHandleGrooves(RodParameters rodParameters, double handleRadius)
         {
-            if (rodParameters.GrooveCount <= 0 || rodParameters.GrooveDepth <= 0.0)
+            if (
+                rodParameters.GrooveCount <= 0
+                || rodParameters.GrooveDepth <= 0.0)
             {
                 return;
             }
 
             var grooveOuterRadius = handleRadius;
-            var grooveInnerRadius = handleRadius - rodParameters.GrooveDepth;
+            var grooveInnerRadius = handleRadius
+                                    - rodParameters.GrooveDepth;
 
             var usableLength =
                 rodParameters.HandleLength -
@@ -86,9 +98,12 @@ namespace SportsDumbbellsPlugin.Wrapper
                     : usableLength / (rodParameters.GrooveCount - 1);
 
             var currentGrooveX =
-                (-rodParameters.HandleLength / 2.0) + RodParameters.GrooveEdgeIndent;
+                (-rodParameters.HandleLength / 2.0)
+                + RodParameters.GrooveEdgeIndent;
 
-            for (var grooveIndex = 0; grooveIndex < rodParameters.GrooveCount; grooveIndex++)
+            for (var grooveIndex = 0;
+                grooveIndex < rodParameters.GrooveCount;
+                grooveIndex++)
             {
                 _wrapper.CutRingAtX(
                     grooveOuterRadius,
@@ -115,10 +130,12 @@ namespace SportsDumbbellsPlugin.Wrapper
             var currentOffsetX = (parameters.Rod.HandleLength / 2.0) +
                                  DumbbellParameters.GapBetweenDisks;
 
-            foreach (var disk in parameters.Disks.Take(parameters.DisksPerSide))
+            foreach (
+                var disk in parameters.Disks.Take(parameters.DisksPerSide))
             {
                 BuildDiskPair(disk, currentOffsetX);
-                currentOffsetX += disk.Thickness + DumbbellParameters.GapBetweenDisks;
+                currentOffsetX += disk.Thickness
+                                  + DumbbellParameters.GapBetweenDisks;
             }
         }
 

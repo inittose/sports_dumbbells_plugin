@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 namespace SportsDumbbellsPlugin.View.Controls
 {
     /// <summary>
-    /// Пользовательский элемент управления для задания количества дисков на сторону
+    /// Пользовательский элемент управления для задания количества дисков
+    /// на сторону
     /// и ввода параметров каждого диска.
     /// </summary>
     public partial class DisksControl : UserControl
@@ -18,7 +19,8 @@ namespace SportsDumbbellsPlugin.View.Controls
             new Regex(@"^Disks\[(\d+)\]\.(.+)$", RegexOptions.Compiled);
 
         /// <summary>
-        /// Событие, возникающее при изменении параметров дисков или их количества.
+        /// Событие, возникающее при изменении параметров дисков или
+        /// их количества.
         /// </summary>
         public event EventHandler? ParametersChanged;
 
@@ -79,7 +81,9 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// </summary>
         public void ClearErrors()
         {
-            foreach (var diskControl in tableLayoutDisksPanel.Controls.OfType<DiskParametersControl>())
+            foreach (
+                var diskControl in
+                tableLayoutDisksPanel.Controls.OfType<DiskParametersControl>())
             {
                 diskControl.ClearErrors();
             }
@@ -98,22 +102,23 @@ namespace SportsDumbbellsPlugin.View.Controls
 
             ClearErrors();
 
-            var diskErrors = errors
-                .Where(error => error.Source.StartsWith("Disks[", StringComparison.Ordinal))
-                .ToList();
+            var diskErrors = errors.Where(error =>
+                    error.Source.StartsWith(
+                        "Disks[", StringComparison.Ordinal)).ToList();
 
             if (diskErrors.Count == 0)
             {
                 return;
             }
 
-            var groupedDiskErrors = GroupDiskErrors(diskErrors);
+            var groupedDiskErrors =
+                GroupDiskErrors(diskErrors);
 
-            foreach (var group in groupedDiskErrors)
+            foreach (
+                var group in groupedDiskErrors)
             {
                 var diskIndex = group.Key.DiskIndex;
                 var propertyName = group.Key.PropertyName;
-
                 var combinedMessage = string.Join(
                     Environment.NewLine,
                     group.Select(item => item.Message).Distinct());

@@ -6,19 +6,23 @@ using SportsDumbbellsPluginCore.Validation;
 namespace SportsDumbbellsPlugin.View.Controls
 {
     /// <summary>
-    /// Пользовательский элемент управления для ввода и отображения параметров грифа гантели.
-    /// Выполняет отображение суммарной длины и применяет ошибки валидации на UI.
+    /// Пользовательский элемент управления для ввода и отображения
+    /// параметров грифа гантели.
+    /// Выполняет отображение суммарной длины и
+    /// применяет ошибки валидации на UI.
     /// </summary>
     public partial class RodParametersControl : UserControl
     {
         /// <summary>
         /// Событие, возникающее при изменении любых параметров грифа.
-        /// Используется для повторной валидации на уровне формы/родительского контролла.
+        /// Используется для повторной валидации на уровне
+        /// формы/родительского контролла.
         /// </summary>
         public event EventHandler? ParametersChanged;
 
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="RodParametersControl"/>.
+        /// Инициализирует новый экземпляр класса
+        /// <see cref="RodParametersControl"/>.
         /// </summary>
         public RodParametersControl()
         {
@@ -35,7 +39,8 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
-        /// Формирует модель <see cref="RodParameters"/> на основе значений в полях ввода.
+        /// Формирует модель <see cref="RodParameters"/> на основе значений в
+        /// полях ввода.
         /// Некорректные значения интерпретируются как 0.
         /// </summary>
         /// <returns>Экземпляр <see cref="RodParameters"/>.</returns>
@@ -66,11 +71,21 @@ namespace SportsDumbbellsPlugin.View.Controls
             }
 
             //TODO: RSDN
-            textBoxCenterLength.Text = ParameterValueFormatter.FormatDouble(model.HandleLength);
-            textBoxSeatLength.Text = ParameterValueFormatter.FormatDouble(model.SeatLength);
-            textBoxHandleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HandleDiameter);
-            textBoxSeatDiameter.Text = ParameterValueFormatter.FormatDouble(model.SeatDiameter);
-            textBoxGrooveDepth.Text = ParameterValueFormatter.FormatDouble(model.GrooveDepth);
+            textBoxCenterLength.Text =
+                ParameterValueFormatter.FormatDouble(model.HandleLength);
+
+            textBoxSeatLength.Text =
+                ParameterValueFormatter.FormatDouble(model.SeatLength);
+
+            textBoxHandleDiameter.Text =
+                ParameterValueFormatter.FormatDouble(model.HandleDiameter);
+
+            textBoxSeatDiameter.Text =
+                ParameterValueFormatter.FormatDouble(model.SeatDiameter);
+
+            textBoxGrooveDepth.Text =
+                ParameterValueFormatter.FormatDouble(model.GrooveDepth);
+
             numericUpDownGrooveCount.Value = Math.Max(
                 numericUpDownGrooveCount.Minimum,
                 Math.Min(numericUpDownGrooveCount.Maximum, model.GrooveCount));
@@ -114,16 +129,18 @@ namespace SportsDumbbellsPlugin.View.Controls
             }
 
             ClearErrors();
-            var rodErrors = errors.Where(error => error.Source.StartsWith(
-                ValidationSources.RodPrefix, StringComparison.Ordinal)).ToList();
+            var rodErrors = errors.Where(
+                error => error.Source.StartsWith(
+                    ValidationSources.RodPrefix,
+                    StringComparison.Ordinal)).ToList();
 
             if (rodErrors.Count == 0)
             {
                 return;
             }
 
-            var groupedErrors = rodErrors
-                .GroupBy(error => error.Source.Substring(ValidationSources.RodPrefix.Length));
+            var groupedErrors = rodErrors.GroupBy(
+                error => error.Source.Substring(ValidationSources.RodPrefix.Length));
 
             foreach (var group in groupedErrors)
             {
@@ -141,7 +158,9 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// Возвращает контрол, соответствующий имени свойства модели грифа.
         /// </summary>
         /// <param name="propertyName">Имя свойства модели.</param>
-        /// <returns>Соответствующий контрол или <see langword="null"/>.</returns>
+        /// <returns>
+        /// Соответствующий контрол или <see langword="null"/>.
+        /// </returns>
         private Control? GetControlByPropertyName(string propertyName)
         {
             return propertyName switch
@@ -171,9 +190,12 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
-        /// Устанавливает ошибку <see cref="ErrorProvider"/> и подсвечивает контрол.
+        /// Устанавливает ошибку <see cref="ErrorProvider"/> и
+        /// подсвечивает контрол.
         /// </summary>
-        /// <param name="control">Контрол, к которому применяется ошибка.</param>
+        /// <param name="control">
+        /// Контрол, к которому применяется ошибка.
+        /// </param>
         /// <param name="message">Сообщение об ошибке.</param>
         private void SetError(Control control, string message)
         {
@@ -192,7 +214,8 @@ namespace SportsDumbbellsPlugin.View.Controls
 
         /// <summary>
         /// Обработчик изменения любого параметра.
-        /// Пересчитывает суммарную длину и генерирует событие <see cref="ParametersChanged"/>.
+        /// Пересчитывает суммарную длину и генерирует событие
+        /// <see cref="ParametersChanged"/>.
         /// </summary>
         /// <param name="sender">Источник события.</param>
         /// <param name="e">Аргументы события.</param>
@@ -236,11 +259,13 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// <param name="totalLength">Суммарная длина.</param>
         private void UpdateTotalLength(double totalLength)
         {
-            textBoxTotalLength.Text = ParameterValueFormatter.FormatDouble(totalLength);
+            textBoxTotalLength.Text =
+                ParameterValueFormatter.FormatDouble(totalLength);
         }
 
         /// <summary>
-        /// Пытается распарсить число с плавающей точкой в инвариантной культуре.
+        /// Пытается распарсить число с плавающей точкой в
+        /// инвариантной культуре.
         /// При ошибке возвращает 0.
         /// </summary>
         /// <param name="value">Строковое представление числа.</param>

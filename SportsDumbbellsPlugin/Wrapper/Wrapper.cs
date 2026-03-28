@@ -31,12 +31,14 @@ namespace SportsDumbbellsPlugin.Wrapper
         private ksPart? _topPart;
 
         /// <summary>
-        /// Текущий 2D-документ (редактор эскиза), если эскиз находится в режиме редактирования.
+        /// Текущий 2D-документ (редактор эскиза),
+        /// если эскиз находится в режиме редактирования.
         /// </summary>
         private ksDocument2D? _currentSketchDocument2D;
 
         /// <summary>
-        /// Подключается к КОМПАС (создаёт экземпляр приложения) и активирует API контроллера.
+        /// Подключается к КОМПАС (создаёт экземпляр приложения) и
+        /// активирует API контроллера.
         /// </summary>
         /// <param name="visible">Признак видимости окна КОМПАС.</param>
         public void AttachOrRunCad(bool visible = true)
@@ -49,13 +51,15 @@ namespace SportsDumbbellsPlugin.Wrapper
             var kompasType = Type.GetTypeFromProgID(KompasProgId);
             if (kompasType == null)
             {
-                throw new InvalidOperationException($"Не найден ProgID {KompasProgId}.");
+                throw new InvalidOperationException(
+                    $"Не найден ProgID {KompasProgId}.");
             }
 
             _kompas = (KompasObject?)Activator.CreateInstance(kompasType);
             if (_kompas == null)
             {
-                throw new InvalidOperationException("Не удалось создать KompasObject.");
+                throw new InvalidOperationException(
+                    "Не удалось создать KompasObject.");
             }
 
             _kompas.Visible = visible;
@@ -66,7 +70,9 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// Создаёт новый 3D-документ и получает верхнюю деталь (pTop_Part).
         /// При наличии открытого документа закрывает его.
         /// </summary>
-        /// <param name="invisible">Не используется, оставлено для совместимости сигнатуры.</param>
+        /// <param name="invisible">
+        /// Не используется, оставлено для совместимости сигнатуры.
+        /// </param>
         public void CreateDocument3D(bool invisible = false)
         {
             EnsureKompas();
@@ -85,7 +91,8 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             if (_document3D == null)
             {
-                throw new InvalidOperationException("Не удалось получить ksDocument3D.");
+                throw new InvalidOperationException(
+                    "Не удалось получить ksDocument3D.");
             }
 
             _document3D.Create();
@@ -99,26 +106,35 @@ namespace SportsDumbbellsPlugin.Wrapper
         }
 
         /// <summary>
-        /// Создаёт эскиз на переданной сущности плоскости и переводит его в режим редактирования.
+        /// Создаёт эскиз на переданной сущности плоскости и
+        /// переводит его в режим редактирования.
         /// </summary>
-        /// <param name="planeEntity">Сущность плоскости (например, базовая или смещённая).</param>
+        /// <param name="planeEntity">
+        /// Сущность плоскости (например, базовая или смещённая).
+        /// </param>
         /// <returns>Сущность эскиза.</returns>
         public ksEntity CreateSketchOnPlane(ksEntity planeEntity)
         {
             EnsureTopPart();
 
-            var sketchEntity = (ksEntity?)_topPart!.NewEntity((short)Obj3dType.o3d_sketch);
+            var sketchEntity = (ksEntity?)_topPart!.NewEntity(
+                (short)Obj3dType.o3d_sketch);
+
             if (sketchEntity == null)
             {
                 throw new InvalidOperationException(
                     "Не удалось создать сущность эскиза (o3d_sketch).");
             }
 
-            var sketchDefinition = (ksSketchDefinition)sketchEntity.GetDefinition();
+            var sketchDefinition =
+                (ksSketchDefinition)sketchEntity.GetDefinition();
+
             sketchDefinition.SetPlane(planeEntity);
             sketchEntity.Create();
 
-            _currentSketchDocument2D = (ksDocument2D?)sketchDefinition.BeginEdit();
+            _currentSketchDocument2D =
+                (ksDocument2D?)sketchDefinition.BeginEdit();
+
             if (_currentSketchDocument2D == null)
             {
                 throw new InvalidOperationException(
@@ -134,9 +150,10 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="sketchEntity">Сущность эскиза.</param>
         public void FinishSketch(ksEntity sketchEntity)
         {
-            var sketchDefinition = (ksSketchDefinition)sketchEntity.GetDefinition();
-            sketchDefinition.EndEdit();
+            var sketchDefinition =
+                (ksSketchDefinition)sketchEntity.GetDefinition();
 
+            sketchDefinition.EndEdit();
             _currentSketchDocument2D = null;
         }
 
@@ -147,15 +164,24 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="centerY">Y координата центра.</param>
         /// <param name="radius">Радиус окружности.</param>
         /// <param name="style">Стиль линии (по умолчанию 1).</param>
-        public void DrawCircle(double centerX, double centerY, double radius, int style = 1)
+        public void DrawCircle(
+            double centerX,
+            double centerY,
+            double radius,
+            int style = 1)
         {
             if (_currentSketchDocument2D == null)
             {
                 throw new InvalidOperationException(
-                    "Нет активного 2D-эскиза. Сначала вызови CreateSketchOnPlane().");
+                    "Нет активного 2D-эскиза."
+                    + " Сначала вызови CreateSketchOnPlane().");
             }
 
-            _currentSketchDocument2D.ksCircle(centerX, centerY, radius, style);
+            _currentSketchDocument2D.ksCircle(
+                centerX,
+                centerY,
+                radius,
+                style);
         }
 
         /// <summary>
@@ -169,30 +195,37 @@ namespace SportsDumbbellsPlugin.Wrapper
             EnsureTopPart();
 
             var basePlaneEntity =
-                (ksEntity?)_topPart!.GetDefaultEntity((short)Obj3dType.o3d_planeYOZ);
+                (ksEntity?)_topPart!.GetDefaultEntity(
+                    (short)Obj3dType.o3d_planeYOZ);
 
             if (basePlaneEntity == null)
             {
-                throw new InvalidOperationException("Не удалось получить базовую плоскость YOZ.");
+                throw new InvalidOperationException(
+                    "Не удалось получить базовую плоскость YOZ.");
             }
 
-            var planeEntity = (ksEntity?)_topPart.NewEntity((short)Obj3dType.o3d_planeOffset);
+            var planeEntity = (ksEntity?)_topPart.NewEntity(
+                (short)Obj3dType.o3d_planeOffset);
+
             if (planeEntity == null)
             {
-                throw new InvalidOperationException("Не удалось создать o3d_planeOffset.");
+                throw new InvalidOperationException(
+                    "Не удалось создать o3d_planeOffset.");
             }
 
-            var planeDefinition = (ksPlaneOffsetDefinition)planeEntity.GetDefinition();
+            var planeDefinition =
+                (ksPlaneOffsetDefinition)planeEntity.GetDefinition();
+
             planeDefinition.SetPlane(basePlaneEntity);
             planeDefinition.offset = offsetX;
-
             planeEntity.Create();
             return planeEntity;
         }
 
         /// <summary>
         /// Строит диск на плоскости YOZ с заданным смещением по оси X.
-        /// Диск создаётся как выдавливание кольцевого профиля (две окружности в одном эскизе).
+        /// Диск создаётся как выдавливание кольцевого профиля
+        /// (две окружности в одном эскизе).
         /// </summary>
         /// <param name="outerRadius">Внешний радиус диска.</param>
         /// <param name="holeRadius">Радиус отверстия диска.</param>
@@ -218,13 +251,18 @@ namespace SportsDumbbellsPlugin.Wrapper
         }
 
         /// <summary>
-        /// Строит цилиндр с осью вдоль оси X, используя плоскость YOZ со смещением.
-        /// Выдавливание выполняется симметрично относительно плоскости (dtMiddlePlane).
+        /// Строит цилиндр с осью вдоль оси X,
+        /// используя плоскость YOZ со смещением.
+        /// Выдавливание выполняется симметрично относительно плоскости
+        /// (dtMiddlePlane).
         /// </summary>
         /// <param name="radius">Радиус цилиндра.</param>
         /// <param name="height">Длина цилиндра вдоль оси X.</param>
         /// <param name="offsetX">Смещение плоскости YOZ по оси X.</param>
-        public void BuildCylinderAtX(double radius, double height, double offsetX = 0)
+        public void BuildCylinderAtX(
+            double radius,
+            double height,
+            double offsetX = 0)
         {
             BuildExtrusionAtOffsetPlaneYOZ(
                 offsetX,
@@ -255,18 +293,20 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             if (extrusionEntity == null)
             {
-                throw new InvalidOperationException("Не удалось создать o3d_bossExtrusion.");
+                throw new InvalidOperationException(
+                    "Не удалось создать o3d_bossExtrusion.");
             }
 
-            var extrusionDefinition = (ksBossExtrusionDefinition)extrusionEntity.GetDefinition();
-            var extrusionParameters = (ksExtrusionParam)extrusionDefinition.ExtrusionParam();
+            var extrusionDefinition =
+                (ksBossExtrusionDefinition)extrusionEntity.GetDefinition();
+
+            var extrusionParameters =
+                (ksExtrusionParam)extrusionDefinition.ExtrusionParam();
 
             extrusionDefinition.SetSketch(sketchEntity);
-
             extrusionParameters.direction = (short)direction;
             extrusionParameters.typeNormal = (short)End_Type.etBlind;
             extrusionParameters.depthNormal = Math.Abs(depth);
-
             extrusionEntity.Create();
             return extrusionEntity;
         }
@@ -286,28 +326,49 @@ namespace SportsDumbbellsPlugin.Wrapper
             EnsureTopPart();
 
             //TODO: RSDN
-            var cutEntity = (ksEntity?)_topPart!.NewEntity((short)Obj3dType.o3d_cutExtrusion);
+            var cutEntity = (ksEntity?)_topPart!.NewEntity(
+                (short)Obj3dType.o3d_cutExtrusion);
             if (cutEntity == null)
             {
-                throw new InvalidOperationException("Не удалось создать o3d_cutExtrusion.");
+                throw new InvalidOperationException(
+                    "Не удалось создать o3d_cutExtrusion.");
             }
 
-            var cutDefinition = (ksCutExtrusionDefinition)cutEntity.GetDefinition();
+            var cutDefinition =
+                (ksCutExtrusionDefinition)cutEntity.GetDefinition();
+
             cutDefinition.SetSketch(sketchEntity);
 
             if (direction == Direction_Type.dtReverse)
             {
-                cutDefinition.SetSideParam(false, (short)End_Type.etBlind, Math.Abs(depth), 0.0, false);
+                cutDefinition.SetSideParam(
+                    false,
+                    (short)End_Type.etBlind,
+                    Math.Abs(depth),
+                    0.0,
+                    false);
             }
             else if (direction == Direction_Type.dtMiddlePlane)
             {
                 var halfDepth = Math.Abs(depth) / 2.0;
-                cutDefinition.SetSideParam(true, (short)End_Type.etBlind, halfDepth, 0.0, false);
-                cutDefinition.SetSideParam(false, (short)End_Type.etBlind, halfDepth, 0.0, false);
+                cutDefinition.SetSideParam(
+                    true,
+                    (short)End_Type.etBlind,
+                    halfDepth,
+                    0.0,
+                    false);
+
+                cutDefinition.SetSideParam(
+                    false,
+                    (short)End_Type.etBlind,
+                    halfDepth,
+                    0.0,
+                    false);
             }
             else
             {
-                cutDefinition.SetSideParam(true, (short)End_Type.etBlind, Math.Abs(depth), 0.0, false);
+                cutDefinition.SetSideParam(
+                    true, (short)End_Type.etBlind, Math.Abs(depth), 0.0, false);
             }
 
             cutEntity.Create();

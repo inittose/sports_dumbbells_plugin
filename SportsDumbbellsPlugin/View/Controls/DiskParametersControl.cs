@@ -16,7 +16,8 @@ namespace SportsDumbbellsPlugin.View.Controls
         private int _diskNumber;
 
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="DiskParametersControl"/>.
+        /// Инициализирует новый экземпляр класса
+        /// <see cref="DiskParametersControl"/>.
         /// </summary>
         public DiskParametersControl()
         {
@@ -32,7 +33,8 @@ namespace SportsDumbbellsPlugin.View.Controls
 
         /// <summary>
         /// Событие, возникающее при изменении любых входных параметров диска.
-        /// Используется для пересчёта/валидации на уровне формы/родительского контролла.
+        /// Используется для пересчёта/валидации на уровне
+        /// формы/родительского контролла.
         /// </summary>
         public event EventHandler? ParametersChanged;
 
@@ -50,7 +52,8 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
-        /// Применяет модель к элементам управления (заполняет текстовые поля).
+        /// Применяет модель к элементам управления
+        /// (заполняет текстовые поля).
         /// </summary>
         /// <param name="model">Модель параметров диска.</param>
         public void SetModel(DiskParameters model)
@@ -68,7 +71,8 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
-        /// Сбрасывает значения полей к значениям по умолчанию и очищает ошибки.
+        /// Сбрасывает значения полей к значениям по умолчанию и
+        /// очищает ошибки.
         /// </summary>
         public void SetDefault()
         {
@@ -79,16 +83,24 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
-        /// Формирует модель параметров диска на основе введённых пользователем значений.
+        /// Формирует модель параметров диска на основе введённых
+        /// пользователем значений.
         /// Некорректные значения интерпретируются как 0.
         /// </summary>
         /// <returns>Экземпляр <see cref="DiskParameters"/>.</returns>
         public DiskParameters GetModel()
         {
-            var outerDiameter = ParseDoubleOrDefault(textBoxOuterDiameter.Text);
-            var holeDiameter = ParseDoubleOrDefault(textBoxHoleDiameter.Text);
-            var thickness = ParseDoubleOrDefault(textBoxThickness.Text);
-            var filletDiameter = ParseDoubleOrDefault(textBoxFilletDiameter.Text);
+            var outerDiameter =
+                ParseDoubleOrDefault(textBoxOuterDiameter.Text);
+
+            var holeDiameter =
+                ParseDoubleOrDefault(textBoxHoleDiameter.Text);
+
+            var thickness =
+                ParseDoubleOrDefault(textBoxThickness.Text);
+
+            var filletDiameter =
+                ParseDoubleOrDefault(textBoxFilletDiameter.Text);
 
             return new DiskParameters
             {
@@ -145,11 +157,14 @@ namespace SportsDumbbellsPlugin.View.Controls
         }
 
         /// <summary>
-        /// Возвращает текстовое поле, соответствующее имени свойства модели диска.
+        /// Возвращает текстовое поле, соответствующее имени свойства
+        /// модели диска.
         /// </summary>
         /// <param name="propertyName">Имя свойства модели.</param>
-        /// <returns>Соответствующий <see cref="TextBox"/>,
-        /// либо <see langword="null"/> если свойство не поддерживается.</returns>
+        /// <returns>
+        /// Соответствующий <see cref="TextBox"/>,
+        /// либо <see langword="null"/> если свойство не поддерживается.
+        /// </returns>
         private TextBox? GetTargetTextBox(string propertyName)
         {
             return propertyName switch
