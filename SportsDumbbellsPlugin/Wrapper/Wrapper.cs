@@ -230,7 +230,9 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="outerRadius">Внешний радиус диска.</param>
         /// <param name="holeRadius">Радиус отверстия диска.</param>
         /// <param name="thickness">Толщина диска.</param>
-        /// <param name="offsetX">Смещение плоскости построения по оси X.</param>
+        /// <param name="offsetX">
+        /// Смещение плоскости построения по оси X.
+        /// </param>
         /// <param name="direction">Направление выдавливания.</param>
         public ksEntity BuildDiskAtX(
             double outerRadius,
@@ -325,7 +327,7 @@ namespace SportsDumbbellsPlugin.Wrapper
         {
             EnsureTopPart();
 
-            //TODO: RSDN
+            //TODO: RSDN +
             var cutEntity = (ksEntity?)_topPart!.NewEntity(
                 (short)Obj3dType.o3d_cutExtrusion);
             if (cutEntity == null)
@@ -368,7 +370,11 @@ namespace SportsDumbbellsPlugin.Wrapper
             else
             {
                 cutDefinition.SetSideParam(
-                    true, (short)End_Type.etBlind, Math.Abs(depth), 0.0, false);
+                    true,
+                    (short)End_Type.etBlind,
+                    Math.Abs(depth),
+                    0.0,
+                    false);
             }
 
             cutEntity.Create();
@@ -376,7 +382,8 @@ namespace SportsDumbbellsPlugin.Wrapper
         }
 
         /// <summary>
-        /// Строит кольцевую прорезь как вырезание выдавливанием на плоскости YOZ.
+        /// Строит кольцевую прорезь как вырезание выдавливанием
+        /// на плоскости YOZ.
         /// </summary>
         /// <param name="outerRadius">Внешний радиус прорези.</param>
         /// <param name="innerRadius">Внутренний радиус прорези.</param>
@@ -409,9 +416,13 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// Для кольцевого диска это как раз рёбра переднего и заднего торца
         /// внешнего и внутреннего контура.
         /// </summary>
-        /// <param name="operationEntity">Операция, у которой нужно скруглить рёбра.</param>
+        /// <param name="operationEntity">
+        /// Операция, у которой нужно скруглить рёбра.
+        /// </param>
         /// <param name="radius">Радиус скругления.</param>
-        public void ApplyFilletToOperationEdges(ksEntity operationEntity, double radius)
+        public void ApplyFilletToOperationEdges(
+            ksEntity operationEntity,
+            double radius)
         {
             if (operationEntity == null)
             {
@@ -428,13 +439,17 @@ namespace SportsDumbbellsPlugin.Wrapper
             var feature = (ksFeature?)operationEntity.GetFeature();
             if (feature == null)
             {
-                throw new InvalidOperationException("Не удалось получить feature операции.");
+                throw new InvalidOperationException(
+                    "Не удалось получить feature операции.");
             }
 
-            var operationEdges = (ksEntityCollection?)feature.EntityCollection((short)Obj3dType.o3d_edge);
+            var operationEdges = (ksEntityCollection?)feature.EntityCollection(
+                (short)Obj3dType.o3d_edge);
+
             if (operationEdges == null)
             {
-                throw new InvalidOperationException("Не удалось получить коллекцию рёбер операции.");
+                throw new InvalidOperationException(
+                    "Не удалось получить коллекцию рёбер операции.");
             }
 
             if (operationEdges.GetCount() == 0)
@@ -442,19 +457,24 @@ namespace SportsDumbbellsPlugin.Wrapper
                 return;
             }
 
-            var filletEntity = (ksEntity?)_topPart!.NewEntity((short)Obj3dType.o3d_fillet);
+            var filletEntity = (ksEntity?)_topPart!.NewEntity(
+                (short)Obj3dType.o3d_fillet);
+
             if (filletEntity == null)
             {
-                throw new InvalidOperationException("Не удалось создать o3d_fillet.");
+                throw new InvalidOperationException(
+                    "Не удалось создать o3d_fillet.");
             }
 
-            var filletDefinition = (ksFilletDefinition)filletEntity.GetDefinition();
+            var filletDefinition =
+                (ksFilletDefinition)filletEntity.GetDefinition();
+
             filletDefinition.radius = radius;
             filletDefinition.tangent = true;
-
             var filletEdges = (ksEntityCollection)filletDefinition.array();
-
-            for (var edgeIndex = 0; edgeIndex < operationEdges.GetCount(); edgeIndex++)
+            for (var edgeIndex = 0;
+                edgeIndex < operationEdges.GetCount();
+                edgeIndex++)
             {
                 var edge = (ksEntity?)operationEdges.GetByIndex(edgeIndex);
                 if (edge != null)
@@ -482,7 +502,8 @@ namespace SportsDumbbellsPlugin.Wrapper
         {
             if (_document3D == null)
             {
-                throw new InvalidOperationException("Нет активного 3D-документа для сохранения.");
+                throw new InvalidOperationException(
+                    "Нет активного 3D-документа для сохранения.");
             }
 
             _document3D.SaveAs(filePath);
@@ -502,10 +523,6 @@ namespace SportsDumbbellsPlugin.Wrapper
             {
                 _document3D.close();
             }
-            catch
-            {
-                // Игнорируем исключения: COM может выбросить ошибку, если документ уже закрыт.
-            }
             finally
             {
                 ReleaseDocumentResources();
@@ -513,7 +530,8 @@ namespace SportsDumbbellsPlugin.Wrapper
         }
 
         /// <summary>
-        /// Освобождает ресурсы: закрывает документ и освобождает COM-объект КОМПАС.
+        /// Освобождает ресурсы: закрывает документ и
+        /// освобождает COM-объект КОМПАС.
         /// </summary>
         public void Dispose()
         {
@@ -525,7 +543,8 @@ namespace SportsDumbbellsPlugin.Wrapper
 
         /// <summary>
         /// Выполняет общий сценарий:
-        /// создание смещённой плоскости, создание эскиза, рисование и выдавливание.
+        /// создание смещённой плоскости, создание эскиза, рисование и
+        /// выдавливание.
         /// </summary>
         /// <param name="offsetX">Смещение плоскости по оси X.</param>
         /// <param name="drawAction">Действие рисования в эскизе.</param>
@@ -586,7 +605,8 @@ namespace SportsDumbbellsPlugin.Wrapper
             if (_topPart == null)
             {
                 throw new InvalidOperationException(
-                    "Документ/деталь не инициализированы. Вызови CreateDocument3D().");
+                    "Документ/деталь не инициализированы. "
+                    + "Вызови CreateDocument3D().");
             }
         }
 

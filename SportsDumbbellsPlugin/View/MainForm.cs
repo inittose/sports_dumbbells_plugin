@@ -60,7 +60,7 @@ namespace SportsDumbbellsPlugin.View
             var validationErrors =
                 dumbbellParameters.Validate();
 
-            //TODO: RSDN
+            //TODO: RSDN +
             _rodTabHasErrors = validationErrors.Any(
                 error => error.Source.StartsWith(
                     ValidationSources.RodPrefix,
@@ -211,7 +211,9 @@ namespace SportsDumbbellsPlugin.View
         private void ButtonDesignClick(object sender, EventArgs e)
         {
             var dumbbellParameters = BuildModelFromControls();
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
+
             if (validationErrors.Count > 0)
             {
                 return;

@@ -4,7 +4,8 @@ namespace SportsDumbbellsPluginCore.Model
 {
     /// <summary>
     /// Параметры грифа гантели.
-    /// Содержит геометрические размеры и выполняет их валидацию по заданным ограничениям.
+    /// Содержит геометрические размеры и выполняет
+    /// их валидацию по заданным ограничениям.
     /// </summary>
     public class RodParameters
     {
@@ -131,7 +132,8 @@ namespace SportsDumbbellsPluginCore.Model
         /// <summary>
         /// Выполняет валидацию параметров грифа и возвращает список ошибок.
         /// </summary>
-        /// <returns>Список ошибок валидации. Если ошибок нет, возвращается пустой список.</returns>
+        /// <returns>Список ошибок валидации. Если ошибок нет,
+        /// возвращается пустой список.</returns>
         public IReadOnlyList<ValidationError> Validate()
         {
             var validationErrors = new List<ValidationError>();
@@ -155,7 +157,8 @@ namespace SportsDumbbellsPluginCore.Model
         /// </summary>
         private void ValidateHandleLength(List<ValidationError> validationErrors)
         {
-            if (HandleLength >= HandleLengthMin && HandleLength <= HandleLengthMax)
+            if (HandleLength >= HandleLengthMin
+                && HandleLength <= HandleLengthMax)
             {
                 return;
             }
@@ -185,9 +188,11 @@ namespace SportsDumbbellsPluginCore.Model
         /// <summary>
         /// Проверяет допустимость диаметра рукояти.
         /// </summary>
-        private void ValidateHandleDiameter(List<ValidationError> validationErrors)
+        private void ValidateHandleDiameter(
+            List<ValidationError> validationErrors)
         {
-            if (HandleDiameter >= HandleDiameterMin && HandleDiameter <= HandleDiameterMax)
+            if (HandleDiameter >= HandleDiameterMin
+                && HandleDiameter <= HandleDiameterMax)
             {
                 return;
             }
@@ -210,14 +215,16 @@ namespace SportsDumbbellsPluginCore.Model
 
             validationErrors.Add(new ValidationError(
                 "Rod.SeatDiameter",
-                "Диаметр посадочной части стержня d₂ должен быть в диапазоне " +
+                "Диаметр посадочной части стержня "
+                + "d₂ должен быть в диапазоне " +
                 $"{SeatDiameterMin}–{SeatDiameterMax} мм."));
         }
 
         /// <summary>
         /// Проверяет взаимное ограничение диаметров: d₂ &lt; d₁.
         /// </summary>
-        private void ValidateDiameterRelation(List<ValidationError> validationErrors)
+        private void ValidateDiameterRelation(
+            List<ValidationError> validationErrors)
         {
             if (SeatDiameter < HandleDiameter)
             {
@@ -226,21 +233,25 @@ namespace SportsDumbbellsPluginCore.Model
 
             validationErrors.Add(new ValidationError(
                 "Rod.SeatDiameter",
-                "Диаметр посадочной части стержня d₂ должен быть меньше чем " +
+                "Диаметр посадочной части стержня d₂ "
+                + "должен быть меньше чем " +
                 $"диаметр рукояти d₁ (d₁ = {HandleDiameter:F1} мм)."));
 
             validationErrors.Add(new ValidationError(
                 "Rod.HandleDiameter",
-                "Диаметр рукояти d₁ должен быть больше чем диаметр посадочной " +
+                "Диаметр рукояти d₁ должен быть больше "
+                + "чем диаметр посадочной " +
                 $"части стержня d₂ (d₂ = {SeatDiameter:F1} мм)."));
         }
 
         /// <summary>
         /// Проверяет допустимость общей длины грифа.
         /// </summary>
-        private void ValidateTotalLength(List<ValidationError> validationErrors)
+        private void ValidateTotalLength(
+            List<ValidationError> validationErrors)
         {
-            if (TotalLength >= TotalLengthMin && TotalLength <= TotalLengthMax)
+            if (TotalLength >= TotalLengthMin
+                && TotalLength <= TotalLengthMax)
             {
                 return;
             }
@@ -249,8 +260,11 @@ namespace SportsDumbbellsPluginCore.Model
                 "Общая длина стержня L = l₁ + 2·l₂ должна быть в диапазоне " +
                 $"{TotalLengthMin}–{TotalLengthMax} мм.";
 
-            validationErrors.Add(new ValidationError("Rod.HandleLength", totalLengthMessage));
-            validationErrors.Add(new ValidationError("Rod.SeatLength", totalLengthMessage));
+            validationErrors.Add(new ValidationError(
+                "Rod.HandleLength", totalLengthMessage));
+
+            validationErrors.Add(new ValidationError(
+                "Rod.SeatLength", totalLengthMessage));
         }
 
         /// <summary>
@@ -265,7 +279,8 @@ namespace SportsDumbbellsPluginCore.Model
 
             validationErrors.Add(new ValidationError(
                 "Rod.GrooveCount",
-                $"Количество прорезей должно быть в диапазоне {GrooveCountMin}–{GrooveCountMax}."));
+                $"Количество прорезей должно быть в диапазоне "
+                + $"{GrooveCountMin}–{GrooveCountMax}."));
         }
 
         /// <summary>
@@ -280,13 +295,15 @@ namespace SportsDumbbellsPluginCore.Model
 
             validationErrors.Add(new ValidationError(
                 "Rod.GrooveDepth",
-                $"Глубина прорези должна быть в диапазоне {GrooveDepthMin:F1}–{GrooveDepthMax:F1} мм."));
+                $"Глубина прорези должна быть в диапазоне "
+                + $"{GrooveDepthMin:F1}–{GrooveDepthMax:F1} мм."));
         }
 
         /// <summary>
         /// Проверяет, что после прорези рукоять остаётся толще посадочной части.
         /// </summary>
-        private void ValidateGrooveDepthAgainstRod(List<ValidationError> validationErrors)
+        private void ValidateGrooveDepthAgainstRod(
+            List<ValidationError> validationErrors)
         {
             if (GrooveCount <= 0)
             {
@@ -301,15 +318,18 @@ namespace SportsDumbbellsPluginCore.Model
 
             validationErrors.Add(new ValidationError(
                 "Rod.GrooveDepth",
-                "Глубина прорези слишком большая: после выполнения прорезей " +
-                "диаметр рукояти в зоне прорези должен оставаться больше диаметра " +
+                "Глубина прорези слишком большая: "
+                + "после выполнения прорезей " +
+                "диаметр рукояти в зоне прорези должен "
+                + "оставаться больше диаметра " +
                 $"посадочной части d₂ = {SeatDiameter:F1} мм."));
         }
 
         /// <summary>
         /// Проверяет, что все прорези помещаются на длине рукояти.
         /// </summary>
-        private void ValidateGroovesFitHandleLength(List<ValidationError> validationErrors)
+        private void ValidateGroovesFitHandleLength(
+            List<ValidationError> validationErrors)
         {
             if (GrooveCount <= 0)
             {
@@ -328,12 +348,14 @@ namespace SportsDumbbellsPluginCore.Model
 
             validationErrors.Add(new ValidationError(
                 "Rod.GrooveCount",
-                $"Выбранное количество прорезей не помещается на рукояти. " +
+                $"Выбранное количество прорезей не "
+                + $"помещается на рукояти. " +
                 $"Требуемая минимальная длина рукояти: {requiredLength:F1} мм."));
 
             validationErrors.Add(new ValidationError(
                 "Rod.HandleLength",
-                $"Длины рукояти l₁ = {HandleLength:F1} мм недостаточно " +
+                $"Длины рукояти l₁ = {HandleLength:F1} "
+                + $"мм недостаточно " +
                 $"для размещения {GrooveCount} прорезей."));
         }
     }

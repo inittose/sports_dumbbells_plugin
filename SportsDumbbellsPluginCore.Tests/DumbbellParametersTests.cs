@@ -14,7 +14,8 @@ namespace SportsDumbbellsPluginCore.Tests
         /// удовлетворяющий всем ограничениям валидации.
         /// Используется как базовое состояние для модульных тестов.
         /// </summary>
-        private static DumbbellParameters CreateValidDumbbellParameters(int disksPerSide = 1)
+        private static DumbbellParameters CreateValidDumbbellParameters(
+            int disksPerSide = 1)
         {
             var dumbbellParameters = new DumbbellParameters
             {
@@ -47,7 +48,8 @@ namespace SportsDumbbellsPluginCore.Tests
             var dumbbellParameters = CreateValidDumbbellParameters();
             dumbbellParameters.DisksPerSide = 9;
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             var hasError = false;
             foreach (var error in validationErrors)
@@ -71,7 +73,8 @@ namespace SportsDumbbellsPluginCore.Tests
             var dumbbellParameters = CreateValidDumbbellParameters();
             dumbbellParameters.DisksPerSide = -1;
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             Assert.That(validationErrors.Any(error =>
                 error.Source == "Dumbbell.DisksPerSide"));
@@ -79,14 +82,16 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при слишком малой разнице между диаметром отверстия диска " +
+            "Проверяет, что при слишком малой"
+            + "разнице между диаметром отверстия диска " +
             "и посадочным диаметром стержня добавляются ошибки валидации.")]
         public void Validate_HoleDiameterDeltaTooSmall_AddsErrors()
         {
             var dumbbellParameters = CreateValidDumbbellParameters();
             dumbbellParameters.Disks[0].HoleDiameter = 30.2;
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             var hasDiskError = false;
             var hasRodError = false;
@@ -110,14 +115,16 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при слишком большой разнице между диаметром отверстия диска " +
+            "Проверяет, что при слишком большой разнице"
+            + "между диаметром отверстия диска " +
             "и посадочным диаметром стержня добавляются ошибки валидации.")]
         public void Validate_HoleDiameterDeltaTooLarge_AddsErrors()
         {
             var dumbbellParameters = CreateValidDumbbellParameters();
             dumbbellParameters.Disks[0].HoleDiameter = 32.0;
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             var hasDiskError = false;
             var hasRodError = false;
@@ -145,7 +152,9 @@ namespace SportsDumbbellsPluginCore.Tests
             "над длиной посадочной части добавляются ошибки валидации.")]
         public void Validate_TotalDiskWidthExceedsSeatLength_AddsErrors()
         {
-            var dumbbellParameters = CreateValidDumbbellParameters(disksPerSide: 2);
+            var dumbbellParameters =
+                CreateValidDumbbellParameters(disksPerSide: 2);
+
             dumbbellParameters.Rod.SeatLength = 30;
 
             dumbbellParameters.Disks.Add(new DiskParameters
@@ -155,11 +164,11 @@ namespace SportsDumbbellsPluginCore.Tests
                 Thickness = 20,
             });
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             var hasRodError = false;
             var hasDiskError = false;
-
             foreach (var error in validationErrors)
             {
                 if (error.Source == "Rod.SeatLength")
@@ -183,10 +192,13 @@ namespace SportsDumbbellsPluginCore.Tests
             "взаимные проверки с дисками не выполняются.")]
         public void Validate_DisksPerSideZero_DoesNotCheckDisks()
         {
-            var dumbbellParameters = CreateValidDumbbellParameters(disksPerSide: 0);
+            var dumbbellParameters =
+                CreateValidDumbbellParameters(disksPerSide: 0);
+
             dumbbellParameters.Disks[0].HoleDiameter = 30.1;
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             foreach (var error in validationErrors)
             {
@@ -202,8 +214,8 @@ namespace SportsDumbbellsPluginCore.Tests
         public void Validate_ValidParameters_NoErrors()
         {
             var dumbbellParameters = CreateValidDumbbellParameters();
-
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             Assert.That(validationErrors, Is.Empty);
         }
@@ -220,7 +232,8 @@ namespace SportsDumbbellsPluginCore.Tests
             dumbbellParameters.Disks[0].HoleDiameter = 40.0;
             dumbbellParameters.Disks[0].Thickness = 50.0;
 
-            var validationErrors = dumbbellParameters.Validate();
+            var validationErrors =
+                dumbbellParameters.Validate();
 
             Assert.Multiple(() =>
             {
@@ -237,11 +250,13 @@ namespace SportsDumbbellsPluginCore.Tests
 
 
         [Test]
-        [Description(
-            "Проверяет, что свойство GapBetweenDisks возвращает ожидаемое значение.")]
+        [Description("Проверяет, что свойство GapBetweenDisks "
+                     + "возвращает ожидаемое значение.")]
         public void GapBetweenDisks_ReturnsExpectedValue()
         {
-            Assert.That(DumbbellParameters.GapBetweenDisks, Is.EqualTo(0.1));
+            Assert.That(
+                DumbbellParameters.GapBetweenDisks,
+                Is.EqualTo(0.1));
         }
     }
 }

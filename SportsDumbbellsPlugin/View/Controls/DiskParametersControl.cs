@@ -63,11 +63,18 @@ namespace SportsDumbbellsPlugin.View.Controls
                 throw new ArgumentNullException(nameof(model));
             }
 
-            //TODO: RSDN
-            textBoxHoleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HoleDiameter);
-            textBoxOuterDiameter.Text = ParameterValueFormatter.FormatDouble(model.OuterDiameter);
-            textBoxThickness.Text = ParameterValueFormatter.FormatDouble(model.Thickness);
-            textBoxFilletDiameter.Text = ParameterValueFormatter.FormatDouble(model.FilletDiameter);
+            //TODO: RSDN +
+            textBoxHoleDiameter.Text =
+                ParameterValueFormatter.FormatDouble(model.HoleDiameter);
+
+            textBoxOuterDiameter.Text =
+                ParameterValueFormatter.FormatDouble(model.OuterDiameter);
+
+            textBoxThickness.Text =
+                ParameterValueFormatter.FormatDouble(model.Thickness);
+
+            textBoxFilletDiameter.Text =
+                ParameterValueFormatter.FormatDouble(model.FilletDiameter);
         }
 
         /// <summary>

@@ -4,7 +4,8 @@ namespace SportsDumbbellsPluginCore.Model
 {
     /// <summary>
     /// Параметры диска гантели.
-    /// Содержит геометрические размеры и выполняет их валидацию по заданным ограничениям.
+    /// Содержит геометрические размеры и выполняет их валидацию
+    /// по заданным ограничениям.
     /// </summary>
     public class DiskParameters
     {
@@ -73,7 +74,8 @@ namespace SportsDumbbellsPluginCore.Model
         {
             var errors = new List<ValidationError>();
 
-            if (OuterDiameter < OuterDiameterMin || OuterDiameter > OuterDiameterMax)
+            if (OuterDiameter < OuterDiameterMin
+                || OuterDiameter > OuterDiameterMax)
             {
                 errors.Add(new ValidationError(
                     "Disk.OuterDiameter",
@@ -126,8 +128,10 @@ namespace SportsDumbbellsPluginCore.Model
 
             errors.Add(new ValidationError(
                 "Disk.FilletDiameter",
-                "Диаметр скругления диска должен быть не больше минимального из двух " +
-                $"значений: толщины диска t = {Thickness:F1} мм и разности D - d = " +
+                "Диаметр скругления диска должен быть "
+                + "не больше минимального из двух " +
+                $"значений: толщины диска t = {Thickness:F1} мм и "
+                + "разности D - d = " +
                 $"{(OuterDiameter - HoleDiameter):F1} мм."));
         }
     }

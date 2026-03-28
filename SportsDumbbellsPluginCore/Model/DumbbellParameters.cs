@@ -4,7 +4,8 @@ namespace SportsDumbbellsPluginCore.Model
 {
     /// <summary>
     /// Параметры гантели.
-    /// Содержит параметры грифа, параметры дисков и выполняет комплексную валидацию,
+    /// Содержит параметры грифа, параметры дисков и
+    /// выполняет комплексную валидацию,
     /// включая взаимные ограничения между элементами.
     /// </summary>
     public class DumbbellParameters
@@ -73,14 +74,17 @@ namespace SportsDumbbellsPluginCore.Model
 
             for (var diskIndex = 0; diskIndex < Disks.Count; diskIndex++)
             {
-                var diskValidationErrors = Disks[diskIndex].Validate();
+                var diskValidationErrors =
+                    Disks[diskIndex].Validate();
 
                 foreach (var diskError in diskValidationErrors)
                 {
-                    var errorSourceSuffix = diskError.Source.Replace("Disk.", string.Empty);
+                    var errorSourceSuffix =
+                        diskError.Source.Replace("Disk.", string.Empty);
                     var source = $"Disks[{diskIndex}].{errorSourceSuffix}";
 
-                    validationErrors.Add(new ValidationError(source, diskError.Message));
+                    validationErrors.Add(
+                        new ValidationError(source, diskError.Message));
                 }
             }
 
@@ -100,13 +104,17 @@ namespace SportsDumbbellsPluginCore.Model
 
         /// <summary>
         /// Проверяет ограничение на разницу между диаметром отверстия диска
-        /// и посадочным диаметром грифа. Для каждого из первых <see cref="DisksPerSide"/> дисков
+        /// и посадочным диаметром грифа.
+        /// Для каждого из первых <see cref="DisksPerSide"/> дисков
         /// разница должна быть в диапазоне
-        /// <see cref="HoleDiameterOffsetMin"/>–<see cref="HoleDiameterOffsetMax"/>.
+        /// <see cref="HoleDiameterOffsetMin"/>
+        /// –
+        /// <see cref="HoleDiameterOffsetMax"/>.
         /// </summary>
         /// <param name="validationErrors">
         /// Список ошибок, в который добавляются результаты проверки.</param>
-        private void ValidateHoleDiameterOffset(List<ValidationError> validationErrors)
+        private void ValidateHoleDiameterOffset(
+            List<ValidationError> validationErrors)
         {
             for (
                 var diskIndex = 0;
@@ -115,9 +123,14 @@ namespace SportsDumbbellsPluginCore.Model
             {
                 var diskParameters = Disks[diskIndex];
 
-                var holeDiameterDelta = diskParameters.HoleDiameter - Rod.SeatDiameter;
-                var deltaIsTooSmall = holeDiameterDelta < HoleDiameterOffsetMin;
-                var deltaIsTooLarge = holeDiameterDelta > HoleDiameterOffsetMax;
+                var holeDiameterDelta =
+                    diskParameters.HoleDiameter - Rod.SeatDiameter;
+
+                var deltaIsTooSmall =
+                    holeDiameterDelta < HoleDiameterOffsetMin;
+
+                var deltaIsTooLarge =
+                    holeDiameterDelta > HoleDiameterOffsetMax;
 
                 if (!deltaIsTooSmall && !deltaIsTooLarge)
                 {
@@ -126,13 +139,17 @@ namespace SportsDumbbellsPluginCore.Model
 
                 var messageForDisk =
                     "Диаметр отверстия диска d должен быть на " +
-                    $"{HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм больше " +
-                    $"диаметра посадочной части стержня d₂ (d₂ = {Rod.SeatDiameter:F1} мм).";
+                    $"{HoleDiameterOffsetMin:0.0}–"
+                    + $"{HoleDiameterOffsetMax:0.0} мм больше " +
+                    $"диаметра посадочной части стержня "
+                    + $"d₂ (d₂ = {Rod.SeatDiameter:F1} мм).";
 
                 var messageForRod =
                     "Диаметр посадочной части стержня d₂ должен быть на " +
-                    $"{HoleDiameterOffsetMin:0.0}–{HoleDiameterOffsetMax:0.0} мм меньше " +
-                    $"диаметра отверстия диска d (d = {diskParameters.HoleDiameter:F1} мм).";
+                    $"{HoleDiameterOffsetMin:0.0}–"
+                    + $"{HoleDiameterOffsetMax:0.0} мм меньше " +
+                    $"диаметра отверстия диска d "
+                    + $"(d = {diskParameters.HoleDiameter:F1} мм).";
 
                 validationErrors.Add(
                     new ValidationError($"Disks[{diskIndex}].HoleDiameter", messageForDisk));

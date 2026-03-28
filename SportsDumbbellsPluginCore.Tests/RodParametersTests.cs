@@ -34,7 +34,8 @@ namespace SportsDumbbellsPluginCore.Tests
             var rodParameters = CreateValidRodParameters();
             rodParameters.HandleLength = 99;
 
-            var validationErrors = rodParameters.Validate();
+            var validationErrors =
+                rodParameters.Validate();
 
             var hasError = false;
 
@@ -52,14 +53,16 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при длине посадочной части вне допустимого диапазона " +
+            "Проверяет, что при длине посадочной "
+            + "части вне допустимого диапазона " +
             "добавляется ошибка валидации.")]
         public void Validate_SeatLengthOutOfRange_AddsError()
         {
             var rodParameters = CreateValidRodParameters();
             rodParameters.SeatLength = 151;
 
-            var validationErrors = rodParameters.Validate();
+            var validationErrors =
+                rodParameters.Validate();
 
             var hasError = false;
 
@@ -84,7 +87,8 @@ namespace SportsDumbbellsPluginCore.Tests
             var rodParameters = CreateValidRodParameters();
             rodParameters.HandleDiameter = 35;
 
-            var validationErrors = rodParameters.Validate();
+            var validationErrors =
+                rodParameters.Validate();
 
             var hasError = false;
 
@@ -102,14 +106,16 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при диаметре посадочной части вне допустимого диапазона " +
+            "Проверяет, что при диаметре посадочной "
+            + "части вне допустимого диапазона " +
             "добавляется ошибка валидации.")]
         public void Validate_SeatDiameterOutOfRange_AddsError()
         {
             var rodParameters = CreateValidRodParameters();
             rodParameters.SeatDiameter = 23;
 
-            var validationErrors = rodParameters.Validate();
+            var validationErrors =
+                rodParameters.Validate();
 
             var hasError = false;
 
@@ -127,7 +133,8 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при диаметре рукояти меньше либо равном диаметру посадки " +
+            "Проверяет, что при диаметре рукояти "
+            + "меньше либо равном диаметру посадки " +
             "добавляются ошибки для обоих параметров.")]
         public void Validate_HandleDiameterLessOrEqualSeatDiameter_AddsErrors()
         {
@@ -135,7 +142,8 @@ namespace SportsDumbbellsPluginCore.Tests
             rodParameters.HandleDiameter = 28;
             rodParameters.SeatDiameter = 28;
 
-            var validationErrors = rodParameters.Validate();
+            var validationErrors =
+                rodParameters.Validate();
 
             var hasHandleDiameterError = false;
             var hasSeatDiameterError = false;
@@ -167,7 +175,8 @@ namespace SportsDumbbellsPluginCore.Tests
             rodParameters.HandleLength = 10;
             rodParameters.SeatLength = 10;
 
-            var validationErrors = rodParameters.Validate();
+            var validationErrors =
+                rodParameters.Validate();
 
             var hasHandleLengthError = false;
             var hasSeatLengthError = false;
@@ -285,7 +294,8 @@ namespace SportsDumbbellsPluginCore.Tests
         }
 
         [Test]
-        [Description("Проверяет, что при количестве прорезей вне допустимого диапазона добавляется ошибка валидации.")]
+        [Description("Проверяет, что при количестве прорезей вне допустимого "
+                     + "диапазона добавляется ошибка валидации.")]
         public void Validate_GrooveCountOutOfRange_AddsError()
         {
             var rodParameters = CreateValidRodParameters();
@@ -321,8 +331,11 @@ namespace SportsDumbbellsPluginCore.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.That(validationErrors.Any(error => error.Source == "Rod.GrooveCount"));
-                Assert.That(validationErrors.Any(error => error.Source == "Rod.HandleLength"));
+                Assert.That(validationErrors.Any(
+                    error => error.Source == "Rod.GrooveCount"));
+
+                Assert.That(validationErrors.Any(
+                    error => error.Source == "Rod.HandleLength"));
             });
         }
 

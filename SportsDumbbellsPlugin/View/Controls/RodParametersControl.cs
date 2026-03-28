@@ -70,7 +70,7 @@ namespace SportsDumbbellsPlugin.View.Controls
                 throw new ArgumentNullException(nameof(model));
             }
 
-            //TODO: RSDN
+            //TODO: RSDN + 
             textBoxCenterLength.Text =
                 ParameterValueFormatter.FormatDouble(model.HandleLength);
 

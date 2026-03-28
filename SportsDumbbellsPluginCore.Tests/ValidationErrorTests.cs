@@ -17,8 +17,13 @@ namespace SportsDumbbellsPluginCore.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.That(validationError.Source, Is.EqualTo("Rod.SeatDiameter"));
-                Assert.That(validationError.Message, Is.EqualTo("Ошибка проверки."));
+                Assert.That(
+                    validationError.Source,
+                    Is.EqualTo("Rod.SeatDiameter"));
+
+                Assert.That(
+                    validationError.Message,
+                    Is.EqualTo("Ошибка проверки."));
             });
         }
     }
