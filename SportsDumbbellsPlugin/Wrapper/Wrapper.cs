@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 namespace SportsDumbbellsPlugin.Wrapper
 {
     //TODO: refactor
+    // +
 
     /// <summary>
     /// Обёртка над KOMPAS-3D API5. Инкапсулирует подключение к КОМПАС,
@@ -12,6 +13,11 @@ namespace SportsDumbbellsPlugin.Wrapper
     /// </summary>
     public class Wrapper : IDisposable
     {
+        /// <summary>
+        /// ProgID приложения KOMPAS.
+        /// </summary>
+        private const string KompasProgId = "KOMPAS.Application.5";
+
         /// <summary>
         /// Экземпляр приложения KOMPAS.
         /// </summary>
@@ -43,10 +49,10 @@ namespace SportsDumbbellsPlugin.Wrapper
                 return;
             }
 
-            var kompasType = Type.GetTypeFromProgID("KOMPAS.Application.5");
+            var kompasType = Type.GetTypeFromProgID(KompasProgId);
             if (kompasType == null)
             {
-                throw new InvalidOperationException("Не найден ProgID KOMPAS.Application.5.");
+                throw new InvalidOperationException($"Не найден ProgID {KompasProgId}.");
             }
 
             _kompas = (KompasObject?)Activator.CreateInstance(kompasType);
@@ -67,10 +73,19 @@ namespace SportsDumbbellsPlugin.Wrapper
         public void CreateDocument3D(bool invisible = false)
         {
             EnsureKompas();
-
             CloseActiveDocument();
 
-            _document3D = (ksDocument3D?)_kompas!.Document3D();
+            try
+            {
+                _document3D = (ksDocument3D?)_kompas!.Document3D();
+            }
+            catch
+            {
+                _kompas = null;
+                AttachOrRunCad();
+                _document3D = (ksDocument3D?)_kompas!.Document3D();
+            }
+
             if (_document3D == null)
             {
                 throw new InvalidOperationException("Не удалось получить ksDocument3D.");
@@ -187,22 +202,22 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="thickness">Толщина диска.</param>
         /// <param name="offsetX">Смещение плоскости построения по оси X.</param>
         /// <param name="direction">Направление выдавливания.</param>
-        public void BuildDiskAtX(
+        public ksEntity BuildDiskAtX(
             double outerRadius,
             double holeRadius,
             double thickness,
             double offsetX = 0,
             Direction_Type direction = Direction_Type.dtNormal)
         {
-            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
-            var sketchEntity = CreateSketchOnPlane(planeEntity);
-
-            DrawCircle(0, 0, outerRadius);
-            DrawCircle(0, 0, holeRadius);
-
-            FinishSketch(sketchEntity);
-
-            BossExtrusion(sketchEntity, thickness, direction);
+            return BuildExtrusionAtOffsetPlaneYOZ(
+                offsetX,
+                () =>
+                {
+                    DrawCircle(0, 0, outerRadius);
+                    DrawCircle(0, 0, holeRadius);
+                },
+                thickness,
+                direction);
         }
 
         /// <summary>
@@ -214,13 +229,14 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="offsetX">Смещение плоскости YOZ по оси X.</param>
         public void BuildCylinderAtX(double radius, double height, double offsetX = 0)
         {
-            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
-            var sketchEntity = CreateSketchOnPlane(planeEntity);
-
-            DrawCircle(0, 0, radius);
-            FinishSketch(sketchEntity);
-
-            BossExtrusion(sketchEntity, height, Direction_Type.dtMiddlePlane);
+            BuildExtrusionAtOffsetPlaneYOZ(
+                offsetX,
+                () =>
+                {
+                    DrawCircle(0, 0, radius);
+                },
+                height,
+                Direction_Type.dtMiddlePlane);
         }
 
         /// <summary>
@@ -256,6 +272,139 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             extrusionEntity.Create();
             return extrusionEntity;
+        }
+
+        /// <summary>
+        /// Выполняет вырезание выдавливанием по эскизу.
+        /// </summary>
+        /// <param name="sketchEntity">Сущность эскиза.</param>
+        /// <param name="depth">Глубина вырезания.</param>
+        /// <param name="direction">Направление вырезания.</param>
+        /// <returns>Сущность операции вырезания.</returns>
+        public ksEntity CutExtrusion(
+            ksEntity sketchEntity,
+            double depth,
+            Direction_Type direction = Direction_Type.dtNormal)
+        {
+            EnsureTopPart();
+
+            var cutEntity = (ksEntity?)_topPart!.NewEntity((short)Obj3dType.o3d_cutExtrusion);
+            if (cutEntity == null)
+            {
+                throw new InvalidOperationException("Не удалось создать o3d_cutExtrusion.");
+            }
+
+            var cutDefinition = (ksCutExtrusionDefinition)cutEntity.GetDefinition();
+            cutDefinition.SetSketch(sketchEntity);
+
+            if (direction == Direction_Type.dtReverse)
+            {
+                cutDefinition.SetSideParam(false, (short)End_Type.etBlind, Math.Abs(depth), 0.0, false);
+            }
+            else if (direction == Direction_Type.dtMiddlePlane)
+            {
+                var halfDepth = Math.Abs(depth) / 2.0;
+                cutDefinition.SetSideParam(true, (short)End_Type.etBlind, halfDepth, 0.0, false);
+                cutDefinition.SetSideParam(false, (short)End_Type.etBlind, halfDepth, 0.0, false);
+            }
+            else
+            {
+                cutDefinition.SetSideParam(true, (short)End_Type.etBlind, Math.Abs(depth), 0.0, false);
+            }
+
+            cutEntity.Create();
+            return cutEntity;
+        }
+
+        /// <summary>
+        /// Строит кольцевую прорезь как вырезание выдавливанием на плоскости YOZ.
+        /// </summary>
+        /// <param name="outerRadius">Внешний радиус прорези.</param>
+        /// <param name="innerRadius">Внутренний радиус прорези.</param>
+        /// <param name="width">Ширина прорези по оси X.</param>
+        /// <param name="offsetX">Смещение плоскости по оси X.</param>
+        public void CutRingAtX(
+            double outerRadius,
+            double innerRadius,
+            double width,
+            double offsetX = 0.0)
+        {
+            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
+            var sketchEntity = CreateSketchOnPlane(planeEntity);
+
+            try
+            {
+                DrawCircle(0, 0, outerRadius);
+                DrawCircle(0, 0, innerRadius);
+            }
+            finally
+            {
+                FinishSketch(sketchEntity);
+            }
+
+            CutExtrusion(sketchEntity, width, Direction_Type.dtNormal);
+        }
+
+        /// <summary>
+        /// Применяет операцию скругления ко всем рёбрам указанной операции.
+        /// Для кольцевого диска это как раз рёбра переднего и заднего торца
+        /// внешнего и внутреннего контура.
+        /// </summary>
+        /// <param name="operationEntity">Операция, у которой нужно скруглить рёбра.</param>
+        /// <param name="radius">Радиус скругления.</param>
+        public void ApplyFilletToOperationEdges(ksEntity operationEntity, double radius)
+        {
+            if (operationEntity == null)
+            {
+                throw new ArgumentNullException(nameof(operationEntity));
+            }
+
+            if (radius <= 0.0)
+            {
+                return;
+            }
+
+            EnsureTopPart();
+
+            var feature = (ksFeature?)operationEntity.GetFeature();
+            if (feature == null)
+            {
+                throw new InvalidOperationException("Не удалось получить feature операции.");
+            }
+
+            var operationEdges = (ksEntityCollection?)feature.EntityCollection((short)Obj3dType.o3d_edge);
+            if (operationEdges == null)
+            {
+                throw new InvalidOperationException("Не удалось получить коллекцию рёбер операции.");
+            }
+
+            if (operationEdges.GetCount() == 0)
+            {
+                return;
+            }
+
+            var filletEntity = (ksEntity?)_topPart!.NewEntity((short)Obj3dType.o3d_fillet);
+            if (filletEntity == null)
+            {
+                throw new InvalidOperationException("Не удалось создать o3d_fillet.");
+            }
+
+            var filletDefinition = (ksFilletDefinition)filletEntity.GetDefinition();
+            filletDefinition.radius = radius;
+            filletDefinition.tangent = true;
+
+            var filletEdges = (ksEntityCollection)filletDefinition.array();
+
+            for (var edgeIndex = 0; edgeIndex < operationEdges.GetCount(); edgeIndex++)
+            {
+                var edge = (ksEntity?)operationEdges.GetByIndex(edgeIndex);
+                if (edge != null)
+                {
+                    filletEdges.Add(edge);
+                }
+            }
+
+            filletEntity.Create();
         }
 
         /// <summary>
@@ -300,13 +449,7 @@ namespace SportsDumbbellsPlugin.Wrapper
             }
             finally
             {
-                ReleaseCom(_currentSketchDocument2D);
-                ReleaseCom(_topPart);
-                ReleaseCom(_document3D);
-
-                _currentSketchDocument2D = null;
-                _topPart = null;
-                _document3D = null;
+                ReleaseDocumentResources();
             }
         }
 
@@ -319,6 +462,49 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             ReleaseCom(_kompas);
             _kompas = null;
+        }
+
+        /// <summary>
+        /// Выполняет общий сценарий:
+        /// создание смещённой плоскости, создание эскиза, рисование и выдавливание.
+        /// </summary>
+        /// <param name="offsetX">Смещение плоскости по оси X.</param>
+        /// <param name="drawAction">Действие рисования в эскизе.</param>
+        /// <param name="depth">Глубина выдавливания.</param>
+        /// <param name="direction">Направление выдавливания.</param>
+        private ksEntity BuildExtrusionAtOffsetPlaneYOZ(
+            double offsetX,
+            Action drawAction,
+            double depth,
+            Direction_Type direction)
+        {
+            var planeEntity = CreateOffsetPlaneYOZ(offsetX);
+            var sketchEntity = CreateSketchOnPlane(planeEntity);
+
+            try
+            {
+                drawAction();
+            }
+            finally
+            {
+                FinishSketch(sketchEntity);
+            }
+
+            return BossExtrusion(sketchEntity, depth, direction);
+        }
+
+        /// <summary>
+        /// Освобождает ресурсы текущего документа.
+        /// </summary>
+        private void ReleaseDocumentResources()
+        {
+            ReleaseCom(_currentSketchDocument2D);
+            ReleaseCom(_topPart);
+            ReleaseCom(_document3D);
+
+            _currentSketchDocument2D = null;
+            _topPart = null;
+            _document3D = null;
         }
 
         /// <summary>
@@ -356,18 +542,12 @@ namespace SportsDumbbellsPlugin.Wrapper
                 return;
             }
 
-            try
+            if (Marshal.IsComObject(comObject))
             {
-                if (Marshal.IsComObject(comObject))
-                {
-                    Marshal.FinalReleaseComObject(comObject);
-                }
+                Marshal.FinalReleaseComObject(comObject);
             }
-            catch
-            {
-                //TODO: ??
-                // Игнорируем исключения при освобождении COM.
-            }
+            //TODO: ??
+            // +
         }
     }
 }

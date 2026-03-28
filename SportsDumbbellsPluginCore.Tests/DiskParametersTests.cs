@@ -80,5 +80,76 @@ namespace SportsDumbbellsPluginCore.Tests
 
             Assert.That(validationErrors, Is.Empty);
         }
+
+        [Test]
+        [Description(
+            "Проверяет, что при внешнем диаметре диска выше допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_OuterDiameterAboveMax_AddsError()
+        {
+            var diskParameters = CreateValidDiskParameters();
+            diskParameters.OuterDiameter = 261.0;
+
+            var validationErrors = diskParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Disk.OuterDiameter"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при диаметре отверстия диска ниже допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_HoleDiameterBelowMin_AddsError()
+        {
+            var diskParameters = CreateValidDiskParameters();
+            diskParameters.HoleDiameter = 25.0;
+
+            var validationErrors = diskParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Disk.HoleDiameter"));
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что при толщине диска ниже допустимого диапазона " +
+            "добавляется ошибка валидации.")]
+        public void Validate_ThicknessBelowMin_AddsError()
+        {
+            var diskParameters = CreateValidDiskParameters();
+            diskParameters.Thickness = 9.0;
+
+            var validationErrors = diskParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Disk.Thickness"));
+        }
+
+        [Test]
+        [Description("Проверяет, что при отрицательном диаметре скругления добавляется ошибка валидации.")]
+        public void Validate_FilletDiameterNegative_AddsError()
+        {
+            var diskParameters = CreateValidDiskParameters();
+            diskParameters.FilletDiameter = -1.0;
+
+            var validationErrors = diskParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Disk.FilletDiameter"));
+        }
+
+        [Test]
+        [Description("Проверяет, что при слишком большом диаметре скругления добавляется ошибка валидации.")]
+        public void Validate_FilletDiameterTooLarge_AddsError()
+        {
+            var diskParameters = CreateValidDiskParameters();
+            diskParameters.FilletDiameter = 50.0;
+
+            var validationErrors = diskParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Disk.FilletDiameter"));
+        }
     }
 }

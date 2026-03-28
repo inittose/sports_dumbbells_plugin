@@ -1,5 +1,6 @@
 ﻿using SportsDumbbellsPluginCore.Model;
 using System.Globalization;
+using SportsDumbbellsPlugin.View.Formatting;
 
 namespace SportsDumbbellsPlugin.View.Controls
 {
@@ -24,6 +25,7 @@ namespace SportsDumbbellsPlugin.View.Controls
             textBoxOuterDiameter.TextChanged += OnAnyTextChanged;
             textBoxHoleDiameter.TextChanged += OnAnyTextChanged;
             textBoxThickness.TextChanged += OnAnyTextChanged;
+            textBoxFilletDiameter.TextChanged += OnAnyTextChanged;
 
             SetDefault();
         }
@@ -59,14 +61,11 @@ namespace SportsDumbbellsPlugin.View.Controls
             }
 
             //todo: duplication
-            textBoxHoleDiameter.Text =
-                model.HoleDiameter.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxOuterDiameter.Text =
-                model.OuterDiameter.ToString("F1", CultureInfo.InvariantCulture);
-
-            textBoxThickness.Text =
-                model.Thickness.ToString("F1", CultureInfo.InvariantCulture);
+            // +
+            textBoxHoleDiameter.Text = ParameterValueFormatter.FormatDouble(model.HoleDiameter);
+            textBoxOuterDiameter.Text = ParameterValueFormatter.FormatDouble(model.OuterDiameter);
+            textBoxThickness.Text = ParameterValueFormatter.FormatDouble(model.Thickness);
+            textBoxFilletDiameter.Text = ParameterValueFormatter.FormatDouble(model.FilletDiameter);
         }
 
         /// <summary>
@@ -90,12 +89,14 @@ namespace SportsDumbbellsPlugin.View.Controls
             var outerDiameter = ParseDoubleOrDefault(textBoxOuterDiameter.Text);
             var holeDiameter = ParseDoubleOrDefault(textBoxHoleDiameter.Text);
             var thickness = ParseDoubleOrDefault(textBoxThickness.Text);
+            var filletDiameter = ParseDoubleOrDefault(textBoxFilletDiameter.Text);
 
             return new DiskParameters
             {
                 OuterDiameter = outerDiameter,
                 HoleDiameter = holeDiameter,
                 Thickness = thickness,
+                FilletDiameter = filletDiameter,
             };
         }
 
@@ -107,10 +108,12 @@ namespace SportsDumbbellsPlugin.View.Controls
             errorProvider.SetError(textBoxOuterDiameter, string.Empty);
             errorProvider.SetError(textBoxHoleDiameter, string.Empty);
             errorProvider.SetError(textBoxThickness, string.Empty);
+            errorProvider.SetError(textBoxFilletDiameter, string.Empty);
 
             textBoxOuterDiameter.BackColor = SystemColors.Window;
             textBoxHoleDiameter.BackColor = SystemColors.Window;
             textBoxThickness.BackColor = SystemColors.Window;
+            textBoxFilletDiameter.BackColor = SystemColors.Window;
         }
 
         /// <summary>
@@ -150,22 +153,14 @@ namespace SportsDumbbellsPlugin.View.Controls
         /// либо <see langword="null"/> если свойство не поддерживается.</returns>
         private TextBox? GetTargetTextBox(string propertyName)
         {
-            if (propertyName == nameof(DiskParameters.OuterDiameter))
+            return propertyName switch
             {
-                return textBoxOuterDiameter;
-            }
-
-            if (propertyName == nameof(DiskParameters.HoleDiameter))
-            {
-                return textBoxHoleDiameter;
-            }
-
-            if (propertyName == nameof(DiskParameters.Thickness))
-            {
-                return textBoxThickness;
-            }
-
-            return null;
+                nameof(DiskParameters.OuterDiameter)  => textBoxOuterDiameter,
+                nameof(DiskParameters.HoleDiameter)   => textBoxHoleDiameter,
+                nameof(DiskParameters.Thickness)      => textBoxThickness,
+                nameof(DiskParameters.FilletDiameter) => textBoxFilletDiameter,
+                _                                     => null
+            };
         }
 
         /// <summary>

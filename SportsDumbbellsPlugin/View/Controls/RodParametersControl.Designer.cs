@@ -41,7 +41,12 @@
             label2 = new Label();
             label1 = new Label();
             errorProvider = new ErrorProvider(components);
+            label6 = new Label();
+            label7 = new Label();
+            textBoxGrooveDepth = new TextBox();
+            numericUpDownGrooveCount = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownGrooveCount).BeginInit();
             SuspendLayout();
             // 
             // textBoxSeatDiameter
@@ -146,10 +151,52 @@
             errorProvider.ContainerControl = this;
             errorProvider.Icon = (Icon)resources.GetObject("errorProvider.Icon");
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(5, 185);
+            label6.Margin = new Padding(5, 10, 10, 10);
+            label6.Name = "label6";
+            label6.Size = new Size(199, 15);
+            label6.TabIndex = 20;
+            label6.Text = "Количество прорезей рукояти, шт:";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(5, 220);
+            label7.Margin = new Padding(5, 10, 10, 10);
+            label7.Name = "label7";
+            label7.Size = new Size(135, 15);
+            label7.TabIndex = 21;
+            label7.Text = "Глубина прорезей, мм:";
+            // 
+            // textBoxGrooveDepth
+            // 
+            textBoxGrooveDepth.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxGrooveDepth.Location = new Point(245, 217);
+            textBoxGrooveDepth.Margin = new Padding(3, 3, 5, 3);
+            textBoxGrooveDepth.Name = "textBoxGrooveDepth";
+            textBoxGrooveDepth.Size = new Size(100, 23);
+            textBoxGrooveDepth.TabIndex = 23;
+            // 
+            // numericUpDownGrooveCount
+            // 
+            numericUpDownGrooveCount.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            numericUpDownGrooveCount.Location = new Point(245, 183);
+            numericUpDownGrooveCount.Maximum = new decimal(new int[] { 12, 0, 0, 0 });
+            numericUpDownGrooveCount.Name = "numericUpDownGrooveCount";
+            numericUpDownGrooveCount.Size = new Size(100, 23);
+            numericUpDownGrooveCount.TabIndex = 24;
+            // 
             // RodParametersControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(numericUpDownGrooveCount);
+            Controls.Add(textBoxGrooveDepth);
+            Controls.Add(label7);
+            Controls.Add(label6);
             Controls.Add(textBoxSeatDiameter);
             Controls.Add(textBoxHandleDiameter);
             Controls.Add(textBoxSeatLength);
@@ -161,8 +208,9 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "RodParametersControl";
-            Size = new Size(380, 184);
+            Size = new Size(380, 254);
             ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownGrooveCount).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -180,5 +228,9 @@
         private Label label2;
         private Label label1;
         private ErrorProvider errorProvider;
+        private NumericUpDown numericUpDownGrooveCount;
+        private TextBox textBoxGrooveDepth;
+        private Label label7;
+        private Label label6;
     }
 }

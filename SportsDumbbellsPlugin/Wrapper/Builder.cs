@@ -3,6 +3,7 @@
 namespace SportsDumbbellsPlugin.Wrapper
 {
     //TODO: refactor
+    // +
     /// <summary>
     /// Оркестратор построения 3D-модели гантели в KOMPAS-3D.
     /// Выполняет последовательное построение грифа и дисков, используя <see cref="Wrapper"/>.
@@ -29,10 +30,7 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="parameters">Параметры гантели.</param>
         public void Build(DumbbellParameters parameters)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
+            ArgumentNullException.ThrowIfNull(parameters);
 
             _wrapper.AttachOrRunCad(visible: true);
             _wrapper.CreateDocument3D();
@@ -44,8 +42,7 @@ namespace SportsDumbbellsPlugin.Wrapper
         }
 
         /// <summary>
-        /// Строит гриф гантели в виде двух коаксиальных цилиндров:
-        /// базовый цилиндр посадочной части и утолщение рукояти.
+        /// Строит гриф гантели и кольцевые прорези на рукояти.
         /// </summary>
         /// <param name="rodParameters">Параметры грифа.</param>
         private void BuildRod(RodParameters rodParameters)
@@ -61,6 +58,48 @@ namespace SportsDumbbellsPlugin.Wrapper
 
             _wrapper.BuildCylinderAtX(seatRadius, totalRodLength);
             _wrapper.BuildCylinderAtX(handleRadius, rodParameters.HandleLength);
+
+            BuildHandleGrooves(rodParameters, handleRadius);
+        }
+
+        /// <summary>
+        /// Строит кольцевые прорези на рукояти.
+        /// </summary>
+        /// <param name="rodParameters">Параметры грифа.</param>
+        /// <param name="handleRadius">Радиус рукояти.</param>
+        private void BuildHandleGrooves(RodParameters rodParameters, double handleRadius)
+        {
+            if (rodParameters.GrooveCount <= 0 || rodParameters.GrooveDepth <= 0.0)
+            {
+                return;
+            }
+
+            var grooveOuterRadius = handleRadius;
+            var grooveInnerRadius = handleRadius - rodParameters.GrooveDepth;
+
+            var usableLength =
+                rodParameters.HandleLength -
+                (2.0 * RodParameters.GrooveEdgeIndent) -
+                (rodParameters.GrooveCount * RodParameters.GrooveWidth);
+
+            var gap =
+                rodParameters.GrooveCount == 1
+                    ? 0.0
+                    : usableLength / (rodParameters.GrooveCount - 1);
+
+            var currentGrooveX =
+                (-rodParameters.HandleLength / 2.0) + RodParameters.GrooveEdgeIndent;
+
+            for (var grooveIndex = 0; grooveIndex < rodParameters.GrooveCount; grooveIndex++)
+            {
+                _wrapper.CutRingAtX(
+                    grooveOuterRadius,
+                    grooveInnerRadius,
+                    RodParameters.GrooveWidth,
+                    currentGrooveX);
+
+                currentGrooveX += RodParameters.GrooveWidth + gap;
+            }
         }
 
         /// <summary>
@@ -70,11 +109,6 @@ namespace SportsDumbbellsPlugin.Wrapper
         /// <param name="parameters">Параметры гантели.</param>
         private void BuildDisks(DumbbellParameters parameters)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
             if (parameters.DisksPerSide <= 0)
             {
                 return;
@@ -83,25 +117,39 @@ namespace SportsDumbbellsPlugin.Wrapper
             var currentOffsetX = (parameters.Rod.HandleLength / 2.0) +
                                  DumbbellParameters.GapBetweenDisks;
 
-            foreach (var diskParameters in parameters.Disks)
+            foreach (var disk in parameters.Disks.Take(parameters.DisksPerSide))
             {
-                var outerRadius = diskParameters.OuterDiameter / 2.0;
-                var holeRadius = diskParameters.HoleDiameter / 2.0;
-
-                _wrapper.BuildDiskAtX(
-                    outerRadius,
-                    holeRadius,
-                    diskParameters.Thickness,
-                    currentOffsetX);
-
-                _wrapper.BuildDiskAtX(
-                    outerRadius,
-                    holeRadius,
-                    diskParameters.Thickness,
-                    -currentOffsetX - diskParameters.Thickness);
-
-                currentOffsetX += diskParameters.Thickness + DumbbellParameters.GapBetweenDisks;
+                BuildDiskPair(disk, currentOffsetX);
+                currentOffsetX += disk.Thickness + DumbbellParameters.GapBetweenDisks;
             }
+        }
+
+        /// <summary>
+        /// Строит пару одинаковых дисков симметрично относительно центра грифа.
+        /// </summary>
+        /// <param name="disk">Параметры диска.</param>
+        /// <param name="offsetX">Смещение первого диска по оси X.</param>
+        private void BuildDiskPair(DiskParameters disk, double offsetX)
+        {
+            var outerRadius = disk.OuterDiameter / 2.0;
+            var holeRadius = disk.HoleDiameter / 2.0;
+            var filletRadius = disk.FilletDiameter / 2.0;
+
+            var rightDisk = _wrapper.BuildDiskAtX(
+                outerRadius,
+                holeRadius,
+                disk.Thickness,
+                offsetX);
+
+            _wrapper.ApplyFilletToOperationEdges(rightDisk, filletRadius);
+
+            var leftDisk = _wrapper.BuildDiskAtX(
+                outerRadius,
+                holeRadius,
+                disk.Thickness,
+                -offsetX - disk.Thickness);
+
+            _wrapper.ApplyFilletToOperationEdges(leftDisk, filletRadius);
         }
     }
 }

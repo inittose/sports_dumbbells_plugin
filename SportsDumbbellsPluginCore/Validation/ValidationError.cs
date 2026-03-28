@@ -1,4 +1,4 @@
-﻿namespace SportsDumbbellsPluginCore.Model
+﻿namespace SportsDumbbellsPluginCore.Validation
 {
     /// <summary>
     /// Описывает ошибку валидации параметров модели.

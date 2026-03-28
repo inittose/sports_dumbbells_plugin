@@ -64,6 +64,21 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
+            "Проверяет, что при отрицательном количестве дисков на сторону " +
+            "добавляется ошибка валидации.")]
+        public void Validate_DisksPerSideBelowMin_AddsError()
+        {
+            var dumbbellParameters = CreateValidDumbbellParameters();
+            dumbbellParameters.DisksPerSide = -1;
+
+            var validationErrors = dumbbellParameters.Validate();
+
+            Assert.That(validationErrors.Any(error =>
+                error.Source == "Dumbbell.DisksPerSide"));
+        }
+
+        [Test]
+        [Description(
             "Проверяет, что при слишком малой разнице между диаметром отверстия диска " +
             "и посадочным диаметром стержня добавляются ошибки валидации.")]
         public void Validate_HoleDiameterDeltaTooSmall_AddsErrors()
@@ -191,6 +206,42 @@ namespace SportsDumbbellsPluginCore.Tests
             var validationErrors = dumbbellParameters.Validate();
 
             Assert.That(validationErrors, Is.Empty);
+        }
+
+        [Test]
+        [Description(
+            "Проверяет, что ошибки валидации диска ремапятся " +
+            "из источников Disk.* в источники Disks[i].*.")]
+        public void Validate_InvalidDisk_RemapsDiskErrorsToIndexedSources()
+        {
+            var dumbbellParameters = CreateValidDumbbellParameters();
+
+            dumbbellParameters.Disks[0].OuterDiameter = 300.0;
+            dumbbellParameters.Disks[0].HoleDiameter = 40.0;
+            dumbbellParameters.Disks[0].Thickness = 50.0;
+
+            var validationErrors = dumbbellParameters.Validate();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationErrors.Any(error =>
+                    error.Source == "Disks[0].OuterDiameter"));
+
+                Assert.That(validationErrors.Any(error =>
+                    error.Source == "Disks[0].HoleDiameter"));
+
+                Assert.That(validationErrors.Any(error =>
+                    error.Source == "Disks[0].Thickness"));
+            });
+        }
+
+
+        [Test]
+        [Description(
+            "Проверяет, что свойство GapBetweenDisks возвращает ожидаемое значение.")]
+        public void GapBetweenDisks_ReturnsExpectedValue()
+        {
+            Assert.That(DumbbellParameters.GapBetweenDisks, Is.EqualTo(0.1));
         }
     }
 }
