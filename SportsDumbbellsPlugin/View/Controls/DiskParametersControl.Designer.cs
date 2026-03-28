@@ -57,7 +57,7 @@
             groupBox.Dock = DockStyle.Fill;
             groupBox.Location = new Point(0, 0);
             groupBox.Name = "groupBox";
-            groupBox.Size = new Size(447, 156);
+            groupBox.Size = new Size(442, 170);
             groupBox.TabIndex = 0;
             groupBox.TabStop = false;
             groupBox.Text = "Параметры диска n";
@@ -65,7 +65,7 @@
             // textBoxFilletDiameter
             // 
             textBoxFilletDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxFilletDiameter.Location = new Point(317, 131);
+            textBoxFilletDiameter.Location = new Point(312, 131);
             textBoxFilletDiameter.Name = "textBoxFilletDiameter";
             textBoxFilletDiameter.Size = new Size(100, 23);
             textBoxFilletDiameter.TabIndex = 7;
@@ -83,7 +83,7 @@
             // textBoxThickness
             // 
             textBoxThickness.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxThickness.Location = new Point(317, 96);
+            textBoxThickness.Location = new Point(312, 96);
             textBoxThickness.Name = "textBoxThickness";
             textBoxThickness.Size = new Size(100, 23);
             textBoxThickness.TabIndex = 5;
@@ -91,7 +91,7 @@
             // textBoxHoleDiameter
             // 
             textBoxHoleDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxHoleDiameter.Location = new Point(317, 61);
+            textBoxHoleDiameter.Location = new Point(312, 61);
             textBoxHoleDiameter.Name = "textBoxHoleDiameter";
             textBoxHoleDiameter.Size = new Size(100, 23);
             textBoxHoleDiameter.TabIndex = 4;
@@ -99,7 +99,7 @@
             // textBoxOuterDiameter
             // 
             textBoxOuterDiameter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxOuterDiameter.Location = new Point(317, 26);
+            textBoxOuterDiameter.Location = new Point(312, 26);
             textBoxOuterDiameter.Name = "textBoxOuterDiameter";
             textBoxOuterDiameter.Size = new Size(100, 23);
             textBoxOuterDiameter.TabIndex = 3;
@@ -145,10 +145,10 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(groupBox);
-            MaximumSize = new Size(0, 156);
-            MinimumSize = new Size(0, 156);
+            MaximumSize = new Size(0, 170);
+            MinimumSize = new Size(0, 170);
             Name = "DiskParametersControl";
-            Size = new Size(447, 156);
+            Size = new Size(442, 170);
             groupBox.ResumeLayout(false);
             groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
