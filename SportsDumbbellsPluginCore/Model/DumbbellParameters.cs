@@ -44,7 +44,8 @@ namespace SportsDumbbellsPluginCore.Model
 
         /// <summary>
         /// Возвращает и задает список параметров дисков.
-        /// Диски в списке считаются расположенными последовательно от грифа наружу.
+        /// Диски в списке считаются расположенными
+        /// последовательно от грифа наружу.
         /// </summary>
         public List<DiskParameters> Disks { get; } = new ();
 
@@ -55,7 +56,8 @@ namespace SportsDumbbellsPluginCore.Model
 
         /// <summary>
         /// Суммарная ширина пакета дисков на одной стороне, мм.
-        /// Считается как сумма толщин первых <see cref="DisksPerSide"/> дисков.
+        /// Считается как сумма толщин
+        /// первых <see cref="DisksPerSide"/> дисков.
         /// </summary>
         public double TotalDiskWidthPerSide =>
             Disks.Take(DisksPerSide).Sum(d => d.Thickness);
@@ -88,7 +90,8 @@ namespace SportsDumbbellsPluginCore.Model
                 }
             }
 
-            if (DisksPerSide < DisksPerSideMin || DisksPerSide > DisksPerSideMax)
+            if (DisksPerSide < DisksPerSideMin
+                || DisksPerSide > DisksPerSideMax)
             {
                 validationErrors.Add(new ValidationError(
                     "Dumbbell.DisksPerSide",
@@ -151,20 +154,23 @@ namespace SportsDumbbellsPluginCore.Model
                     $"диаметра отверстия диска d "
                     + $"(d = {diskParameters.HoleDiameter:F1} мм).";
 
-                validationErrors.Add(
-                    new ValidationError($"Disks[{diskIndex}].HoleDiameter", messageForDisk));
+                validationErrors.Add(new ValidationError(
+                    $"Disks[{diskIndex}].HoleDiameter", messageForDisk));
 
-                validationErrors.Add(new ValidationError("Rod.SeatDiameter", messageForRod));
+                validationErrors.Add(
+                    new ValidationError("Rod.SeatDiameter", messageForRod));
             }
         }
 
         /// <summary>
         /// Проверяет ограничение на суммарную ширину пакета дисков.
-        /// Суммарная ширина H не должна превышать длину посадочной части грифа l₂.
+        /// Суммарная ширина H не должна
+        /// превышать длину посадочной части грифа l₂.
         /// </summary>
         /// <param name="validationErrors">
         /// Список ошибок, в который добавляются результаты проверки.</param>
-        private void ValidateDiskPackWidth(List<ValidationError> validationErrors)
+        private void ValidateDiskPackWidth(
+            List<ValidationError> validationErrors)
         {
             var totalDiskWidthPerSide = TotalDiskWidthPerSide;
 
@@ -174,11 +180,14 @@ namespace SportsDumbbellsPluginCore.Model
             }
 
             var messageForDisks =
-                $"Суммарная ширина пакета дисков H = {totalDiskWidthPerSide:F1} мм не должна " +
-                $"превышать длину посадочной части стержня l₂ = {Rod.SeatLength:F1} мм.";
+                $"Суммарная ширина пакета дисков " +
+                $"H = {totalDiskWidthPerSide:F1} мм не должна " +
+                $"превышать длину посадочной части " +
+                $"стержня l₂ = {Rod.SeatLength:F1} мм.";
 
             var messageForRod =
-                $"Длина посадочной части стержня l₂ = {Rod.SeatLength:F1} мм меньше суммарной " +
+                $"Длина посадочной части стержня " +
+                $"l₂ = {Rod.SeatLength:F1} мм меньше суммарной " +
                 $"ширины пакета дисков H = {totalDiskWidthPerSide:F1} мм.";
 
             for (
@@ -186,11 +195,12 @@ namespace SportsDumbbellsPluginCore.Model
                 diskIndex < DisksPerSide && diskIndex < Disks.Count;
                 diskIndex++)
             {
-                validationErrors.Add(
-                    new ValidationError($"Disks[{diskIndex}].Thickness", messageForDisks));
+                validationErrors.Add(new ValidationError(
+                        $"Disks[{diskIndex}].Thickness", messageForDisks));
             }
 
-            validationErrors.Add(new ValidationError("Rod.SeatLength", messageForRod));
+            validationErrors.Add(
+                new ValidationError("Rod.SeatLength", messageForRod));
         }
     }
 }

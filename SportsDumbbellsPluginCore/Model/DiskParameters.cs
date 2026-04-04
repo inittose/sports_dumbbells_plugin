@@ -83,7 +83,8 @@ namespace SportsDumbbellsPluginCore.Model
                     $"{OuterDiameterMin}–{OuterDiameterMax} мм."));
             }
 
-            if (HoleDiameter < HoleDiameterMin || HoleDiameter > HoleDiameterMax)
+            if (HoleDiameter < HoleDiameterMin
+                || HoleDiameter > HoleDiameterMax)
             {
                 errors.Add(new ValidationError(
                     "Disk.HoleDiameter",

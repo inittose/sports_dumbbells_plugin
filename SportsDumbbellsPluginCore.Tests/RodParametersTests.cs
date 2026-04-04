@@ -167,7 +167,8 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при общей длине стержня вне допустимого диапазона " +
+            "Проверяет, что при общей длине " +
+            "стержня вне допустимого диапазона " +
             "добавляются ошибки для длины рукояти и посадочной части.")]
         public void Validate_TotalLengthOutOfRange_AddsErrors()
         {
@@ -228,7 +229,8 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при длине посадочной части ниже допустимого диапазона " +
+            "Проверяет, что при длине посадочной части " +
+            "ниже допустимого диапазона " +
             "добавляется ошибка валидации.")]
         public void Validate_SeatLengthBelowMin_AddsError()
         {
@@ -258,7 +260,8 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при диаметре посадочной части выше допустимого диапазона " +
+            "Проверяет, что при диаметре посадочной " +
+            "части выше допустимого диапазона " +
             "добавляется ошибка валидации.")]
         public void Validate_SeatDiameterAboveMax_AddsError()
         {
@@ -273,7 +276,8 @@ namespace SportsDumbbellsPluginCore.Tests
 
         [Test]
         [Description(
-            "Проверяет, что при общей длине стержня выше допустимого диапазона " +
+            "Проверяет, что при общей длине стержня " +
+            "выше допустимого диапазона " +
             "добавляются ошибки для длины рукояти и посадочной части.")]
         public void Validate_TotalLengthAboveMax_AddsErrors()
         {
@@ -303,11 +307,13 @@ namespace SportsDumbbellsPluginCore.Tests
 
             var validationErrors = rodParameters.Validate();
 
-            Assert.That(validationErrors.Any(error => error.Source == "Rod.GrooveCount"));
+            Assert.That(validationErrors.Any(
+                    error => error.Source == "Rod.GrooveCount"));
         }
 
         [Test]
-        [Description("Проверяет, что при слишком большой глубине прорези добавляется ошибка валидации.")]
+        [Description("Проверяет, что при слишком большой глубине " +
+                    "прорези добавляется ошибка валидации.")]
         public void Validate_GrooveDepthTooLarge_AddsError()
         {
             var rodParameters = CreateValidRodParameters();
@@ -316,11 +322,13 @@ namespace SportsDumbbellsPluginCore.Tests
 
             var validationErrors = rodParameters.Validate();
 
-            Assert.That(validationErrors.Any(error => error.Source == "Rod.GrooveDepth"));
+            Assert.That(validationErrors.Any(
+                error => error.Source == "Rod.GrooveDepth"));
         }
 
         [Test]
-        [Description("Проверяет, что при слишком большом количестве прорезей для длины рукояти добавляются ошибки валидации.")]
+        [Description("Проверяет, что при слишком большом количестве " +
+                    "прорезей для длины рукояти добавляются ошибки валидации.")]
         public void Validate_GroovesDoNotFitHandleLength_AddsErrors()
         {
             var rodParameters = CreateValidRodParameters();

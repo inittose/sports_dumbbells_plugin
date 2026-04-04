@@ -123,7 +123,8 @@ namespace StressTesting
                 streamWriter.WriteLine(exception.ToString());
 
                 Console.WriteLine();
-                Console.WriteLine("Во время нагрузочного тестирования произошла ошибка:");
+                Console.WriteLine(
+                    "Во время нагрузочного тестирования произошла ошибка:");
                 Console.WriteLine(exception);
             }
             finally
