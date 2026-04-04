@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsDumbbellsPluginCore",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsDumbbellsPluginCore.Tests", "..\SportsDumbbellsPluginCore.Tests\SportsDumbbellsPluginCore.Tests.csproj", "{02D50E0A-22E7-40EF-8F92-F30E4C5C021A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StressTesting", "..\StressTesting\StressTesting.csproj", "{B48958AC-FFB7-4984-92CD-0F56DB65E34E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{02D50E0A-22E7-40EF-8F92-F30E4C5C021A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02D50E0A-22E7-40EF-8F92-F30E4C5C021A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02D50E0A-22E7-40EF-8F92-F30E4C5C021A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B48958AC-FFB7-4984-92CD-0F56DB65E34E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B48958AC-FFB7-4984-92CD-0F56DB65E34E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B48958AC-FFB7-4984-92CD-0F56DB65E34E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B48958AC-FFB7-4984-92CD-0F56DB65E34E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
