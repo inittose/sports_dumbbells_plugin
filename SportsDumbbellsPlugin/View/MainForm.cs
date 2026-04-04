@@ -60,7 +60,6 @@ namespace SportsDumbbellsPlugin.View
             var validationErrors =
                 dumbbellParameters.Validate();
 
-            //TODO: RSDN +
             _rodTabHasErrors = validationErrors.Any(
                 error => error.Source.StartsWith(
                     ValidationSources.RodPrefix,

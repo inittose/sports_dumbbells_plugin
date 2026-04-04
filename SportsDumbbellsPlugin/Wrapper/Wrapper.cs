@@ -327,7 +327,6 @@ namespace SportsDumbbellsPlugin.Wrapper
         {
             EnsureTopPart();
 
-            //TODO: RSDN +
             var cutEntity = (ksEntity?)_topPart!.NewEntity(
                 (short)Obj3dType.o3d_cutExtrusion);
             if (cutEntity == null)
